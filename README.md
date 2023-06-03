@@ -4,7 +4,7 @@ This is a collaborative project that involves a client-server architecture.
 
 The [client](./client) directory is managed by [Jakub Cerovský](https://github.com/Jcerovsky) and the [server](./server) directory is managed by [Marek Kobida](https://github.com/marekkobida).
 
-## API
+## Server API
 
 ### Lists
 
@@ -13,6 +13,8 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 - `[POST] /list`
     - It creates a new list.
+
+### Specific list
 
 - `[GET] /list/{listId}`
     - It returns a specific list identified by `listId`.
