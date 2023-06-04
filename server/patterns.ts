@@ -9,6 +9,6 @@ const patterns = {
   SPECIFIC_LIST: /^\/list\/([0-9]+)$/,
   // /list/{listId}/item/{itemId}
   SPECIFIC_LIST_ITEM: /^\/list\/([0-9]+)\/item\/([0-9]+)$/,
-};
+} as const;
 
 export default patterns;

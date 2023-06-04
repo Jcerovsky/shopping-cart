@@ -65,4 +65,4 @@ const server = http.createServer((request, response) => {
   return response.end(JSON.stringify({ error: 'The request is not valid.' }));
 });
 
-server.listen(1337, () => console.log(`http://127.0.0.1:1337/list`));
+server.listen(1337, () => console.log(`Server ✅`));
