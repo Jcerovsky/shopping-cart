@@ -17,7 +17,7 @@ let items: Item[] = [
 ];
 
 function addItem(listId: number, text: string): Item[] {
-  //                                        ↓ if `undefined`
+  //                                        ↓ If there is no last item, the `id` starts from 0.
   const lastItemId = items[items.length - 1]?.id ?? 0;
 
   return (items = [...items, { id: lastItemId + 1, listId, text }]);

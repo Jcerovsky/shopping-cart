@@ -15,7 +15,7 @@ let lists: List[] = [
 ];
 
 function createList(name: string): List[] {
-  //                                        ↓ if `undefined`
+  //                                        ↓ If there is no last list, the `id` starts from 0.
   const lastListId = lists[lists.length - 1]?.id ?? 0;
 
   return (lists = [...lists, { id: lastListId + 1, name }]);
