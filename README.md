@@ -35,8 +35,8 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Specific list item
 
-- `[GET] /list/{listId}/item/{itemId}`
-    - It returns a specific item, identified by `itemId`, from a specific list identified by `listId`.
+- ~~`[GET] /list/{listId}/item/{itemId}`~~
+    - ~~It returns a specific item, identified by `itemId`, from a specific list identified by `listId`.~~
 
 - `[DELETE] /list/{listId}/item/{itemId}`
     - It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
