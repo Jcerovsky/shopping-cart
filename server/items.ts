@@ -27,8 +27,12 @@ function deleteItem(id: number): Item[] {
   return items.filter(item => item.id !== id);
 }
 
+function deleteItems(listId: number): Item[] {
+  return items.filter(item => item.listId !== listId);
+}
+
 function getItems(listId: number): Item[] {
   return items.filter(item => item.listId === listId);
 }
 
-export { addItem, deleteItem, getItems, items };
+export { addItem, deleteItem, deleteItems, getItems, items };

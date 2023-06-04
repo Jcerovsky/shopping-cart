@@ -3,7 +3,7 @@
  */
 
 import http from 'http';
-import { addItem, deleteItem, getItems } from './items';
+import { addItem, deleteItem, deleteItems, getItems } from './items';
 import { createList, deleteList, lists } from './lists';
 import patterns from './patterns';
 
@@ -20,6 +20,13 @@ const server = http.createServer((request, response) => {
       const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
       return response.end(JSON.stringify(deleteList(+listId)));
+    }
+
+    // [DELETE] /list/{listId}/item
+    if (patterns.LIST_ITEMS.test(url.pathname)) {
+      const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
+
+      return response.end(JSON.stringify(deleteItems(+listId)));
     }
 
     // [DELETE] /list/{listId}/item/{itemId}
