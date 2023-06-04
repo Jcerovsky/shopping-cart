@@ -3,11 +3,10 @@ import {ShoppingCart} from "../InterfaceShoppingCart";
 
 interface DeleteButtonProps {
     id: number,
-    setAllItems:  React.Dispatch<React.SetStateAction<ShoppingCart[]>>,
     fetchData: () => void
 }
 
-function DeleteButton({id,fetchData, setAllItems} : DeleteButtonProps) {
+function DeleteButton({id,fetchData} : DeleteButtonProps) {
 
     const handleDelete = async () => {
         try {
@@ -19,7 +18,7 @@ function DeleteButton({id,fetchData, setAllItems} : DeleteButtonProps) {
         catch (error) {
             throw new Error(`Error deleting item:' ${error}`)
         }
-        
+
     }
 
 
