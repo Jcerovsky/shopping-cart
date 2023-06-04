@@ -11,7 +11,7 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 - ✅ `[GET] /list`
     - It returns all created lists.
 
-- ✅ `[POST] /list?name=Test
+- ✅ `[POST] /list?name=Test`
     - It creates a new list named `Test`.
 
 ### Specific list
@@ -24,7 +24,7 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### List items
 
-- `[GET] /list/{listId}/item`
+- ✅ `[GET] /list/{listId}/item`
     - It returns all items in a specific list identified by `listId`.
 
 - `[DELETE] /list/{listId}/item`

@@ -3,7 +3,7 @@
  */
 
 import http from 'http';
-import { createList, deleteList, lists } from './storage';
+import { createList, deleteList, items, lists } from './storage';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST, PUT');
@@ -31,6 +31,17 @@ const server = http.createServer((request, response) => {
      */
     if (/^\/list$/.test(url.pathname)) {
       return response.end(JSON.stringify(lists));
+    }
+
+    /**
+     * [GET] /list/{listId}/item
+     */
+    const pattern = /^\/list\/([0-9]+)\/item$/;
+
+    if (pattern.test(url.pathname)) {
+      const [, listId] = pattern.exec(url.pathname)!;
+
+      return response.end(JSON.stringify(items.filter(item => item.listId === +listId)));
     }
   }
 

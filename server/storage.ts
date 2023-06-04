@@ -26,3 +26,21 @@ function deleteList(id: number): List[] {
 }
 
 export { createList, deleteList, lists };
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+interface Item {
+  id: number;
+  listId: number;
+  text: string;
+}
+
+const items: Item[] = [
+  {
+    id: 0,
+    listId: 0,
+    text: 'Čerstvé vajcia',
+  },
+];
+
+export { items };
