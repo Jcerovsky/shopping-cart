@@ -15,8 +15,8 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 - ✅ `[GET] /list`
     - It returns all created lists.
 
-- ✅ `[POST] /list?name=M%C3%B4j%20prv%C3%BD%20n%C3%A1kupn%C3%BD%20zoznam`
-    - It creates a new list named `Môj prvý nákupný zoznam`.
+- ✅ `[POST] /list?name=Test
+    - It creates a new list named `Test`.
 
 ### Specific list
 
