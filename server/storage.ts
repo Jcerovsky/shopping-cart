@@ -3,13 +3,21 @@
  */
 
 interface List {
-  id: string;
+  id: number;
   name: string;
 }
 
-export const lists: List[] = [
+let lists: List[] = [
   {
-    id: 'c711030d-9ea4-4b08-924e-ffb7b1472cfc',
+    id: 0,
     name: 'Môj prvý nákupný zoznam',
   },
 ];
+
+function createList(name: string): List[] {
+  const lastList = lists[lists.length - 1];
+
+  return (lists = [...lists, { id: lastList.id + 1, name }]);
+}
+
+export { createList, lists };

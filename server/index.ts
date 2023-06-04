@@ -4,7 +4,7 @@
 
 import getIPv4Addresses from '@warden-sk/compiler/helpers/getIPv4Addresses';
 import http from 'http';
-import { lists } from './storage';
+import { createList, lists } from './storage';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Content-Type', 'application/json');
@@ -14,6 +14,18 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     if (url.pathname === '/list') {
       return response.end(JSON.stringify(lists));
+    }
+  }
+
+  if (request.method === 'POST') {
+    if (url.pathname === '/list') {
+      const name = url.searchParams.get('name');
+
+      if (name) {
+        return response.end(JSON.stringify(createList(name)));
+      }
+
+      return response.end(JSON.stringify({ error: 'That `name` does not exist.' }));
     }
   }
 
@@ -27,7 +39,8 @@ server.listen(1337, () => {
 
   console.log(`
 
-[GET] /list \u2014 http://${address}:1337/list
+[GET] "/list" \u2014 "http://${address}:1337/list"
+[POST] "/list" \u2014 "http://${address}:1337/list"
 
 `);
 });
