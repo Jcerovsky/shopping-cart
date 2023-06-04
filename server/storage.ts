@@ -15,9 +15,10 @@ let lists: List[] = [
 ];
 
 function createList(name: string): List[] {
-  const lastList = lists[lists.length - 1];
+  //                                        ↓ if `undefined`
+  const lastListId = lists[lists.length - 1]?.id ?? 0;
 
-  return (lists = [...lists, { id: lastList.id + 1, name }]);
+  return (lists = [...lists, { id: lastListId + 1, name }]);
 }
 
 function deleteList(id: number): List[] {
