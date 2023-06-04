@@ -20,8 +20,8 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Specific list
 
-- `[GET] /list/{listId}`
-    - It returns a specific list identified by `listId`.
+- ~~`[GET] /list/{listId}`~~
+    - ~~It returns a specific list identified by `listId`.~~
 
 - `[DELETE] /list/{listId}`
     - It deletes a specific list identified by `listId`.
