@@ -23,8 +23,12 @@ function addItem(listId: number, text: string): Item[] {
   return (items = [...items, { id: lastItemId + 1, listId, text }]);
 }
 
+function deleteItem(id: number): Item[] {
+  return items.filter(item => item.id !== id);
+}
+
 function getItems(listId: number): Item[] {
   return items.filter(item => item.listId === listId);
 }
 
-export { addItem, getItems, items };
+export { addItem, deleteItem, getItems, items };
