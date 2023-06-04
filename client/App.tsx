@@ -22,7 +22,7 @@ function App() {
 
     const handleClick = () => {
 
-        fetch(`http://127.0.0.1:1337/list?name=${inputRef.current?.value}&id=${crypto.randomUUID()}`, {
+        fetch(`http://127.0.0.1:1337/list?name=${inputRef.current?.value}`, {
             method: 'POST',
         })
         setItem('')
@@ -41,9 +41,9 @@ function App() {
                 ref={inputRef}
             />
             <button onClick={handleClick}>Add</button>
-            <ShoppingItems allItems={allItems} />
+            <ShoppingItems allItems={allItems} fetchData={fetchData} setAllItems={setAllItems}/>
         </div>
-    );
+    )
 }
 
 export default App;
