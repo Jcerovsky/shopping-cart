@@ -3,7 +3,7 @@
  */
 
 import http from 'http';
-import { createList, deleteList, items, lists } from './storage';
+import { addItem, createList, deleteList, getItems, lists } from './storage';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST, PUT');
@@ -41,7 +41,7 @@ const server = http.createServer((request, response) => {
     if (pattern.test(url.pathname)) {
       const [, listId] = pattern.exec(url.pathname)!;
 
-      return response.end(JSON.stringify(items.filter(item => item.listId === +listId)));
+      return response.end(JSON.stringify(getItems(+listId)));
     }
   }
 
@@ -57,6 +57,22 @@ const server = http.createServer((request, response) => {
       }
 
       return response.end(JSON.stringify({ error: 'The `name` does not exist.' }));
+    }
+
+    /**
+     * [POST] /list/{listId}/item
+     */
+    const pattern = /^\/list\/([0-9]+)\/item$/;
+
+    if (pattern.test(url.pathname)) {
+      const [, listId] = pattern.exec(url.pathname)!;
+      const text = url.searchParams.get('text');
+
+      if (text) {
+        return response.end(JSON.stringify(addItem(+listId, text)));
+      }
+
+      return response.end(JSON.stringify({ error: 'The `text` does not exist.' }));
     }
   }
 
