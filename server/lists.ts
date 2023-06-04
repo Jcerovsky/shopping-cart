@@ -2,6 +2,8 @@
  * Copyright 2023 Marek Kobida
  */
 
+import { deleteItems } from './items';
+
 interface List {
   id: number;
   name: string;
@@ -22,6 +24,8 @@ function createList(name: string): List[] {
 }
 
 function deleteList(id: number): List[] {
+  deleteItems(id);
+
   return (lists = lists.filter(list => list.id !== id));
 }
 
