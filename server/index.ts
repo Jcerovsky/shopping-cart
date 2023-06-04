@@ -3,7 +3,8 @@
  */
 
 import http from 'http';
-import { addItem, createList, deleteList, getItems, lists } from './storage';
+import { addItem, getItems } from './items';
+import { createList, deleteList, lists } from './lists';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST, PUT');
