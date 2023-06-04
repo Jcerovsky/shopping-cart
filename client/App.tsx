@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ShoppingCart} from './InterfaceShoppingCart'
 import ShoppingItems from "./components/ShoppingItems";
+import Input from "./components/Input";
 
 function App() {
 
@@ -33,15 +34,9 @@ function App() {
     return (
         <div>
             <h1>Shopping List</h1>
-            <input
-                type="text"
-                placeholder='Add item'
-                value={item}
-                onChange={(e) => setItem(e.target.value)}
-                ref={inputRef}
-            />
+            <Input forwardedRef={inputRef}/>
             <button onClick={handleClick}>Add</button>
-            <ShoppingItems allItems={allItems} fetchData={fetchData} setAllItems={setAllItems}/>
+            <ShoppingItems allItems={allItems} fetchData={fetchData}/>
         </div>
     )
 }
