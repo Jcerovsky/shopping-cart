@@ -27,10 +27,10 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 - ✅ `[GET] /list/{listId}/item`
     - It returns all items in a specific list identified by `listId`.
 
-- `[DELETE] /list/{listId}/item`
-    - It deletes all items from a specific list identified by `listId`.
+- ~~`[DELETE] /list/{listId}/item`~~
+    - ~~It deletes all items from a specific list identified by `listId`.~~
 
-- `[POST] /list/{listId}/item`
+- ✅ `[POST] /list/{listId}/item`
     - It adds a new item to a specific list identified by `listId`.
 
 ### Specific list item
