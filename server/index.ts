@@ -14,9 +14,7 @@ const server = http.createServer((request, response) => {
   const url = new URL(request.url!, `https://${request.headers.host}`);
 
   if (request.method === 'DELETE') {
-    /**
-     * [DELETE] /list/{listId}
-     */
+    // [DELETE] /list/{listId}
     const pattern = /^\/list\/([0-9]+)$/;
 
     if (pattern.test(url.pathname)) {
@@ -27,16 +25,12 @@ const server = http.createServer((request, response) => {
   }
 
   if (request.method === 'GET') {
-    /**
-     * [GET] /list
-     */
+    // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
       return response.end(JSON.stringify(lists));
     }
 
-    /**
-     * [GET] /list/{listId}/item
-     */
+    // [GET] /list/{listId}/item
     const pattern = /^\/list\/([0-9]+)\/item$/;
 
     if (pattern.test(url.pathname)) {
@@ -47,9 +41,7 @@ const server = http.createServer((request, response) => {
   }
 
   if (request.method === 'POST') {
-    /**
-     * [POST] /list
-     */
+    // [POST] /list
     if (/^\/list$/.test(url.pathname)) {
       const name = url.searchParams.get('name');
 
@@ -60,9 +52,7 @@ const server = http.createServer((request, response) => {
       return response.end(JSON.stringify({ error: 'The `name` does not exist.' }));
     }
 
-    /**
-     * [POST] /list/{listId}/item
-     */
+    // [POST] /list/{listId}/item
     const pattern = /^\/list\/([0-9]+)\/item$/;
 
     if (pattern.test(url.pathname)) {
