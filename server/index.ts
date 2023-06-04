@@ -12,20 +12,26 @@ const server = http.createServer((request, response) => {
   const url = new URL(request.url!, `https://${request.headers.host}`);
 
   if (request.method === 'GET') {
-    if (url.pathname === '/list') {
+    /**
+     * [GET] /list
+     */
+    if (/\/list/.test(url.pathname)) {
       return response.end(JSON.stringify(lists));
     }
   }
 
   if (request.method === 'POST') {
-    if (url.pathname === '/list') {
+    /**
+     * [POST] /list
+     */
+    if (/\/list/.test(url.pathname)) {
       const name = url.searchParams.get('name');
 
       if (name) {
         return response.end(JSON.stringify(createList(name)));
       }
 
-      return response.end(JSON.stringify({ error: 'That `name` does not exist.' }));
+      return response.end(JSON.stringify({ error: 'The `name` does not exist.' }));
     }
   }
 
