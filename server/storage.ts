@@ -20,4 +20,8 @@ function createList(name: string): List[] {
   return (lists = [...lists, { id: lastList.id + 1, name }]);
 }
 
-export { createList, lists };
+function deleteList(id: number): List[] {
+  return (lists = lists.filter(list => list.id !== id));
+}
+
+export { createList, deleteList, lists };

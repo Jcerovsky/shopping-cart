@@ -4,18 +4,31 @@
 
 import getIPv4Addresses from '@warden-sk/compiler/helpers/getIPv4Addresses';
 import http from 'http';
-import { createList, lists } from './storage';
+import { createList, deleteList, lists } from './storage';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Content-Type', 'application/json');
 
   const url = new URL(request.url!, `https://${request.headers.host}`);
 
+  if (request.method === 'DELETE') {
+    /**
+     * [DELETE] /list/{listId}
+     */
+    const pattern = /^\/list\/([0-9]+)$/;
+
+    if (pattern.test(url.pathname)) {
+      const [, listId] = pattern.exec(url.pathname)!;
+
+      return response.end(JSON.stringify(deleteList(+listId)));
+    }
+  }
+
   if (request.method === 'GET') {
     /**
      * [GET] /list
      */
-    if (/\/list/.test(url.pathname)) {
+    if (/^\/list$/.test(url.pathname)) {
       return response.end(JSON.stringify(lists));
     }
   }
@@ -24,7 +37,7 @@ const server = http.createServer((request, response) => {
     /**
      * [POST] /list
      */
-    if (/\/list/.test(url.pathname)) {
+    if (/^\/list$/.test(url.pathname)) {
       const name = url.searchParams.get('name');
 
       if (name) {
