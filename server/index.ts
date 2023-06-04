@@ -6,6 +6,7 @@ import http from 'http';
 import { createList, deleteList, lists } from './storage';
 
 const server = http.createServer((request, response) => {
+  response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Content-Type', 'application/json');
 
   const url = new URL(request.url!, `https://${request.headers.host}`);
@@ -50,4 +51,4 @@ const server = http.createServer((request, response) => {
   return response.end(JSON.stringify({ error: 'The request is not valid.' }));
 });
 
-server.listen(1337);
+server.listen(1337, () => console.log(`http://127.0.0.1:1337/list`));
