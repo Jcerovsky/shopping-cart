@@ -35,4 +35,5 @@ function getItems(listId: number): Item[] {
   return items.filter(item => item.listId === listId);
 }
 
+export type { Item };
 export { addItem, deleteItem, deleteItems, getItems, items };
