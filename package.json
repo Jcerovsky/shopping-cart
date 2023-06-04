@@ -11,5 +11,9 @@
     "webpack": "^5.80.0"
   },
   "name": "shopping-cart",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "@tanstack/react-query": "^4.29.12",
+    "ts-node": "^10.9.1"
+  }
 }

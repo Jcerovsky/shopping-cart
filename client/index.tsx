@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Client from './Client';
+import App from './App';
 import './index.css';
 
 if (typeof window !== 'undefined') {
-  ReactDOM.createRoot(window.document.querySelector('#client') as HTMLDivElement).render(<Client />);
+  ReactDOM.createRoot(window.document.querySelector('#client') as HTMLDivElement).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+  );
 }
 
 export default <div id="client" />;
