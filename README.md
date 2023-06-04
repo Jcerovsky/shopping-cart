@@ -12,10 +12,10 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Lists
 
-- `[GET] /list`
+- ✅ `[GET] /list`
     - It returns all created lists.
 
-- `[POST] /list`
+- ✅ `[POST] /list`
     - It creates a new list.
 
 ### Specific list
