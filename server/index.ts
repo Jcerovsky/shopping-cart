@@ -5,6 +5,7 @@
 import http from 'http';
 import { addItem, getItems } from './items';
 import { createList, deleteList, lists } from './lists';
+import patterns from './patterns';
 
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST, PUT');
@@ -15,10 +16,8 @@ const server = http.createServer((request, response) => {
 
   if (request.method === 'DELETE') {
     // [DELETE] /list/{listId}
-    const pattern = /^\/list\/([0-9]+)$/;
-
-    if (pattern.test(url.pathname)) {
-      const [, listId] = pattern.exec(url.pathname)!;
+    if (patterns.SPECIFIC_LIST.test(url.pathname)) {
+      const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
       return response.end(JSON.stringify(deleteList(+listId)));
     }
@@ -31,10 +30,8 @@ const server = http.createServer((request, response) => {
     }
 
     // [GET] /list/{listId}/item
-    const pattern = /^\/list\/([0-9]+)\/item$/;
-
-    if (pattern.test(url.pathname)) {
-      const [, listId] = pattern.exec(url.pathname)!;
+    if (patterns.LIST_ITEMS.test(url.pathname)) {
+      const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
       return response.end(JSON.stringify(getItems(+listId)));
     }
@@ -53,10 +50,8 @@ const server = http.createServer((request, response) => {
     }
 
     // [POST] /list/{listId}/item
-    const pattern = /^\/list\/([0-9]+)\/item$/;
-
-    if (pattern.test(url.pathname)) {
-      const [, listId] = pattern.exec(url.pathname)!;
+    if (patterns.LIST_ITEMS.test(url.pathname)) {
+      const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
       const text = url.searchParams.get('text');
 
       if (text) {
