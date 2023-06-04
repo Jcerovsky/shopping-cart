@@ -8,7 +8,7 @@ import { createList, deleteList, items, lists } from './storage';
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST, PUT');
   response.setHeader('Access-Control-Allow-Origin', '*');
-  response.setHeader('Content-Type', 'application/json');
+  response.setHeader('Content-Type', 'application/json; charset=utf-8');
 
   const url = new URL(request.url!, `https://${request.headers.host}`);
 
