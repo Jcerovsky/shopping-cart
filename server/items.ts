@@ -3,14 +3,18 @@
  */
 
 interface Item {
+  createdAt: number;
   id: number;
+  isDone: number;
   listId: number;
   text: string;
 }
 
 let items: Item[] = [
   {
+    createdAt: +new Date(),
     id: 0,
+    isDone: 0,
     listId: 0,
     text: 'Čerstvé vajcia',
   },
@@ -20,7 +24,7 @@ function addItem(listId: number, text: string): Item[] {
   //                                        ↓ If there is no last item, the `id` starts from 0.
   const lastItemId = items[items.length - 1]?.id ?? 0;
 
-  return (items = [...items, { id: lastItemId + 1, listId, text }]);
+  return (items = [...items, { createdAt: +new Date(), id: lastItemId + 1, isDone: 0, listId, text }]);
 }
 
 function deleteItem(id: number): Item[] {
