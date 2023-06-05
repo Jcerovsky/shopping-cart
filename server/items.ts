@@ -36,4 +36,4 @@ function getItems(listId: number): Item[] {
 }
 
 export type { Item };
-export { addItem, deleteItem, deleteItems, getItems, items };
+export { addItem, deleteItem, deleteItems, getItems };

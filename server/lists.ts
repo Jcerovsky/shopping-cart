@@ -29,5 +29,9 @@ function deleteList(id: number): List[] {
   return (lists = lists.filter(list => list.id !== id));
 }
 
+function getLists(): List[] {
+  return lists;
+}
+
 export type { List };
-export { createList, deleteList, lists };
+export { createList, deleteList, getLists };
