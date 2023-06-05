@@ -18,11 +18,15 @@ let lists: List[] = [
   },
 ];
 
-function createList(name: string): List[] {
+function createList(name: string): List {
   //                                        ↓ If there is no last list, the `id` starts from 0.
   const lastListId = lists[lists.length - 1]?.id ?? 0;
 
-  return (lists = [...lists, { createdAt: +new Date(), id: lastListId + 1, name }]);
+  const list = { createdAt: +new Date(), id: lastListId + 1, name };
+
+  lists = [...lists, list];
+
+  return list;
 }
 
 function deleteList(id: number): List[] {

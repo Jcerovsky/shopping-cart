@@ -69,7 +69,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        return response.end(JSON.stringify(createList(name)));
+        return response.end(JSON.stringify(createList(name).id));
       }
     }
 
