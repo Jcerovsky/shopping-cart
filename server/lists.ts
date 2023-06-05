@@ -35,5 +35,9 @@ function getLists(): List[] {
   return lists;
 }
 
+function updateList(id: number, name: string): List[] {
+  return (lists = lists.map(list => (list.id === id ? { ...list, name } : list)));
+}
+
 export type { List };
-export { createList, deleteList, getLists };
+export { createList, deleteList, getLists, updateList };

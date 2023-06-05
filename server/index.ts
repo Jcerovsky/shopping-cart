@@ -5,11 +5,11 @@
 import http from 'http';
 import common from '../common';
 import { addItem, deleteItem, deleteItems, getItems } from './items';
-import { createList, deleteList, getLists } from './lists';
+import { createList, deleteList, getLists, updateList } from './lists';
 import patterns from './patterns';
 
 const server = http.createServer((request, response) => {
-  response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, POST');
+  response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST');
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
 
@@ -52,6 +52,17 @@ const server = http.createServer((request, response) => {
     }
   }
 
+  if (request.method === 'PATCH') {
+    if (patterns.SPECIFIC_LIST.test(url.pathname)) {
+      const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
+      const name = url.searchParams.get('name');
+
+      if (name) {
+        return response.end(JSON.stringify(updateList(+listId, name)));
+      }
+    }
+  }
+
   if (request.method === 'POST') {
     // [POST] /list
     if (/^\/list$/.test(url.pathname)) {
@@ -60,8 +71,6 @@ const server = http.createServer((request, response) => {
       if (name) {
         return response.end(JSON.stringify(createList(name)));
       }
-
-      return response.end(JSON.stringify({ error: 'The `name` does not exist.' }));
     }
 
     // [POST] /list/{listId}/item
@@ -72,8 +81,6 @@ const server = http.createServer((request, response) => {
       if (text) {
         return response.end(JSON.stringify(addItem(+listId, text)));
       }
-
-      return response.end(JSON.stringify({ error: 'The `text` does not exist.' }));
     }
   }
 
