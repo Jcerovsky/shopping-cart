@@ -8,35 +8,29 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Lists
 
-- ✅ `[GET] /list`
+- `[GET] /list`
     - It returns all created lists.
 
-- ✅ `[POST] /list?name=Test`
+- `[POST] /list?name=Test`
     - It creates a new list named `Test`.
 
 ### Specific list
 
-- ~~`[GET] /list/{listId}`~~
-    - ~~It returns a specific list identified by `listId`.~~
-
-- ✅ `[DELETE] /list/{listId}`
+- `[DELETE] /list/{listId}`
     - It deletes a specific list identified by `listId`.
 
 ### List items
 
-- ✅ `[GET] /list/{listId}/item`
+- `[GET] /list/{listId}/item`
     - It returns all items in a specific list identified by `listId`.
 
-- ✅ `[DELETE] /list/{listId}/item`
-    - It deletes all items from a specific list identified by `listId`.
-
-- ✅ `[POST] /list/{listId}/item`
+- `[POST] /list/{listId}/item`
     - It adds a new item to a specific list identified by `listId`.
+
+- `[DELETE] /list/{listId}/item`
+    - It deletes all items from a specific list identified by `listId`.
 
 ### Specific list item
 
-- ~~`[GET] /list/{listId}/item/{itemId}`~~
-    - ~~It returns a specific item, identified by `itemId`, from a specific list identified by `listId`.~~
-
-- ✅ `[DELETE] /list/{listId}/item/{itemId}`
+- `[DELETE] /list/{listId}/item/{itemId}`
     - It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
