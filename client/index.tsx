@@ -5,9 +5,7 @@ import './index.css';
 
 if (typeof window !== 'undefined') {
   ReactDOM.createRoot(window.document.querySelector('#client') as HTMLDivElement).render(
-      <React.StrictMode>
         <App />
-      </React.StrictMode>
   );
 }
 
