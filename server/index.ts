@@ -3,6 +3,7 @@
  */
 
 import http from 'http';
+import common from '../common';
 import { addItem, deleteItem, deleteItems, getItems } from './items';
 import { createList, deleteList, getLists } from './lists';
 import patterns from './patterns';
@@ -79,4 +80,4 @@ const server = http.createServer((request, response) => {
   return response.end(JSON.stringify({ error: 'The request is not valid.' }));
 });
 
-server.listen(1337, () => console.log(`Server ✅`));
+server.listen(1337, () => console.log(`${common.SERVER_URL}/list`));
