@@ -12,7 +12,7 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
     - It returns all created lists.
 
 - `[POST] /list?name=Test`
-    - It creates a new list.
+    - It creates a new list and returns an `id`.
 
 ### Specific list
 
