@@ -4,7 +4,7 @@
 
 import http from 'http';
 import { addItem, deleteItem, deleteItems, getItems } from './items';
-import { createList, deleteList, lists } from './lists';
+import { createList, deleteList, getLists } from './lists';
 import patterns from './patterns';
 
 const server = http.createServer((request, response) => {
@@ -40,7 +40,7 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
-      return response.end(JSON.stringify(lists));
+      return response.end(JSON.stringify(getLists()));
     }
 
     // [GET] /list/{listId}/item
