@@ -20,11 +20,15 @@ let items: Item[] = [
   },
 ];
 
-function addItem(listId: number, text: string): Item[] {
+function addItem(listId: number, text: string): Item {
   //                                        ↓ If there is no last item, the `id` starts from 0.
   const lastItemId = items[items.length - 1]?.id ?? 0;
 
-  return (items = [...items, { createdAt: +new Date(), id: lastItemId + 1, isDone: 0, listId, text }]);
+  const item = { createdAt: +new Date(), id: lastItemId + 1, isDone: 0, listId, text };
+
+  items = [...items, item];
+
+  return item;
 }
 
 function deleteItem(id: number): Item[] {
