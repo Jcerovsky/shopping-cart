@@ -79,7 +79,7 @@ const server = http.createServer((request, response) => {
       const text = url.searchParams.get('text');
 
       if (text) {
-        return response.end(JSON.stringify(addItem(+listId, text)));
+        return response.end(JSON.stringify(addItem(+listId, text).id));
       }
     }
   }
