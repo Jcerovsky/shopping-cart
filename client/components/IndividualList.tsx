@@ -24,7 +24,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
   useEffect(() => {
     fetchItem();
-  }, [allItems, list.id]);
+  }, []);
 
   const fetchItem = async () => {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
@@ -43,7 +43,15 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       );
 
       if (response.ok) {
-        const newItem = await response.json();
+        const newItemId = await response.json();
+        console.log(newItemId);
+
+        const newItem = {
+          id: newItemId,
+          text: item,
+          isDone: 0,
+          listId: list.id,
+        };
 
         console.log(newItem);
 
@@ -73,7 +81,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
       if (response.ok) {
         setAllItems((prevState) =>
-          prevState.filter((item) => item.id !== itemId)
+          prevState.filter((item) => item.id !== list.id)
         );
       }
     } catch (error) {
@@ -81,7 +89,9 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     }
   };
 
-  const filteredItemsById = allItems.filter((item) => item.id === list.id);
+  console.log("allitems", allItems);
+
+  const filteredItemsById = allItems.filter((item) => item.listId === list.id);
 
   return (
     <div p="3">

@@ -7,6 +7,7 @@ interface ShoppingItems {
   id: number;
   isDone: number;
   text: string;
+  listId: number;
 }
 
 export { ShoppingItems, ShoppingCart };
