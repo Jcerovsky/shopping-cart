@@ -10,10 +10,10 @@ function App() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchData();
+    fetchList();
   }, []);
 
-  const fetchData = async () => {
+  const fetchList = async () => {
     const response = await fetch("http://127.0.0.1:1337/list");
     const data = await response.json();
     setAllLists(data);
