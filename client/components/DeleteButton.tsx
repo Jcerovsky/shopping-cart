@@ -21,6 +21,11 @@ function DeleteButton({ id, setAllLists, allItems }: DeleteButtonProps) {
           });
         })
       );
+      if (listToDelete.length === 0) {
+        await fetch(`http://127.0.0.1:1337/list/${id}`, {
+          method: "DELETE",
+        });
+      }
     } catch (error) {
       throw new Error(`Error deleting item:' ${error}`);
     }
