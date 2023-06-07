@@ -1,19 +1,26 @@
 import React from "react";
-import { ShoppingCart } from "../ShoppingCartProps";
+import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 
 interface DeleteButtonProps {
   id: number;
   setAllLists: (
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
+  allItems: ShoppingItems[];
 }
 
-function DeleteButton({ id, setAllLists }: DeleteButtonProps) {
+function DeleteButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   const handleDelete = async () => {
+    const listToDelete = allItems.filter((item) => item.listId === id);
+
     try {
-      await fetch(`http://127.0.0.1:1337/list/${id}`, {
-        method: "DELETE",
-      });
+      await Promise.all(
+        listToDelete.map(async (item) => {
+          await fetch(`http://127.0.0.1:1337/list/${item.listId}`, {
+            method: "DELETE",
+          });
+        })
+      );
     } catch (error) {
       throw new Error(`Error deleting item:' ${error}`);
     }

@@ -44,7 +44,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
       if (response.ok) {
         const newItemId = await response.json();
-        console.log(newItemId);
 
         const newItem = {
           id: newItemId,
@@ -53,9 +52,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           listId: list.id,
         };
 
-        console.log(newItem);
-
-        ///Marek makinmg changes - post to return only number
         setAllItems((prevState) => [...prevState, newItem]);
         setItem("");
         setIsClicked(false);
@@ -81,12 +77,22 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
       if (response.ok) {
         setAllItems((prevState) =>
-          prevState.filter((item) => item.id !== list.id)
+          prevState.filter((item) => item.id !== itemId)
         );
       }
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
     }
+  };
+
+  const handleCancelEditAddItem = () => {
+    setIsClicked(true);
+    setItem("");
+  };
+
+  const handleCancelEditAddList = () => {
+    setEditingList(true);
+    setItem(item);
   };
 
   console.log("allitems", allItems);
@@ -130,16 +136,20 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
             <button onClick={() => setIsClicked(false)}>X</button>
           </div>
         ) : (
-          <button onClick={() => setIsClicked(true)}>Add item</button>
+          <button onClick={handleCancelEditAddItem}>Add item</button>
         )}
         <button
           style={{ marginLeft: "auto" }}
-          onClick={() => setEditingList(true)}
+          onClick={handleCancelEditAddList}
         >
           Edit list
         </button>
         <div>
-          <DeleteButton id={list.id} setAllLists={setAllLists} />
+          <DeleteButton
+            id={list.id}
+            setAllLists={setAllLists}
+            allItems={allItems}
+          />
         </div>
       </li>
       <ul>
