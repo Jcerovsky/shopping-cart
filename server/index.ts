@@ -20,21 +20,27 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST.test(url.pathname)) {
       const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
-      return response.end(JSON.stringify(deleteList(+listId)));
+      deleteList(+listId);
+
+      return response.end();
     }
 
     // [DELETE] /list/{listId}/item
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
-      return response.end(JSON.stringify(deleteItems(+listId)));
+      deleteItems(+listId);
+
+      return response.end();
     }
 
     // [DELETE] /list/{listId}/item/{itemId}
     if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
       const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
 
-      return response.end(JSON.stringify(deleteItem(+itemId)));
+      deleteItem(+itemId);
+
+      return response.end();
     }
   }
 
@@ -58,7 +64,9 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        return response.end(JSON.stringify(updateList(+listId, name)));
+        updateList(+listId, name);
+
+        return response.end();
       }
     }
   }
