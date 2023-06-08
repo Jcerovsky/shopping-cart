@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import DeleteButton from "./DeleteButton";
 import "../App.css";
@@ -9,9 +9,11 @@ interface IndividualItemProps {
   setAllLists: (
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
+  setList: (value: (string | ((prevState: string) => string))) => void;
 }
 
-function IndividualList({ list, setAllLists }: IndividualItemProps) {
+function IndividualList({ list, setAllLists, setList }: IndividualItemProps) {
+
   const [item, setItem] = useState<string>("");
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
   const [isClicked, setIsClicked] = useState(false);
@@ -62,8 +64,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleEditListClick = () => {
-    setItem(editedListName);
+    // setItem(editedListName)
+    setEditedListName(editedListName)
     setEditingList(false);
+
   };
 
   const handleDeleteItem = async (itemId: number) => {
@@ -91,13 +95,15 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleCancelEditAddList = () => {
-    setEditingList(true);
-    setItem(item);
+    setEditingList(false)
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
   };
 
-  console.log("allitems", allItems);
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div p="3">
@@ -118,10 +124,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               onChange={(e) => setEditedListName(e.target.value)}
             />
             <button onClick={handleEditListClick}>✔</button>
-            <button onClick={() => setEditingList(false)}>X</button>
+            <button onClick={handleCancelEditAddList}>X</button>
           </>
         ) : (
-          <p>{editedListName ? editedListName : list.name}</p>
+          <p>{editedListName}</p>
         )}
         {isClicked ? (
           <div>
@@ -130,6 +136,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               placeholder="Add item"
               value={item}
               onChange={(e) => setItem(e.target.value)}
+              ref={inputRef}
             />
 
             <button onClick={handleAddItem}>✔</button>
@@ -140,7 +147,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         )}
         <button
           style={{ marginLeft: "auto" }}
-          onClick={handleCancelEditAddList}
+          onClick={() => setEditingList(prevState => !prevState)}
         >
           Edit list
         </button>

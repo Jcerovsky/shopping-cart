@@ -13,6 +13,7 @@ function DeleteButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   const handleDelete = async () => {
     const listToDelete = allItems.filter((item) => item.listId === id);
 
+
     try {
       await Promise.all(
         listToDelete.map(async (item) => {

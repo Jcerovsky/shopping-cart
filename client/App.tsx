@@ -47,7 +47,7 @@ function App() {
       <h1>Shopping List</h1>
       <Input forwardedRef={inputRef} list={list} setList={setList} />
       <button onClick={handleClick}>Add</button>
-      <ShoppingList allLists={allLists} setAllLists={setAllLists} />
+      <ShoppingList allLists={allLists} setAllLists={setAllLists} setList={setList} />
     </div>
   );
 }
