@@ -1,18 +1,20 @@
-import React, {useState, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 
 interface InputRefProps {
     forwardedRef: React.RefObject<HTMLInputElement>,
+    list: string,
+    setList: (value: (((prevState: string) => string) | string)) => void,
+    ref:  ((instance: (unknown | null)) => void),
 }
 
-const Input = forwardRef(({forwardedRef} : InputRefProps) => {
-    const [item, setItem] = useState<string>('')
+const Input = forwardRef(({forwardedRef, list, setList} : InputRefProps, ref) => {
 
     return (
         <input
             type="text"
-            placeholder='Add item'
-            value={item}
-            onChange={(e) => setItem(e.target.value)}
+            placeholder='Add list'
+            value={list}
+            onChange={(e) => setList(e.target.value)}
             ref={forwardedRef}
         />
     );
