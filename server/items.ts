@@ -32,11 +32,11 @@ function addItem(listId: number, text: string): Item {
 }
 
 function deleteItem(id: number): Item[] {
-  return items.filter(item => item.id !== id);
+  return (items = items.filter(item => item.id !== id));
 }
 
 function deleteItems(listId: number): Item[] {
-  return items.filter(item => item.listId !== listId);
+  return (items = items.filter(item => item.listId !== listId));
 }
 
 function getItems(listId: number): Item[] {
