@@ -20,6 +20,8 @@ function IndividualList({ list, setAllLists, setList }: IndividualItemProps) {
 
   const [editingList, setEditingList] = useState(false);
   const [editedListName, setEditedListName] = useState(list.name);
+  const [originalListName, setOriginalListName] = useState(list.name);
+
 
   const [editingItem, setEditingItem] = useState(false);
   const [editingItemName, setEditingItemName] = useState(false);
@@ -63,10 +65,18 @@ function IndividualList({ list, setAllLists, setList }: IndividualItemProps) {
     }
   };
 
-  const handleEditListClick = () => {
-    // setItem(editedListName)
+  const handleEditListClick = async () => {
     setEditedListName(editedListName)
     setEditingList(false);
+    try {
+      await fetch(`http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`, {
+        method: 'PATCH'
+      })
+      setOriginalListName(editedListName)
+    }
+    catch (error) {
+      console.log(`Failed updating list name: ${error}`)
+    }
 
   };
 
@@ -92,10 +102,12 @@ function IndividualList({ list, setAllLists, setList }: IndividualItemProps) {
   const handleCancelEditAddItem = () => {
     setIsClicked(true);
     setItem("");
+
   };
 
   const handleCancelEditAddList = () => {
     setEditingList(false)
+    setEditedListName(originalListName)
     if (inputRef.current) {
       inputRef.current.value = ''
     }
