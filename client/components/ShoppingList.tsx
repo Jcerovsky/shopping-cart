@@ -7,11 +7,11 @@ interface ShoppingItemsProps {
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
   allLists: ShoppingCart[];
-  setList: (value: (string | ((prevState: string) => string))) => void;
 }
 
-function ShoppingList({ allLists, setAllLists, setList }: ShoppingItemsProps) {
-  console.log("allLists", allLists);
+
+function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
+
   return (
     <div>
       <ul>
@@ -21,7 +21,6 @@ function ShoppingList({ allLists, setAllLists, setList }: ShoppingItemsProps) {
               list={list}
               key={list.id}
               setAllLists={setAllLists}
-              setList={setList}
             />
           ))
         ) : (
