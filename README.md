@@ -35,5 +35,8 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Specific list item
 
+- `[PATCH] /list/{listId}/item/{itemId}`
+    - It updates a specific item identified by `itemId`.
+
 - `[DELETE] /list/{listId}/item/{itemId}`
     - It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.

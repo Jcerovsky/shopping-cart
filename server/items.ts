@@ -43,5 +43,9 @@ function getItems(listId: number): Item[] {
   return items.filter(item => item.listId === listId);
 }
 
+function updateItem(id: number, isDone: number): Item[] {
+  return (items = items.map(item => (item.id === id ? { ...item, isDone } : item)));
+}
+
 export type { Item };
-export { addItem, deleteItem, deleteItems, getItems };
+export { addItem, deleteItem, deleteItems, getItems, updateItem };

@@ -4,7 +4,7 @@
 
 import http from 'http';
 import common from '../common';
-import { addItem, deleteItem, deleteItems, getItems } from './items';
+import { addItem, deleteItem, deleteItems, getItems, updateItem } from './items';
 import { createList, deleteList, getLists, updateList } from './lists';
 import patterns from './patterns';
 
@@ -65,6 +65,17 @@ const server = http.createServer((request, response) => {
 
       if (name) {
         updateList(+listId, name);
+
+        return response.end();
+      }
+    }
+
+    if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
+      const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
+      const isDone = url.searchParams.get('isDone');
+
+      if (isDone) {
+        updateItem(+itemId, +isDone);
 
         return response.end();
       }
