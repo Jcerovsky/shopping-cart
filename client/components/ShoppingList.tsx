@@ -9,8 +9,9 @@ interface ShoppingItemsProps {
   allLists: ShoppingCart[];
 }
 
+
 function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
-  console.log("allLists", allLists);
+
   return (
     <div>
       <ul>

@@ -9,9 +9,10 @@ interface DeleteButtonProps {
   allItems: ShoppingItems[];
 }
 
-function DeleteButton({ id, setAllLists, allItems }: DeleteButtonProps) {
+function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   const handleDelete = async () => {
     const listToDelete = allItems.filter((item) => item.listId === id);
+
 
     try {
       await Promise.all(
@@ -41,4 +42,4 @@ function DeleteButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   );
 }
 
-export default DeleteButton;
+export default DeleteListButton;

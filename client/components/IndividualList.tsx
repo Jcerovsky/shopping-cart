@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
-import DeleteButton from "./DeleteButton";
+import DeleteListButton from "./DeleteListButton";
 import "../App.css";
 import { ShoppingItems } from "../ShoppingCartProps";
 
@@ -12,15 +12,15 @@ interface IndividualItemProps {
 }
 
 function IndividualList({ list, setAllLists }: IndividualItemProps) {
+
   const [item, setItem] = useState<string>("");
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [showList, setShowList] = useState(false);
 
   const [editingList, setEditingList] = useState(false);
   const [editedListName, setEditedListName] = useState(list.name);
-
-  const [editingItem, setEditingItem] = useState(false);
-  const [editingItemName, setEditingItemName] = useState(false);
+  const [originalListName, setOriginalListName] = useState(list.name);
 
   useEffect(() => {
     fetchItem();
@@ -38,7 +38,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item?text=${item}`,
         {
-          method: "POST",
+          method: "POST"
         }
       );
 
@@ -49,7 +49,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           id: newItemId,
           text: item,
           isDone: 0,
-          listId: list.id,
+          listId: list.id
         };
 
         setAllItems((prevState) => [...prevState, newItem]);
@@ -61,17 +61,27 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     }
   };
 
-  const handleEditListClick = () => {
-    setItem(editedListName);
+  const handleEditListClick = async () => {
+    setEditedListName(editedListName);
     setEditingList(false);
+    try {
+      await fetch(`http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`, {
+        method: "PATCH"
+      });
+      setOriginalListName(editedListName);
+    } catch (error) {
+      console.log(`Failed updating list name: ${error}`);
+    }
+
   };
 
   const handleDeleteItem = async (itemId: number) => {
+    console.log(`listId: ${list.id}, itemId: ${itemId}`);
     try {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item/${itemId}`,
         {
-          method: "DELETE",
+          method: "DELETE"
         }
       );
 
@@ -88,16 +98,26 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const handleCancelEditAddItem = () => {
     setIsClicked(true);
     setItem("");
+
   };
 
   const handleCancelEditAddList = () => {
-    setEditingList(true);
-    setItem(item);
+    setEditingList(false);
+    setEditedListName(originalListName);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
-  console.log("allitems", allItems);
+  const toggleShow = () => {
+    setShowList(prevState => prevState = !prevState);
+  };
+
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const itemDisplay = showList ? "block" : "none";
 
   return (
     <div p="3">
@@ -118,10 +138,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               onChange={(e) => setEditedListName(e.target.value)}
             />
             <button onClick={handleEditListClick}>✔</button>
-            <button onClick={() => setEditingList(false)}>X</button>
+            <button onClick={handleCancelEditAddList}>X</button>
           </>
         ) : (
-          <p>{editedListName ? editedListName : list.name}</p>
+          <p>{editedListName}</p>
         )}
         {isClicked ? (
           <div>
@@ -130,6 +150,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               placeholder="Add item"
               value={item}
               onChange={(e) => setItem(e.target.value)}
+              ref={inputRef}
             />
 
             <button onClick={handleAddItem}>✔</button>
@@ -140,24 +161,25 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         )}
         <button
           style={{ marginLeft: "auto" }}
-          onClick={handleCancelEditAddList}
+          onClick={() => setEditingList(prevState => !prevState)}
         >
           Edit list
         </button>
-        <div>
-          <DeleteButton
-            id={list.id}
-            setAllLists={setAllLists}
-            allItems={allItems}
-          />
-        </div>
+        <DeleteListButton
+          id={list.id}
+          setAllLists={setAllLists}
+          allItems={allItems}
+        />
+        {
+          filteredItemsById.length !== 0 &&
+          <button onClick={toggleShow}>{showList ? "Hide" : "Show"}</button>
+        }
       </li>
       <ul>
         {filteredItemsById.map((item) => (
-          <li key={item.id}>
-            <input type="checkbox" />
+          <li style={{ display: itemDisplay }} key={item.id}>
             {item.text}
-            <button>Edit</button>
+            <input type="checkbox" />
             <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
           </li>
         ))}
