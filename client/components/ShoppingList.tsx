@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import IndividualList from "./IndividualList";
+import '../App.css'
 
 interface ShoppingItemsProps {
   setAllLists: (
@@ -13,9 +14,9 @@ interface ShoppingItemsProps {
 function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
 
   return (
-    <div>
+    <div className='list' >
       <ul>
-        {allLists.length !== 0 ? (
+        {allLists.length !== 0? (
           allLists.map((list) => (
             <IndividualList
               list={list}
@@ -24,8 +25,9 @@ function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
             />
           ))
         ) : (
-          <p>Your cart is empty</p>
-        )}
+          <p>Loading...</p>
+          )
+        }
       </ul>
     </div>
   );

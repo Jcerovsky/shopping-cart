@@ -3,6 +3,8 @@ import { ShoppingCart } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import "../App.css";
 import { ShoppingItems } from "../ShoppingCartProps";
+import IndividualItem from "./IndividualItem";
+import EditingListInput from "./EditingListInput";
 
 interface IndividualItemProps {
   list: ShoppingCart;
@@ -10,6 +12,7 @@ interface IndividualItemProps {
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
 }
+
 
 function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
@@ -76,7 +79,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleDeleteItem = async (itemId: number) => {
-    console.log(`listId: ${list.id}, itemId: ${itemId}`);
     try {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item/${itemId}`,
@@ -130,16 +132,8 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         border="1"
       >
         {editingList ? (
-          <>
-            <input
-              type="text"
-              placeholder="Add item"
-              value={editedListName}
-              onChange={(e) => setEditedListName(e.target.value)}
-            />
-            <button onClick={handleEditListClick}>✔</button>
-            <button onClick={handleCancelEditAddList}>X</button>
-          </>
+          <EditingListInput value={editedListName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
+                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} />
         ) : (
           <p>{editedListName}</p>
         )}
@@ -160,7 +154,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           <button onClick={handleCancelEditAddItem}>Add item</button>
         )}
         <button
-          style={{ marginLeft: "auto" }}
+          mL='auto'
           onClick={() => setEditingList(prevState => !prevState)}
         >
           Edit list
@@ -177,11 +171,8 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       </li>
       <ul>
         {filteredItemsById.map((item) => (
-          <li style={{ display: itemDisplay }} key={item.id}>
-            {item.text}
-            <input type="checkbox" />
-            <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
-          </li>
+          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem} />
+
         ))}
       </ul>
     </div>

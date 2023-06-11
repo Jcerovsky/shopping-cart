@@ -1,4 +1,5 @@
 import React, {forwardRef} from 'react';
+import '../App.css'
 
 interface InputRefProps {
     forwardedRef: React.RefObject<HTMLInputElement>,
@@ -16,6 +17,7 @@ const Input = forwardRef(({forwardedRef, list, setList} : InputRefProps, ref) =>
             value={list}
             onChange={(e) => setList(e.target.value)}
             ref={forwardedRef}
+            className='navbar--input'
         />
     );
 })

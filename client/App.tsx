@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "./ShoppingCartProps";
 import ShoppingList from "./components/./ShoppingList";
 import Input from "./components/Input";
+import "./App.css";
 
 function App() {
   const [list, setList] = useState<string>("");
@@ -27,7 +28,7 @@ function App() {
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
           {
-            method: "POST",
+            method: "POST"
           }
         );
 
@@ -43,12 +44,16 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Shopping List</h1>
-      <Input forwardedRef={inputRef} list={list} setList={setList} />
-      <button onClick={handleClick}>Add</button>
+    <>
+      <div className="navbar">
+        <h1 className='navbar--heading' >Shopping List</h1>
+        <div display="flex" justifyContent="center">
+          <Input forwardedRef={inputRef} list={list} setList={setList} />
+          <button className='navbar--button' onClick={handleClick}>Add</button>
+        </div>
+      </div>
       <ShoppingList allLists={allLists} setAllLists={setAllLists} />
-    </div>
+    </>
   );
 }
 

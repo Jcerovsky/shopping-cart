@@ -1,3 +1,33 @@
+
 .individual-list {
-    background-color: #008000;
+    background-color: #4a91ff;
+}
+
+.navbar--input {
+    padding: 0.75em;
+    border-radius: 6px;
+    border: none;
+}
+
+.navbar--button {
+    border-radius: 6px;
+    border: none;
+    right: 10px;
+    margin-left: 1em;
+}
+
+.navbar--heading {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.list {
+    border: 1px solid #fdffee;
+    margin: 1em;
+    border-radius: 10px;
+}
+
+.editing-list-input {
+    padding: 0.5em;
 }

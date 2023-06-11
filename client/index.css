@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;700&display=swap');
+
+
+body {
+    background: linear-gradient(90deg, #2054ff, #008080) no-repeat;
+    width: 100%;
+    height: 100vh;
+    font-family: 'Rajdhani', sans-serif;
+    box-sizing: border-box;
+}
