@@ -171,7 +171,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       </li>
       <ul>
         {filteredItemsById.map((item) => (
-          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem} />
+          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem} listId={list.id}  />
 
         ))}
       </ul>
