@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import "../App.css";
@@ -28,6 +28,13 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   useEffect(() => {
     fetchItem();
   }, []);
+
+  useEffect(() => {
+    if (isClicked && addItemInputRef.current) {
+      addItemInputRef.current.focus();
+    }
+  }, [isClicked]);
+
 
   const fetchItem = async () => {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
@@ -97,7 +104,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     }
   };
 
-  const handleCancelEditAddItem = () => {
+  const handleAddItemButton = () => {
     setIsClicked(true);
     setItem("");
 
@@ -106,18 +113,27 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const handleCancelEditAddList = () => {
     setEditingList(false);
     setEditedListName(originalListName);
-    if (inputRef.current) {
-      inputRef.current.value = "";
+    if (addItemInputRef.current) {
+      addItemInputRef.current.value = "";
     }
   };
 
   const toggleShow = () => {
-    setShowList(prevState => prevState = !prevState);
+    setShowList(prevState => !prevState);
   };
 
+  const focusOnInput = () => {
+      setTimeout(() => {
+        forwardedInputRef.current?.focus()
+        console.log('worked')
+      }, 100)
+
+  }
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const addItemInputRef = useRef<HTMLInputElement>(null);
+  const forwardedInputRef = useRef<HTMLInputElement>(null)
+
 
   const itemDisplay = showList ? "block" : "none";
 
@@ -132,8 +148,9 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         border="1"
       >
         {editingList ? (
-          <EditingListInput value={editedListName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
-                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} />
+          <EditingListInput value={editedListName}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
+                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} ref={forwardedInputRef} />
         ) : (
           <p>{editedListName}</p>
         )}
@@ -144,18 +161,21 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               placeholder="Add item"
               value={item}
               onChange={(e) => setItem(e.target.value)}
-              ref={inputRef}
+              ref={addItemInputRef}
             />
 
             <button onClick={handleAddItem}>✔</button>
             <button onClick={() => setIsClicked(false)}>X</button>
           </div>
         ) : (
-          <button onClick={handleCancelEditAddItem}>Add item</button>
+          <button onClick={handleAddItemButton}>Add </button>
         )}
         <button
-          mL='auto'
-          onClick={() => setEditingList(prevState => !prevState)}
+          mL="auto"
+          onClick={() => {
+            setEditingList(prevState => !prevState);
+            focusOnInput();
+          }}
         >
           Edit list
         </button>
@@ -171,7 +191,8 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       </li>
       <ul>
         {filteredItemsById.map((item) => (
-          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem} listId={list.id}  />
+          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem}
+                          listId={list.id} />
 
         ))}
       </ul>

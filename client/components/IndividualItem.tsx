@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ShoppingItems } from "../ShoppingCartProps";
+import { AiOutlineEdit } from 'react-icons/ai'
+import {RiDeleteBin6Line} from 'react-icons/ri'
 
 interface Props {
   item: ShoppingItems,
@@ -22,14 +24,13 @@ function IndividualItem({ item, itemDisplay, handleDeleteItem, listId}: Props) {
     }
   }, [isClicked])
 
-  console.log(isClicked)
-
 
   return (
     <li display={itemDisplay} key={item.id}>
-      <p onClick={() => setIsClicked(prevState => !prevState)}>{item.text}</p>
+      <p>{item.text}</p>
+      <AiOutlineEdit onClick={() => setIsClicked(prevState => !prevState)}/>
       <div>{isClicked ? "✅" : "⛔️"}</div>
-      <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
+      <RiDeleteBin6Line onClick={() => handleDeleteItem(item.id)}/>
     </li>
   );
 }

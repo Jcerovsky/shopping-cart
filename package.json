@@ -11,5 +11,8 @@
     "webpack": "^5.80.0"
   },
   "name": "shopping-cart",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "react-icons": "^4.9.0"
+  }
 }

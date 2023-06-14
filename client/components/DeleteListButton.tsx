@@ -1,5 +1,7 @@
 import React from "react";
 import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
+import {RiDeleteBin6Line} from 'react-icons/ri'
+
 
 interface DeleteButtonProps {
   id: number;
@@ -35,9 +37,7 @@ function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
 
   return (
     <div>
-      <button p="1" borderRadius="" onClick={handleDelete}>
-        Delete list
-      </button>
+      <RiDeleteBin6Line onClick={handleDelete} />
     </div>
   );
 }
