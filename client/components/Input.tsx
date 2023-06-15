@@ -6,9 +6,15 @@ interface InputRefProps {
     list: string,
     setList: (value: (((prevState: string) => string) | string)) => void,
     ref:  ((instance: (unknown | null)) => void),
+    errorColor: string,
+
 }
 
-const Input = forwardRef(({forwardedRef, list, setList} : InputRefProps, ref) => {
+const Input = forwardRef(({forwardedRef, list, setList, errorColor} : InputRefProps, ref) => {
+
+    const style = {
+        backgroundColor: errorColor
+    }
 
     return (
         <input
@@ -18,6 +24,7 @@ const Input = forwardRef(({forwardedRef, list, setList} : InputRefProps, ref) =>
             onChange={(e) => setList(e.target.value)}
             ref={forwardedRef}
             className='navbar--input'
+            style={style}
         />
     );
 })

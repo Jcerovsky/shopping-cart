@@ -5,7 +5,7 @@ import {RiDeleteBin6Line} from 'react-icons/ri'
 
 interface Props {
   item: ShoppingItems,
-  itemDisplay: "none" | "block",
+  itemDisplay: "none" | "flex",
   handleDeleteItem: (itemId: number) => Promise<void>,
   listId: number,
 }

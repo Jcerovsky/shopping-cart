@@ -1,14 +1,19 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef } from "react";
+import { GiConfirmed } from 'react-icons/gi'
 
 interface Props {
   value: string,
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   onClick: () => Promise<void>,
-  onClick1: () => void,
+  backgroundColor: string
 
 }
 
-const EditingListInput = forwardRef<HTMLInputElement, Props>(({ value, onChange, onClick, onClick1 }: Props, forwardedInputRef) => {
+const EditingListInput = forwardRef<HTMLInputElement, Props>(({ value, onChange, onClick, backgroundColor }: Props, forwardedInputRef) => {
+
+  const style = {
+    backgroundColor
+  }
   return <>
     <input
       className="editing-list-input"
@@ -17,10 +22,10 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(({ value, onChange,
       value={value}
       onChange={onChange}
       ref={forwardedInputRef}
+      style={style}
 
     />
-    <button onClick={onClick}>✔</button>
-    <button onClick={onClick1}>X</button>
+    <GiConfirmed onClick={onClick} style={{fontSize:'2em'}} />
   </>;
 })
 

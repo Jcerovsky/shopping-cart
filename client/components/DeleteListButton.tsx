@@ -35,9 +35,15 @@ function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
     setAllLists((prevList) => prevList.filter((item) => item.id !== id));
   };
 
+  const style = {
+    fontSize: '2em'
+  }
+
+
+
   return (
     <div>
-      <RiDeleteBin6Line onClick={handleDelete} />
+      <RiDeleteBin6Line onClick={handleDelete} style={style} />
     </div>
   );
 }

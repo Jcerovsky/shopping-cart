@@ -7,6 +7,7 @@ import "./App.css";
 function App() {
   const [list, setList] = useState<string>("");
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
+  const [errorColor, setErrorColor] = useState('')
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +24,10 @@ function App() {
   const handleClick = async () => {
     const name = inputRef.current?.value;
 
-    if (name) {
+    if (name === undefined) return
+
+    if (name.length > 2) {
+      setErrorColor('')
       try {
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
@@ -40,6 +44,9 @@ function App() {
       }
 
       setList("");
+    } else {
+      setList('')
+      setErrorColor('red')
     }
   };
 
@@ -48,7 +55,7 @@ function App() {
       <div className="navbar">
         <h1 className='navbar--heading' >Shopping List</h1>
         <div display="flex" justifyContent="center">
-          <Input forwardedRef={inputRef} list={list} setList={setList} />
+          <Input forwardedRef={inputRef} list={list} setList={setList} errorColor={errorColor} />
           <button className='navbar--button' onClick={handleClick}>Add</button>
         </div>
       </div>

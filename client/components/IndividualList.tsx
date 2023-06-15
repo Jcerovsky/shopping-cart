@@ -1,10 +1,14 @@
-import React, {useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import "../App.css";
 import { ShoppingItems } from "../ShoppingCartProps";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
+import { AiOutlineEdit } from "react-icons/ai";
+import { MdOutlineCancel } from "react-icons/md";
+import { IoIosArrowDropup, IoIosArrowDropdown, IoMdAddCircleOutline } from "react-icons/io";
+
 
 interface IndividualItemProps {
   list: ShoppingCart;
@@ -18,22 +22,27 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
   const [item, setItem] = useState<string>("");
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
-  const [isClicked, setIsClicked] = useState(false);
+  const [isAddItemBtnClicked, setIsAddItemBtnClicked] = useState(false);
   const [showList, setShowList] = useState(false);
 
   const [editingList, setEditingList] = useState(false);
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
+  const [backgroundColor, setBackgroundColor] = useState("");
 
   useEffect(() => {
     fetchItem();
   }, []);
 
   useEffect(() => {
-    if (isClicked && addItemInputRef.current) {
+    focusOnInput();
+  }, [editingList]);
+
+  useEffect(() => {
+    if (isAddItemBtnClicked && addItemInputRef.current) {
       addItemInputRef.current.focus();
     }
-  }, [isClicked]);
+  }, [isAddItemBtnClicked]);
 
 
   const fetchItem = async () => {
@@ -44,6 +53,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleAddItem = async (): Promise<void> => {
+    if (item.length < 3) {
+      setBackgroundColor("red");
+      console.log("item you are tryning to add is too hshort");
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item?text=${item}`,
@@ -64,7 +79,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
         setAllItems((prevState) => [...prevState, newItem]);
         setItem("");
-        setIsClicked(false);
+        setIsAddItemBtnClicked(false);
       }
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
@@ -105,7 +120,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleAddItemButton = () => {
-    setIsClicked(true);
+    setIsAddItemBtnClicked(true);
     setItem("");
 
   };
@@ -123,19 +138,16 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const focusOnInput = () => {
-      setTimeout(() => {
-        forwardedInputRef.current?.focus()
-        console.log('worked')
-      }, 100)
+    forwardedInputRef.current?.focus();
+  };
 
-  }
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
   const addItemInputRef = useRef<HTMLInputElement>(null);
-  const forwardedInputRef = useRef<HTMLInputElement>(null)
+  const forwardedInputRef = useRef<HTMLInputElement>(null);
 
 
-  const itemDisplay = showList ? "block" : "none";
+  const itemDisplay = showList ? "flex" : "none";
 
   return (
     <div p="3">
@@ -145,16 +157,17 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         justifyContent="center"
         alignItems="center"
         gap="2"
-        border="1"
+        color="blue"
       >
         {editingList ? (
           <EditingListInput value={editedListName}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
-                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} ref={forwardedInputRef} />
+                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} ref={forwardedInputRef}
+                            backgroundColor={backgroundColor} />
         ) : (
           <p>{editedListName}</p>
         )}
-        {isClicked ? (
+        {isAddItemBtnClicked ? (
           <div>
             <input
               type="text"
@@ -162,32 +175,40 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               value={item}
               onChange={(e) => setItem(e.target.value)}
               ref={addItemInputRef}
+              style={{ backgroundColor: backgroundColor }}
             />
 
             <button onClick={handleAddItem}>✔</button>
-            <button onClick={() => setIsClicked(false)}>X</button>
+            <button onClick={() => setIsAddItemBtnClicked(false)}>X</button>
           </div>
         ) : (
-          <button onClick={handleAddItemButton}>Add </button>
+          <IoMdAddCircleOutline onClick={handleAddItemButton} style={{fontSize:'2em'}} />
         )}
-        <button
-          mL="auto"
-          onClick={() => {
-            setEditingList(prevState => !prevState);
-            focusOnInput();
-          }}
-        >
-          Edit list
-        </button>
+        {
+          editingList ? <MdOutlineCancel onClick={() => {
+              setEditingList(prevState => !prevState);
+              handleCancelEditAddList();
+            }} style={{ marginLeft: "auto", fontSize: '2em' }} /> :
+            <AiOutlineEdit style={{ marginLeft: "auto", fontSize:'2em' }}
+                           onClick={() => {
+                             setEditingList(prevState => !prevState);
+                             focusOnInput();
+                           }} />
+        }
+
+
+        {
+          filteredItemsById.length !== 0 && showList ? <IoIosArrowDropup onClick={toggleShow} style={{fontSize:'2em'}} /> :
+            <IoIosArrowDropdown onClick={toggleShow} style={{fontSize:'2em'}}/>
+
+
+        }
+
         <DeleteListButton
           id={list.id}
           setAllLists={setAllLists}
           allItems={allItems}
         />
-        {
-          filteredItemsById.length !== 0 &&
-          <button onClick={toggleShow}>{showList ? "Hide" : "Show"}</button>
-        }
       </li>
       <ul>
         {filteredItemsById.map((item) => (
