@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
-import { GiConfirmed } from 'react-icons/gi'
+import { MdOutlineFileDownloadDone } from 'react-icons/md'
+import '../App.css'
 
 interface Props {
   value: string,
@@ -25,7 +26,7 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(({ value, onChange,
       style={style}
 
     />
-    <GiConfirmed onClick={onClick} style={{fontSize:'2em'}} />
+    <MdOutlineFileDownloadDone onClick={onClick} className='icons' />
   </>;
 })
 

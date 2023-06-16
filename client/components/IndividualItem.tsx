@@ -1,16 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingItems } from "../ShoppingCartProps";
-import { AiOutlineEdit } from 'react-icons/ai'
-import {RiDeleteBin6Line} from 'react-icons/ri'
+import { MdDoneOutline } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import "../App.css";
 
 interface Props {
   item: ShoppingItems,
   itemDisplay: "none" | "flex",
   handleDeleteItem: (itemId: number) => Promise<void>,
   listId: number,
+  setCompletedItems:  React.Dispatch<React.SetStateAction<number>>,
+  allItems:  ShoppingItems[],
+
 }
 
-function IndividualItem({ item, itemDisplay, handleDeleteItem, listId}: Props) {
+function IndividualItem({ item, itemDisplay, handleDeleteItem, listId, setCompletedItems, allItems}: Props) {
 
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
@@ -22,15 +26,26 @@ function IndividualItem({ item, itemDisplay, handleDeleteItem, listId}: Props) {
     } catch (error) {
       console.log(`Failed updating item: ${error}`);
     }
+
   }, [isClicked])
 
 
+
+  const updateIsDone = () => {
+    console.log(allItems.filter(item => item.isDone === 1))
+  }
+
+
+
+
   return (
-    <li display={itemDisplay} key={item.id}>
+    <li display={itemDisplay} className='individual-item' key={item.id} style={isClicked? {backgroundColor: 'tomato'} : {}}>
+      <MdDoneOutline onClick={() => {
+        setIsClicked(prevState => !prevState);
+        updateIsDone()
+      }}  className='icons' />
       <p>{item.text}</p>
-      <AiOutlineEdit onClick={() => setIsClicked(prevState => !prevState)}/>
-      <div>{isClicked ? "✅" : "⛔️"}</div>
-      <RiDeleteBin6Line onClick={() => handleDeleteItem(item.id)}/>
+      <RiDeleteBin6Line onClick={() => handleDeleteItem(item.id)} style={{marginLeft:"auto"}} className='icons'/>
     </li>
   );
 }

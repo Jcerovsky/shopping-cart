@@ -27,6 +27,7 @@ function App() {
     if (name === undefined) return
 
     if (name.length > 2) {
+
       setErrorColor('')
       try {
         const response = await fetch(
@@ -50,13 +51,14 @@ function App() {
     }
   };
 
+
   return (
     <>
       <div className="navbar">
         <h1 className='navbar--heading' >Shopping List</h1>
         <div display="flex" justifyContent="center">
           <Input forwardedRef={inputRef} list={list} setList={setList} errorColor={errorColor} />
-          <button className='navbar--button' onClick={handleClick}>Add</button>
+          <button className='navbar--button' onClick={handleClick}>ADD</button>
         </div>
       </div>
       <ShoppingList allLists={allLists} setAllLists={setAllLists} />

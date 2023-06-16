@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ShoppingCart } from "../ShoppingCartProps";
+import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import "../App.css";
-import { ShoppingItems } from "../ShoppingCartProps";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineCancel } from "react-icons/md";
-import { IoIosArrowDropup, IoIosArrowDropdown, IoMdAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
 
 
 interface IndividualItemProps {
@@ -15,6 +14,8 @@ interface IndividualItemProps {
   setAllLists: (
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
+
+
 }
 
 
@@ -29,6 +30,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
   const [backgroundColor, setBackgroundColor] = useState("");
+  const [completedItems, setCompletedItems] = useState<number>(allItems.filter(item => item.isDone).length)
 
   useEffect(() => {
     fetchItem();
@@ -152,56 +154,53 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   return (
     <div p="3">
       <li
-        className="individual-list"
         display="flex"
         justifyContent="center"
         alignItems="center"
         gap="2"
         color="blue"
+        className='list--individual'
       >
         {editingList ? (
           <EditingListInput value={editedListName}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
-                            onClick={handleEditListClick} onClick1={handleCancelEditAddList} ref={forwardedInputRef}
+                            onClick={handleEditListClick} ref={forwardedInputRef}
                             backgroundColor={backgroundColor} />
         ) : (
           <p>{editedListName}</p>
         )}
+        {
+          allItems.length !== 0? showList ?
+            <IoIosArrowDropup onClick={toggleShow} className='icons' /> :
+            <IoIosArrowDropdown onClick={toggleShow} className='icons' /> : null
+        }
         {isAddItemBtnClicked ? (
-          <div>
+          <div style={{marginLeft:'auto'}} >
             <input
               type="text"
               placeholder="Add item"
               value={item}
               onChange={(e) => setItem(e.target.value)}
               ref={addItemInputRef}
-              style={{ backgroundColor: backgroundColor }}
+              style={{ backgroundColor: backgroundColor, marginLeft:'auto'}}
             />
 
             <button onClick={handleAddItem}>✔</button>
             <button onClick={() => setIsAddItemBtnClicked(false)}>X</button>
           </div>
         ) : (
-          <IoMdAddCircleOutline onClick={handleAddItemButton} style={{fontSize:'2em'}} />
+          <IoIosAddCircleOutline onClick={handleAddItemButton} className='icons' style={{marginLeft: "auto" }} />
         )}
         {
           editingList ? <MdOutlineCancel onClick={() => {
               setEditingList(prevState => !prevState);
               handleCancelEditAddList();
-            }} style={{ marginLeft: "auto", fontSize: '2em' }} /> :
-            <AiOutlineEdit style={{ marginLeft: "auto", fontSize:'2em' }}
+            }}  className='icons'/> :
+            <AiOutlineEdit className='icons'
                            onClick={() => {
                              setEditingList(prevState => !prevState);
                              focusOnInput();
                            }} />
-        }
-
-
-        {
-          filteredItemsById.length !== 0 && showList ? <IoIosArrowDropup onClick={toggleShow} style={{fontSize:'2em'}} /> :
-            <IoIosArrowDropdown onClick={toggleShow} style={{fontSize:'2em'}}/>
-
-
         }
 
         <DeleteListButton
@@ -209,12 +208,15 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           setAllLists={setAllLists}
           allItems={allItems}
         />
+        <div>
+          {`Items in the list: ${allItems.length}`}
+          {`Completed: ${completedItems}`}
+        </div>
       </li>
-      <ul>
+      <ul style={allItems.length!==0 && showList? {border: '1px solid #000000', borderRadius:'5px', marginTop:'0.5em'} : {} } >
         {filteredItemsById.map((item) => (
           <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem}
-                          listId={list.id} />
-
+                          listId={list.id} setCompletedItems={setCompletedItems} allItems={allItems}  />
         ))}
       </ul>
     </div>

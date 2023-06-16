@@ -19,7 +19,7 @@ const Input = forwardRef(({forwardedRef, list, setList, errorColor} : InputRefPr
     return (
         <input
             type="text"
-            placeholder='Add list'
+            placeholder='ADD NEW LIST'
             value={list}
             onChange={(e) => setList(e.target.value)}
             ref={forwardedRef}

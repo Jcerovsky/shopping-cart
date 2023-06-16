@@ -1,19 +1,47 @@
-
-.individual-list {
-    background-color: #4a91ff;
+:root {
+    --box-shadow: 1px 1px 1px #000000;
+    --border: 1px solid #000000;
+    --border-radius: 5px;
 }
+
+.list--individual {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: 1em;
+}
+
+
+.individual-item {
+    user-select: none;
+    gap: 1em;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: 0.5em;
+    margin: 1em;
+
+}
+
 
 .navbar--input {
     padding: 0.75em;
-    border-radius: 6px;
-    border: none;
+    border-radius: var(--border-radius);
+    border: var(--border);
 }
 
 .navbar--button {
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     border: none;
     right: 10px;
     margin-left: 1em;
+    padding: 0 0.75em;
+}
+.navbar--button:active {
+    transform: scale(0.6);
+    transition: 0.2s;
+}
+
+.navbar--button:hover {
+    box-shadow: var(--box-shadow)
 }
 
 .navbar--heading {
@@ -23,11 +51,26 @@
 }
 
 .list {
-    border: 1px solid #fdffee;
+    border: var(--border);
     margin: 1em;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 .editing-list-input {
     padding: 0.5em;
+    border-radius: var(--border-radius);
+
+}
+
+.icons {
+    font-size: 1.5em;
+    border: var(--border);
+    border-radius: var(--border-radius);
+}
+
+.icons:hover {
+    color: #f5f5f5;
+    box-shadow: var(--box-shadow)
+
+
 }

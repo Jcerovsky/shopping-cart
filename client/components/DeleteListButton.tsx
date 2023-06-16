@@ -1,6 +1,7 @@
 import React from "react";
 import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 import {RiDeleteBin6Line} from 'react-icons/ri'
+import '../App.css'
 
 
 interface DeleteButtonProps {
@@ -35,16 +36,10 @@ function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
     setAllLists((prevList) => prevList.filter((item) => item.id !== id));
   };
 
-  const style = {
-    fontSize: '2em'
-  }
-
 
 
   return (
-    <div>
-      <RiDeleteBin6Line onClick={handleDelete} style={style} />
-    </div>
+      <RiDeleteBin6Line onClick={handleDelete} className='icons'  />
   );
 }
 
