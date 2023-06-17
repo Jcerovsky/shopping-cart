@@ -30,7 +30,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
   const [backgroundColor, setBackgroundColor] = useState("");
-  const [completedItems, setCompletedItems] = useState<number>(allItems.filter(item => item.isDone).length)
+  const [completedItems, setCompletedItems] = useState(0)
 
   useEffect(() => {
     fetchItem();
@@ -143,6 +143,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     forwardedInputRef.current?.focus();
   };
 
+  const updatedCompletedItems = (count: number) => {
+    setCompletedItems(count)
+  }
+
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
   const addItemInputRef = useRef<HTMLInputElement>(null);
@@ -208,15 +212,15 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           setAllLists={setAllLists}
           allItems={allItems}
         />
-        <div>
-          {`Items in the list: ${allItems.length}`}
-          {`Completed: ${completedItems}`}
+        <div display='flex' flexDirection='column'>
+          {/*<p>{`Items in the list: ${allItems.length}`}</p>*/}
+          <p>{`Completed: ${completedItems}/${allItems.length} items`}</p>
         </div>
       </li>
       <ul style={allItems.length!==0 && showList? {border: '1px solid #000000', borderRadius:'5px', marginTop:'0.5em'} : {} } >
         {filteredItemsById.map((item) => (
           <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem}
-                          listId={list.id} setCompletedItems={setCompletedItems} allItems={allItems}  />
+                          listId={list.id} setCompletedItems={updatedCompletedItems} allItems={allItems} />
         ))}
       </ul>
     </div>
