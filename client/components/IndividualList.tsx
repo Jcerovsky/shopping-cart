@@ -5,22 +5,21 @@ import "../App.css";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
 import { AiOutlineEdit } from "react-icons/ai";
-import { MdOutlineCancel } from "react-icons/md";
-import { IoIosAddCircleOutline, IoIosArrowDropdown, IoIosArrowDropup } from "react-icons/io";
-
+import { MdOutlineCancel, MdDoneOutline } from "react-icons/md";
+import {
+  IoIosAddCircleOutline,
+  IoIosArrowDropdown,
+  IoIosArrowDropup,
+} from "react-icons/io";
 
 interface IndividualItemProps {
   list: ShoppingCart;
   setAllLists: (
     value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
   ) => void;
-
-
 }
 
-
 function IndividualList({ list, setAllLists }: IndividualItemProps) {
-
   const [item, setItem] = useState<string>("");
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
   const [isAddItemBtnClicked, setIsAddItemBtnClicked] = useState(false);
@@ -30,7 +29,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
   const [backgroundColor, setBackgroundColor] = useState("");
-  const [completedItems, setCompletedItems] = useState(0)
+  const [completedItems, setCompletedItems] = useState(0);
 
   useEffect(() => {
     fetchItem();
@@ -45,7 +44,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       addItemInputRef.current.focus();
     }
   }, [isAddItemBtnClicked]);
-
 
   const fetchItem = async () => {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
@@ -65,7 +63,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item?text=${item}`,
         {
-          method: "POST"
+          method: "POST",
         }
       );
 
@@ -76,7 +74,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           id: newItemId,
           text: item,
           isDone: 0,
-          listId: list.id
+          listId: list.id,
         };
 
         setAllItems((prevState) => [...prevState, newItem]);
@@ -92,14 +90,16 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     setEditedListName(editedListName);
     setEditingList(false);
     try {
-      await fetch(`http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`, {
-        method: "PATCH"
-      });
+      await fetch(
+        `http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`,
+        {
+          method: "PATCH",
+        }
+      );
       setOriginalListName(editedListName);
     } catch (error) {
       console.log(`Failed updating list name: ${error}`);
     }
-
   };
 
   const handleDeleteItem = async (itemId: number) => {
@@ -107,7 +107,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item/${itemId}`,
         {
-          method: "DELETE"
+          method: "DELETE",
         }
       );
 
@@ -124,7 +124,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const handleAddItemButton = () => {
     setIsAddItemBtnClicked(true);
     setItem("");
-
   };
 
   const handleCancelEditAddList = () => {
@@ -136,7 +135,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const toggleShow = () => {
-    setShowList(prevState => !prevState);
+    setShowList((prevState) => !prevState);
   };
 
   const focusOnInput = () => {
@@ -144,14 +143,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const updatedCompletedItems = (count: number) => {
-    setCompletedItems(count)
-  }
-
+    setCompletedItems(count);
+  };
 
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
   const addItemInputRef = useRef<HTMLInputElement>(null);
   const forwardedInputRef = useRef<HTMLInputElement>(null);
-
 
   const itemDisplay = showList ? "flex" : "none";
 
@@ -163,64 +160,112 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         alignItems="center"
         gap="2"
         color="blue"
-        className='list--individual'
+        className="list--individual"
       >
         {editingList ? (
-          <EditingListInput value={editedListName}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedListName(e.target.value)}
-                            onClick={handleEditListClick} ref={forwardedInputRef}
-                            backgroundColor={backgroundColor} />
+          <EditingListInput
+            value={editedListName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEditedListName(e.target.value)
+            }
+            onClick={handleEditListClick}
+            ref={forwardedInputRef}
+            backgroundColor={backgroundColor}
+          />
         ) : (
           <p>{editedListName}</p>
         )}
-        {
-          allItems.length !== 0? showList ?
-            <IoIosArrowDropup onClick={toggleShow} className='icons' /> :
-            <IoIosArrowDropdown onClick={toggleShow} className='icons' /> : null
-        }
+        {allItems.length !== 0 ? (
+          showList ? (
+            <IoIosArrowDropup onClick={toggleShow} className="icons" />
+          ) : (
+            <IoIosArrowDropdown onClick={toggleShow} className="icons" />
+          )
+        ) : null}
         {isAddItemBtnClicked ? (
-          <div style={{marginLeft:'auto'}} >
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5em",
+            }}
+          >
             <input
               type="text"
               placeholder="Add item"
               value={item}
               onChange={(e) => setItem(e.target.value)}
               ref={addItemInputRef}
-              style={{ backgroundColor: backgroundColor, marginLeft:'auto'}}
+              style={{ backgroundColor: backgroundColor }}
+              className="add-item-input"
             />
-
-            <button onClick={handleAddItem}>✔</button>
-            <button onClick={() => setIsAddItemBtnClicked(false)}>X</button>
+            <MdDoneOutline
+              onClick={handleAddItem}
+              className="icons save-icon"
+              style={{ alignSelf: "center" }}
+            />
+            <MdOutlineCancel
+              onClick={() => setIsAddItemBtnClicked(false)}
+              className="icons delete-icon"
+              style={{ alignSelf: "center" }}
+            />
           </div>
         ) : (
-          <IoIosAddCircleOutline onClick={handleAddItemButton} className='icons' style={{marginLeft: "auto" }} />
+          <IoIosAddCircleOutline
+            onClick={handleAddItemButton}
+            className="icons"
+            style={{ marginLeft: "auto" }}
+          />
         )}
-        {
-          editingList ? <MdOutlineCancel onClick={() => {
-              setEditingList(prevState => !prevState);
+        {editingList ? (
+          <MdOutlineCancel
+            onClick={() => {
+              setEditingList((prevState) => !prevState);
               handleCancelEditAddList();
-            }}  className='icons'/> :
-            <AiOutlineEdit className='icons'
-                           onClick={() => {
-                             setEditingList(prevState => !prevState);
-                             focusOnInput();
-                           }} />
-        }
+            }}
+            className="icons delete-icon"
+          />
+        ) : (
+          <AiOutlineEdit
+            className="icons"
+            onClick={() => {
+              setEditingList((prevState) => !prevState);
+              focusOnInput();
+            }}
+          />
+        )}
 
         <DeleteListButton
           id={list.id}
           setAllLists={setAllLists}
           allItems={allItems}
         />
-        <div display='flex' flexDirection='column'>
-          {/*<p>{`Items in the list: ${allItems.length}`}</p>*/}
+        <div display="flex" flexDirection="column">
           <p>{`Completed: ${completedItems}/${allItems.length} items`}</p>
         </div>
       </li>
-      <ul style={allItems.length!==0 && showList? {border: '1px solid #000000', borderRadius:'5px', marginTop:'0.5em'} : {} } >
+      <ul
+        style={
+          allItems.length !== 0 && showList
+            ? {
+                border: "1px solid #000000",
+                borderRadius: "5px",
+                marginTop: "0.5em",
+              }
+            : {}
+        }
+      >
         {filteredItemsById.map((item) => (
-          <IndividualItem item={item} key={item.id} itemDisplay={itemDisplay} handleDeleteItem={handleDeleteItem}
-                          listId={list.id} setCompletedItems={updatedCompletedItems} allItems={allItems} />
+          <IndividualItem
+            item={item}
+            key={item.id}
+            itemDisplay={itemDisplay}
+            handleDeleteItem={handleDeleteItem}
+            listId={list.id}
+            setCompletedItems={updatedCompletedItems}
+            allItems={allItems}
+          />
         ))}
       </ul>
     </div>

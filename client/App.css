@@ -1,81 +1,89 @@
 :root {
-    --box-shadow: 1px 1px 1px #000000;
-    --border: 1px solid #000000;
-    --border-radius: 5px;
+  --box-shadow: 1px 1px 1px #000000;
+  --border: 1px solid #000000;
+  --border-radius: 8px;
+  --input-padding: 0.5em;
 }
 
 .list--individual {
-    border: 0.1px solid orangered;
-    border-radius: var(--border-radius);
-    padding: 1em;
-    background: linear-gradient(darkorange, orange, #ffed6b);
-
+  border-radius: var(--border-radius);
+  padding: 1em;
+  background: linear-gradient(#1d7874, #f4c095);
 }
-
 
 .individual-item {
-    user-select: none;
-    gap: 1em;
-    border: var(--border);
-    border-radius: var(--border-radius);
-    padding: 0.5em;
-    margin: 1em;
-
+  user-select: none;
+  gap: 1em;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 0.5em;
+  margin: 1em;
 }
 
-
 .navbar--input {
-    padding: 0.75em;
-    border-radius: var(--border-radius);
-    border: var(--border);
+  padding: 0.75em;
+  border-radius: var(--border-radius);
+  border: var(--border);
 }
 
 .navbar--button {
-    border-radius: var(--border-radius);
-    border: none;
-    right: 10px;
-    margin-left: 1em;
-    padding: 0 0.75em;
+  border-radius: var(--border-radius);
+  border: none;
+  right: 10px;
+  margin-left: 1em;
+  padding: 0 0.75em;
 }
 .navbar--button:active {
-    transform: scale(0.6);
-    transition: 0.2s;
+  transform: scale(0.6);
+  transition: 0.2s;
 }
 
 .navbar--button:hover {
-    box-shadow: var(--box-shadow)
+  box-shadow: var(--box-shadow);
 }
 
 .navbar--heading {
-    font-size: 2em;
-    text-align: center;
-    margin-bottom: 1em;
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 1em;
 }
 
 .list {
-    border: var(--border);
-    margin: 1em;
-    border-radius: var(--border-radius);
-
+  border: var(--border);
+  margin: 1em;
+  border-radius: var(--border-radius);
+  background: linear-gradient(#1d7874, #f4c095);
 }
 
 .editing-list-input {
-    padding: 0.5em;
-    border-radius: var(--border-radius);
-
+  padding: 0.5em;
+  border-radius: var(--border-radius);
 }
 
 .icons {
-    font-size: 1.5em;
-    border: var(--border);
-    border-radius: var(--border-radius);
-    padding: 0.1em;
-    background: linear-gradient(orange, whitesmoke);
+  font-size: 1.5em;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 0.1em;
+  background: linear-gradient(#1d7874, #f4c095);
 }
 
 .icons:hover {
-    color: #f5f5f5;
-    box-shadow: var(--box-shadow)
+  color: #f5f5f5;
+  box-shadow: var(--box-shadow);
+}
 
+.icons.delete-icon:hover {
+  background: orangered;
+}
 
+.icons.save-icon:hover {
+  background: seagreen;
+}
+
+.add-item-input {
+  margin-left: auto;
+  border-radius: var(--border-radius);
+  border: var(--border);
+  padding: 0.5em;
 }

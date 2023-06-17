@@ -1,8 +1,7 @@
 import React from "react";
 import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
-import {RiDeleteBin6Line} from 'react-icons/ri'
-import '../App.css'
-
+import { RiDeleteBin6Line } from "react-icons/ri";
+import "../App.css";
 
 interface DeleteButtonProps {
   id: number;
@@ -15,7 +14,6 @@ interface DeleteButtonProps {
 function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   const handleDelete = async () => {
     const listToDelete = allItems.filter((item) => item.listId === id);
-
 
     try {
       await Promise.all(
@@ -36,10 +34,8 @@ function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
     setAllLists((prevList) => prevList.filter((item) => item.id !== id));
   };
 
-
-
   return (
-      <RiDeleteBin6Line onClick={handleDelete} className='icons'  />
+    <RiDeleteBin6Line onClick={handleDelete} className="icons delete-icon" />
   );
 }
 

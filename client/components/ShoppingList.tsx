@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import IndividualList from "./IndividualList";
-import '../App.css'
+import "../App.css";
 
 interface ShoppingItemsProps {
   setAllLists: (
@@ -10,13 +10,11 @@ interface ShoppingItemsProps {
   allLists: ShoppingCart[];
 }
 
-
 function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
-
   return (
-    <div className='list' >
+    <div className="list">
       <ul>
-        {allLists.length !== 0? (
+        {allLists.length !== 0 ? (
           allLists.map((list) => (
             <IndividualList
               list={list}
@@ -26,8 +24,7 @@ function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
           ))
         ) : (
           <p>Loading...</p>
-          )
-        }
+        )}
       </ul>
     </div>
   );
