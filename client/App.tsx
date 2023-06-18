@@ -7,7 +7,7 @@ import "./App.css";
 function App() {
   const [list, setList] = useState<string>("");
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
-  const [errorColor, setErrorColor] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,7 +27,6 @@ function App() {
     if (name === undefined) return;
 
     if (name.length > 2) {
-      setErrorColor("");
       try {
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
@@ -44,11 +43,18 @@ function App() {
       }
 
       setList("");
-    } else {
-      setList("");
-      setErrorColor("red");
     }
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      if (inputRef.current?.value.length > 2) {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
+    }
+  }, [list]);
 
   return (
     <>
@@ -59,9 +65,13 @@ function App() {
             forwardedRef={inputRef}
             list={list}
             setList={setList}
-            errorColor={errorColor}
+            handleClick={handleClick}
           />
-          <button className="navbar--button" onClick={handleClick}>
+          <button
+            className="navbar--button"
+            disabled={isDisabled}
+            onClick={handleClick}
+          >
             ADD
           </button>
         </div>

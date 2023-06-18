@@ -24,6 +24,7 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(
           onChange={onChange}
           ref={forwardedInputRef}
           style={style}
+          onKeyDown={(event) => event.key === "Enter" && onClick()}
         />
         <MdOutlineFileDownloadDone
           onClick={onClick}

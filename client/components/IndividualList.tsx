@@ -196,6 +196,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               ref={addItemInputRef}
               style={{ backgroundColor: backgroundColor }}
               className="add-item-input"
+              onKeyDown={(event) => event.key === "Enter" && handleAddItem()}
             />
             <MdDoneOutline
               onClick={handleAddItem}

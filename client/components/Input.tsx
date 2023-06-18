@@ -6,15 +6,11 @@ interface InputRefProps {
   list: string;
   setList: (value: ((prevState: string) => string) | string) => void;
   ref: (instance: unknown | null) => void;
-  errorColor: string;
+  handleClick: () => void;
 }
 
 const Input = forwardRef(
-  ({ forwardedRef, list, setList, errorColor }: InputRefProps, ref) => {
-    const style = {
-      backgroundColor: errorColor,
-    };
-
+  ({ forwardedRef, list, setList, handleClick }: InputRefProps, ref) => {
     return (
       <input
         type="text"
@@ -23,7 +19,11 @@ const Input = forwardRef(
         onChange={(e) => setList(e.target.value)}
         ref={forwardedRef}
         className="navbar--input"
-        style={style}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            handleClick();
+          }
+        }}
       />
     );
   }
