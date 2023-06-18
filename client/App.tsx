@@ -59,7 +59,9 @@ function App() {
   return (
     <>
       <div className="navbar">
-        <h1 className="navbar--heading">Shopping List</h1>
+        <div className="navbar--heading">
+          <h1 className="navbar--heading__text">SHOPPING LIST</h1>
+        </div>
         <div display="flex" justifyContent="center">
           <Input
             forwardedRef={inputRef}

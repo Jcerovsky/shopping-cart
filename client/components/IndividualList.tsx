@@ -7,7 +7,11 @@ import "../App.css";
 
 //React Icons
 import { AiOutlineEdit } from "react-icons/ai";
-import { MdOutlineCancel, MdDoneOutline } from "react-icons/md";
+import {
+  MdOutlineCancel,
+  MdDoneOutline,
+  MdOutlineFileDownloadDone,
+} from "react-icons/md";
 import {
   IoIosAddCircleOutline,
   IoIosArrowDropdown,
@@ -209,6 +213,29 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         ) : (
           <p>{editedListName}</p>
         )}
+        {editingList ? (
+          <MdOutlineCancel
+            onClick={() => {
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
+              handleCancelEditAddList();
+            }}
+            className="icon delete-icon"
+          />
+        ) : (
+          <AiOutlineEdit
+            className="icon"
+            onClick={() => {
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
+              focusOnInput();
+            }}
+          />
+        )}
         {allItems.length !== 0 ? (
           showList ? (
             <IoIosArrowDropup onClick={setShowListToggle} className="icon" />
@@ -239,7 +266,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               className="add-item-input"
               onKeyDown={(event) => event.key === "Enter" && handleAddItem()}
             />
-            <MdDoneOutline
+            <MdOutlineFileDownloadDone
               onClick={handleAddItem}
               className="icon save-icon"
               style={{ alignSelf: "center" }}
@@ -260,29 +287,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
             onClick={handleAddItemButton}
             className="icon save-icon"
             style={{ marginLeft: "auto" }}
-          />
-        )}
-        {editingList ? (
-          <MdOutlineCancel
-            onClick={() => {
-              setState((prevState) => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
-              handleCancelEditAddList();
-            }}
-            className="icon delete-icon"
-          />
-        ) : (
-          <AiOutlineEdit
-            className="icon edit-icon"
-            onClick={() => {
-              setState((prevState) => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
-              focusOnInput();
-            }}
           />
         )}
 
