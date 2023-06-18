@@ -212,7 +212,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         ) : (
           <IoIosAddCircleOutline
             onClick={handleAddItemButton}
-            className="icon"
+            className="icon save-icon"
             style={{ marginLeft: "auto" }}
           />
         )}
@@ -226,7 +226,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           />
         ) : (
           <AiOutlineEdit
-            className="icon"
+            className="icon edit-icon"
             onClick={() => {
               setEditingList((prevState) => !prevState);
               focusOnInput();

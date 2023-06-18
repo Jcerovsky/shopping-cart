@@ -65,11 +65,12 @@ function IndividualItem({
         <MdDoneOutline
           onClick={() => setIsClicked((prevState) => !prevState)}
           className="icon"
+          style={{ background: "seagreen" }}
         />
       ) : (
         <ImCheckboxUnchecked
           onClick={() => setIsClicked((prevState) => !prevState)}
-          className="icon "
+          className="icon save-icon"
         />
       )}
       <p

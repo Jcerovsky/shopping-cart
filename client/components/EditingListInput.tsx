@@ -28,7 +28,7 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(
         />
         <MdOutlineFileDownloadDone
           onClick={onClick}
-          className="icons save-icon"
+          className="icon save-icon"
         />
       </>
     );

@@ -81,6 +81,11 @@
   background: seagreen;
 }
 
+.icon.edit-icon:hover {
+  background: #f4ff45;
+  color: black;
+}
+
 .add-item-input {
   margin-left: auto;
   border-radius: var(--border-radius);
