@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
+import { ShoppingCart, InitialStateProps } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
@@ -22,25 +22,7 @@ interface IndividualItemProps {
 }
 
 function IndividualList({ list, setAllLists }: IndividualItemProps) {
-  const [item, setItem] = useState<string>("");
-  const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
-  const [isAddItemBtnClicked, setIsAddItemBtnClicked] = useState(false);
-  const [showList, setShowList] = useState(false);
-  const [editingList, setEditingList] = useState(false);
-  const [editedListName, setEditedListName] = useState(list.name);
-  const [originalListName, setOriginalListName] = useState(list.name);
-
-  interface initialStateProps {
-    item: string;
-    allItems: ShoppingItems[];
-    isAddItemBtnClicked: boolean;
-    showList: boolean;
-    editingList: boolean;
-    editedListName: string;
-    originalListName: string;
-  }
-
-  const initialState: initialStateProps = {
+  const initialState: InitialStateProps = {
     item: "",
     allItems: [],
     isAddItemBtnClicked: false,
@@ -49,7 +31,18 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     editedListName: list.name,
     originalListName: list.name,
   };
+
   const [state, setState] = useState(initialState);
+
+  const {
+    item,
+    allItems,
+    isAddItemBtnClicked,
+    showList,
+    editingList,
+    editedListName,
+    originalListName,
+  } = state;
 
   useEffect(() => {
     fetchItem();
@@ -159,7 +152,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const handleAddItemButton = () => {
     setState((prevState) => ({
       ...prevState,
-      isAddItemBtnClicked: false,
+      isAddItemBtnClicked: true,
       item: "",
     }));
   };
@@ -176,7 +169,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     }
   };
 
-  const toggleShow = () => {
+  const setShowListToggle = () => {
     setState((prevState) => ({
       ...prevState,
       showList: !prevState.showList,
@@ -191,8 +184,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const addItemInputRef = useRef<HTMLInputElement>(null);
   const forwardedInputRef = useRef<HTMLInputElement>(null);
 
-  const itemDisplay = showList ? "flex" : "none";
-
   return (
     <div p="3">
       <li
@@ -206,8 +197,11 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         {editingList ? (
           <EditingListInput
             value={editedListName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEditedListName(e.target.value)
+            onChange={(e) =>
+              setState((prevState) => ({
+                ...prevState,
+                editedListName: e.target.value,
+              }))
             }
             onClick={handleEditListClick}
             ref={forwardedInputRef}
@@ -217,9 +211,9 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         )}
         {allItems.length !== 0 ? (
           showList ? (
-            <IoIosArrowDropup onClick={toggleShow} className="icon" />
+            <IoIosArrowDropup onClick={setShowListToggle} className="icon" />
           ) : (
-            <IoIosArrowDropdown onClick={toggleShow} className="icon" />
+            <IoIosArrowDropdown onClick={setShowListToggle} className="icon" />
           )
         ) : null}
         {isAddItemBtnClicked ? (
@@ -235,7 +229,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               type="text"
               placeholder="Add item"
               value={item}
-              onChange={(e) => setItem(e.target.value)}
+              onChange={(e) => {
+                setState((prevState) => ({
+                  ...prevState,
+                  item: e.target.value,
+                }));
+              }}
               ref={addItemInputRef}
               className="add-item-input"
               onKeyDown={(event) => event.key === "Enter" && handleAddItem()}
@@ -310,13 +309,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       >
         {filteredItemsById.map((item) => (
           <IndividualItem
-            item={item}
             key={item.id}
-            itemDisplay={itemDisplay}
             handleDeleteItem={handleDeleteItem}
             listId={list.id}
-            allItems={allItems}
-            setAllItems={setAllItems}
+            initialState={state}
+            setState={setState}
+            item={item}
           />
         ))}
       </ul>

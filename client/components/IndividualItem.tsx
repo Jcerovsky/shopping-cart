@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { ShoppingItems } from "../ShoppingCartProps";
 import { MdDoneOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { ImCheckboxUnchecked } from "react-icons/im";
+import { IndividualItemProps } from "../ShoppingCartProps";
 import "../App.css";
 
-interface Props {
-  item: ShoppingItems;
-  itemDisplay: "none" | "flex";
-  handleDeleteItem: (itemId: number) => Promise<void>;
-  listId: number;
-  allItems: ShoppingItems[];
-  setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>;
-}
-
 function IndividualItem({
-  item,
-  itemDisplay,
+  initialState,
   handleDeleteItem,
   listId,
-  setAllItems,
-  allItems,
-}: Props) {
+  item,
+  setState,
+}: IndividualItemProps) {
+  const { allItems, showList } = initialState;
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
   useEffect(() => {
@@ -30,14 +21,17 @@ function IndividualItem({
         const updatedItems = allItems.map((existingItem) => {
           if (existingItem.id === item.id) {
             return {
-              ...item,
+              ...existingItem,
               isDone: isClicked ? 1 : 0,
             };
           }
           return existingItem;
         });
 
-        setAllItems(updatedItems);
+        setState((prevState) => ({
+          ...prevState,
+          allItems: updatedItems,
+        }));
 
         await fetch(
           `http://127.0.0.1:1337/list/${listId}/item/${item.id}?isDone=${
@@ -56,7 +50,7 @@ function IndividualItem({
 
   return (
     <li
-      display={itemDisplay}
+      display={showList ? "flex" : "none"}
       className="individual-item"
       key={item.id}
       style={isClicked ? { opacity: "0.5", background: "lightseagreen" } : {}}
