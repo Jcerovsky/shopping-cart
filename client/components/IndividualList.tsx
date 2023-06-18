@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
-import "../App.css";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
+import "../App.css";
+
+//React Icons
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineCancel, MdDoneOutline } from "react-icons/md";
 import {
@@ -29,7 +31,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
   const [backgroundColor, setBackgroundColor] = useState("");
-  const [completedItems, setCompletedItems] = useState(0);
 
   useEffect(() => {
     fetchItem();
@@ -55,7 +56,7 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const handleAddItem = async (): Promise<void> => {
     if (item.length < 3) {
       setBackgroundColor("red");
-      console.log("item you are tryning to add is too hshort");
+      console.log("Items need to be at least three characters long");
       return;
     }
 
@@ -142,10 +143,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     forwardedInputRef.current?.focus();
   };
 
-  const updatedCompletedItems = (count: number) => {
-    setCompletedItems(count);
-  };
-
   const filteredItemsById = allItems.filter((item) => item.listId === list.id);
   const addItemInputRef = useRef<HTMLInputElement>(null);
   const forwardedInputRef = useRef<HTMLInputElement>(null);
@@ -177,9 +174,9 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         )}
         {allItems.length !== 0 ? (
           showList ? (
-            <IoIosArrowDropup onClick={toggleShow} className="icons" />
+            <IoIosArrowDropup onClick={toggleShow} className="icon" />
           ) : (
-            <IoIosArrowDropdown onClick={toggleShow} className="icons" />
+            <IoIosArrowDropdown onClick={toggleShow} className="icon" />
           )
         ) : null}
         {isAddItemBtnClicked ? (
@@ -202,19 +199,19 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
             />
             <MdDoneOutline
               onClick={handleAddItem}
-              className="icons save-icon"
+              className="icon save-icon"
               style={{ alignSelf: "center" }}
             />
             <MdOutlineCancel
               onClick={() => setIsAddItemBtnClicked(false)}
-              className="icons delete-icon"
+              className="icon delete-icon"
               style={{ alignSelf: "center" }}
             />
           </div>
         ) : (
           <IoIosAddCircleOutline
             onClick={handleAddItemButton}
-            className="icons"
+            className="icon"
             style={{ marginLeft: "auto" }}
           />
         )}
@@ -224,11 +221,11 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               setEditingList((prevState) => !prevState);
               handleCancelEditAddList();
             }}
-            className="icons delete-icon"
+            className="icon delete-icon"
           />
         ) : (
           <AiOutlineEdit
-            className="icons"
+            className="icon"
             onClick={() => {
               setEditingList((prevState) => !prevState);
               focusOnInput();
@@ -242,14 +239,15 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           allItems={allItems}
         />
         <div display="flex" flexDirection="column">
-          <p>{`Completed: ${completedItems}/${allItems.length} items`}</p>
+          <p>{`Completed: ${
+            allItems.filter((item) => item.isDone === 1).length
+          }/${allItems.length} items`}</p>
         </div>
       </li>
       <ul
         style={
           allItems.length !== 0 && showList
             ? {
-                border: "1px solid #000000",
                 borderRadius: "5px",
                 marginTop: "0.5em",
               }
@@ -263,8 +261,8 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
             itemDisplay={itemDisplay}
             handleDeleteItem={handleDeleteItem}
             listId={list.id}
-            setCompletedItems={updatedCompletedItems}
             allItems={allItems}
+            setAllItems={setAllItems}
           />
         ))}
       </ul>

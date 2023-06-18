@@ -35,7 +35,7 @@ function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
   };
 
   return (
-    <RiDeleteBin6Line onClick={handleDelete} className="icons delete-icon" />
+    <RiDeleteBin6Line onClick={handleDelete} className="icon delete-icon" />
   );
 }
 
