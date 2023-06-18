@@ -26,11 +26,30 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
   const [isAddItemBtnClicked, setIsAddItemBtnClicked] = useState(false);
   const [showList, setShowList] = useState(false);
-
   const [editingList, setEditingList] = useState(false);
   const [editedListName, setEditedListName] = useState(list.name);
   const [originalListName, setOriginalListName] = useState(list.name);
-  const [backgroundColor, setBackgroundColor] = useState("");
+
+  interface initialStateProps {
+    item: string;
+    allItems: ShoppingItems[];
+    isAddItemBtnClicked: boolean;
+    showList: boolean;
+    editingList: boolean;
+    editedListName: string;
+    originalListName: string;
+  }
+
+  const initialState: initialStateProps = {
+    item: "",
+    allItems: [],
+    isAddItemBtnClicked: false,
+    showList: false,
+    editingList: false,
+    editedListName: list.name,
+    originalListName: list.name,
+  };
+  const [state, setState] = useState(initialState);
 
   useEffect(() => {
     fetchItem();
@@ -50,12 +69,14 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
     const data = await response.json();
 
-    setAllItems(data);
+    setState((prevState) => ({
+      ...prevState,
+      allItems: data,
+    }));
   };
 
   const handleAddItem = async (): Promise<void> => {
     if (item.length < 3) {
-      setBackgroundColor("red");
       console.log("Items need to be at least three characters long");
       return;
     }
@@ -78,9 +99,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           listId: list.id,
         };
 
-        setAllItems((prevState) => [...prevState, newItem]);
-        setItem("");
-        setIsAddItemBtnClicked(false);
+        setState((prevState) => ({
+          ...prevState,
+          allItems: [...prevState.allItems, newItem],
+          item: "",
+          isAddItemBtnClicked: false,
+        }));
       }
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
@@ -88,8 +112,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleEditListClick = async () => {
-    setEditedListName(editedListName);
-    setEditingList(false);
+    setState((prevState) => ({
+      ...prevState,
+      editedListName: editedListName,
+      editingList: false,
+    }));
+
     try {
       await fetch(
         `http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`,
@@ -97,7 +125,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           method: "PATCH",
         }
       );
-      setOriginalListName(editedListName);
+      setState((prevState) => ({
+        ...prevState,
+        originalListName: editedListName,
+      }));
     } catch (error) {
       console.log(`Failed updating list name: ${error}`);
     }
@@ -113,9 +144,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
       );
 
       if (response.ok) {
-        setAllItems((prevState) =>
-          prevState.filter((item) => item.id !== itemId)
-        );
+        setState((prevState) => ({
+          ...prevState,
+          allItems: [
+            ...prevState.allItems.filter((item) => item.id !== itemId),
+          ],
+        }));
       }
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
@@ -123,20 +157,30 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
   };
 
   const handleAddItemButton = () => {
-    setIsAddItemBtnClicked(true);
-    setItem("");
+    setState((prevState) => ({
+      ...prevState,
+      isAddItemBtnClicked: false,
+      item: "",
+    }));
   };
 
   const handleCancelEditAddList = () => {
-    setEditingList(false);
-    setEditedListName(originalListName);
+    setState((prevState) => ({
+      ...prevState,
+      editingList: false,
+      editedListName: originalListName,
+    }));
+
     if (addItemInputRef.current) {
       addItemInputRef.current.value = "";
     }
   };
 
   const toggleShow = () => {
-    setShowList((prevState) => !prevState);
+    setState((prevState) => ({
+      ...prevState,
+      showList: !prevState.showList,
+    }));
   };
 
   const focusOnInput = () => {
@@ -167,7 +211,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
             }
             onClick={handleEditListClick}
             ref={forwardedInputRef}
-            backgroundColor={backgroundColor}
           />
         ) : (
           <p>{editedListName}</p>
@@ -194,7 +237,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               value={item}
               onChange={(e) => setItem(e.target.value)}
               ref={addItemInputRef}
-              style={{ backgroundColor: backgroundColor }}
               className="add-item-input"
               onKeyDown={(event) => event.key === "Enter" && handleAddItem()}
             />
@@ -204,7 +246,12 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
               style={{ alignSelf: "center" }}
             />
             <MdOutlineCancel
-              onClick={() => setIsAddItemBtnClicked(false)}
+              onClick={() =>
+                setState((prevState) => ({
+                  ...prevState,
+                  isAddItemBtnClicked: false,
+                }))
+              }
               className="icon delete-icon"
               style={{ alignSelf: "center" }}
             />
@@ -219,7 +266,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
         {editingList ? (
           <MdOutlineCancel
             onClick={() => {
-              setEditingList((prevState) => !prevState);
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
               handleCancelEditAddList();
             }}
             className="icon delete-icon"
@@ -228,7 +278,10 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
           <AiOutlineEdit
             className="icon edit-icon"
             onClick={() => {
-              setEditingList((prevState) => !prevState);
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
               focusOnInput();
             }}
           />

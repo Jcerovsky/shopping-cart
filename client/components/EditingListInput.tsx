@@ -6,14 +6,10 @@ interface Props {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClick: () => Promise<void>;
-  backgroundColor: string;
 }
 
 const EditingListInput = forwardRef<HTMLInputElement, Props>(
-  ({ value, onChange, onClick, backgroundColor }: Props, forwardedInputRef) => {
-    const style = {
-      backgroundColor,
-    };
+  ({ value, onChange, onClick }: Props, forwardedInputRef) => {
     return (
       <>
         <input
@@ -23,7 +19,6 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(
           value={value}
           onChange={onChange}
           ref={forwardedInputRef}
-          style={style}
           onKeyDown={(event) => event.key === "Enter" && onClick()}
         />
         <MdOutlineFileDownloadDone
