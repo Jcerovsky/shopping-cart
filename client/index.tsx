@@ -10,8 +10,8 @@ if (typeof window !== "undefined") {
   ).render(
     <AppContextProvider>
       <App />
-    </AppContextProvider>)
-
+    </AppContextProvider>
+  );
 }
 
 export default <div id="client" />;

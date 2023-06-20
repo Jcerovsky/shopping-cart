@@ -4,14 +4,12 @@ import { AppContext } from "../AppContext";
 
 interface InputRefProps {
   forwardedRef: React.RefObject<HTMLInputElement>;
-  ref: (instance: unknown | null) => void;
   handleClick: () => void;
 }
 
 const Input = forwardRef(
   ({ forwardedRef, handleClick }: InputRefProps, ref) => {
-
-    const appContext = useContext(AppContext)
+    const appContext = useContext(AppContext);
 
     return (
       <input

@@ -11,8 +11,7 @@ function IndividualItem({
   listId,
   item,
 }: IndividualItemProps) {
-
-  const appContext = useContext(AppContext)
+  const appContext = useContext(AppContext);
 
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
@@ -29,10 +28,7 @@ function IndividualItem({
           return existingItem;
         });
 
-        appContext?.setAllItems((prevState) => ({
-          ...prevState,
-          allItems: updatedItems,
-        }));
+        updatedItems && appContext?.setAllItems(updatedItems);
 
         await fetch(
           `http://127.0.0.1:1337/list/${listId}/item/${item.id}?isDone=${

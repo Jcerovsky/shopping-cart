@@ -2,17 +2,12 @@ import React, { useContext, useEffect, useRef } from "react";
 import ShoppingList from "./components/./ShoppingList";
 import Input from "./components/Input";
 import "./index.css";
-import { AppContext} from "./AppContext";
-
+import { AppContext } from "./AppContext";
 
 function App() {
-  const appContext = useContext(AppContext)
-
-
+  const appContext = useContext(AppContext);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-
 
   useEffect(() => {
     fetchList();
@@ -34,13 +29,16 @@ function App() {
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
           {
-            method: "POST"
+            method: "POST",
           }
         );
 
         const data = (await response.json()) as number;
 
-        appContext?.setAllLists((prevState) => [...prevState, { name, id: data }]);
+        appContext?.setAllLists((prevState) => [
+          ...prevState,
+          { name, id: data },
+        ]);
       } catch (error) {
         throw new Error(`Error posting data. The error is ${error}`);
       }
@@ -60,28 +58,24 @@ function App() {
   }, [appContext?.list]);
 
   return (
-      <>
-        <div className="navbar">
-          <div className="navbar--heading">
-            <h1 className="navbar--heading__text">SHOPPING LIST</h1>
-          </div>
-          <div display="flex" justifyContent="center">
-            <Input
-              forwardedRef={inputRef}
-              handleClick={handleClick}
-            />
-            <button
-              className="navbar--button"
-              disabled={appContext?.isDisabled as boolean}
-              onClick={handleClick}
-            >
-              ADD
-            </button>
-          </div>
+    <>
+      <div className="navbar">
+        <div className="navbar--heading">
+          <h1 className="navbar--heading__text">SHOPPING LIST</h1>
         </div>
-        <ShoppingList />
-      </>
-
+        <div display="flex" justifyContent="center">
+          <Input forwardedRef={inputRef} handleClick={handleClick} />
+          <button
+            className="navbar--button"
+            disabled={appContext?.isDisabled as boolean}
+            onClick={handleClick}
+          >
+            ADD
+          </button>
+        </div>
+      </div>
+      <ShoppingList />
+    </>
   );
 }
 
