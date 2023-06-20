@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ShoppingCart } from "./ShoppingCartProps";
+import React, { useContext, useEffect, useRef } from "react";
 import ShoppingList from "./components/./ShoppingList";
 import Input from "./components/Input";
-import "./App.css";
+import "./index.css";
+import { AppContext} from "./AppContext";
+
 
 function App() {
-  const [list, setList] = useState<string>("");
-  const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const appContext = useContext(AppContext)
+
+
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+
 
   useEffect(() => {
     fetchList();
@@ -18,7 +21,7 @@ function App() {
   const fetchList = async () => {
     const response = await fetch("http://127.0.0.1:1337/list");
     const data = await response.json();
-    setAllLists(data);
+    appContext?.setAllLists(data);
   };
 
   const handleClick = async () => {
@@ -31,55 +34,54 @@ function App() {
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
           {
-            method: "POST",
+            method: "POST"
           }
         );
 
         const data = (await response.json()) as number;
 
-        setAllLists((prevState) => [...prevState, { name, id: data }]);
+        appContext?.setAllLists((prevState) => [...prevState, { name, id: data }]);
       } catch (error) {
         throw new Error(`Error posting data. The error is ${error}`);
       }
 
-      setList("");
+      appContext?.setList("");
     }
   };
 
   useEffect(() => {
     if (inputRef.current) {
       if (inputRef.current?.value.length > 2) {
-        setIsDisabled(false);
+        appContext?.setIsDisabled(false);
       } else {
-        setIsDisabled(true);
+        appContext?.setIsDisabled(true);
       }
     }
-  }, [list]);
+  }, [appContext?.list]);
 
   return (
-    <>
-      <div className="navbar">
-        <div className="navbar--heading">
-          <h1 className="navbar--heading__text">SHOPPING LIST</h1>
+      <>
+        <div className="navbar">
+          <div className="navbar--heading">
+            <h1 className="navbar--heading__text">SHOPPING LIST</h1>
+          </div>
+          <div display="flex" justifyContent="center">
+            <Input
+              forwardedRef={inputRef}
+              handleClick={handleClick}
+            />
+            <button
+              className="navbar--button"
+              disabled={appContext?.isDisabled as boolean}
+              onClick={handleClick}
+            >
+              ADD
+            </button>
+          </div>
         </div>
-        <div display="flex" justifyContent="center">
-          <Input
-            forwardedRef={inputRef}
-            list={list}
-            setList={setList}
-            handleClick={handleClick}
-          />
-          <button
-            className="navbar--button"
-            disabled={isDisabled}
-            onClick={handleClick}
-          >
-            ADD
-          </button>
-        </div>
-      </div>
-      <ShoppingList allLists={allLists} setAllLists={setAllLists} />
-    </>
+        <ShoppingList />
+      </>
+
   );
 }
 

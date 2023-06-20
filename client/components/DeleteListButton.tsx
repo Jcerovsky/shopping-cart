@@ -1,37 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import "../App.css";
+import { AppContext, } from "../AppContext";
 
-interface DeleteButtonProps {
+interface Props {
   id: number;
-  setAllLists: (
-    value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
-  ) => void;
-  allItems: ShoppingItems[];
 }
 
-function DeleteListButton({ id, setAllLists, allItems }: DeleteButtonProps) {
-  const handleDelete = async () => {
-    const listToDelete = allItems.filter((item) => item.listId === id);
+function DeleteListButton({ id }: Props) {
 
-    try {
-      await Promise.all(
-        listToDelete.map(async (item) => {
-          await fetch(`http://127.0.0.1:1337/list/${item.listId}`, {
+  const appContext = useContext(AppContext)
+
+  const handleDelete = async () => {
+    if (appContext !== undefined) {
+      const listToDelete = appContext.allItems.filter((item) => item.listId === id);
+      try {
+        await Promise.all(
+          listToDelete.map(async (item) => {
+            await fetch(`http://127.0.0.1:1337/list/${item.listId}`, {
+              method: "DELETE",
+            });
+          })
+        );
+        if (listToDelete?.length === 0) {
+          await fetch(`http://127.0.0.1:1337/list/${id}`, {
             method: "DELETE",
           });
-        })
-      );
-      if (listToDelete.length === 0) {
-        await fetch(`http://127.0.0.1:1337/list/${id}`, {
-          method: "DELETE",
-        });
+        }
+      } catch (error) {
+        throw new Error(`Error deleting item:' ${error}`);
       }
-    } catch (error) {
-      throw new Error(`Error deleting item:' ${error}`);
     }
-    setAllLists((prevList) => prevList.filter((item) => item.id !== id));
+
+    appContext?.setAllLists((prevList) => prevList.filter((item) => item.id !== id));
+
   };
 
   return (

@@ -1,25 +1,21 @@
-import React from "react";
-import { ShoppingCart } from "../ShoppingCartProps";
+import React, { useContext } from "react";
 import IndividualList from "./IndividualList";
 import "../App.css";
+import { AppContext } from "../AppContext";
 
-interface ShoppingItemsProps {
-  setAllLists: (
-    value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
-  ) => void;
-  allLists: ShoppingCart[];
-}
 
-function ShoppingList({ allLists, setAllLists }: ShoppingItemsProps) {
+function ShoppingList() {
+
+  const appContext = useContext(AppContext)
+
   return (
     <div className="list">
       <ul>
-        {allLists.length !== 0 ? (
-          allLists.map((list) => (
+        {appContext?.allLists.length !== 0 ? (
+          appContext?.allLists.map((list) => (
             <IndividualList
               list={list}
               key={list.id}
-              setAllLists={setAllLists}
             />
           ))
         ) : (

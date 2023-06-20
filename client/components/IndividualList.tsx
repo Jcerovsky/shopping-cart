@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ShoppingCart, InitialStateProps } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
@@ -9,7 +9,6 @@ import "../App.css";
 import { AiOutlineEdit } from "react-icons/ai";
 import {
   MdOutlineCancel,
-  MdDoneOutline,
   MdOutlineFileDownloadDone,
 } from "react-icons/md";
 import {
@@ -18,14 +17,13 @@ import {
   IoIosArrowDropup,
 } from "react-icons/io";
 
-interface IndividualItemProps {
+interface Props {
   list: ShoppingCart;
-  setAllLists: (
-    value: ((prevState: ShoppingCart[]) => ShoppingCart[]) | ShoppingCart[]
-  ) => void;
 }
 
-function IndividualList({ list, setAllLists }: IndividualItemProps) {
+function IndividualList({ list }: Props) {
+
+
   const initialState: InitialStateProps = {
     item: "",
     allItems: [],
@@ -292,8 +290,6 @@ function IndividualList({ list, setAllLists }: IndividualItemProps) {
 
         <DeleteListButton
           id={list.id}
-          setAllLists={setAllLists}
-          allItems={allItems}
         />
         <div display="flex" flexDirection="column">
           <p>{`Completed: ${

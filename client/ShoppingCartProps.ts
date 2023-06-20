@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ShoppingCart {
   name: string;
@@ -30,4 +30,15 @@ interface IndividualItemProps {
   setState: React.Dispatch<React.SetStateAction<InitialStateProps>>;
 }
 
-export { ShoppingItems, ShoppingCart, InitialStateProps, IndividualItemProps };
+interface AppContextProps {
+  list: string,
+  allLists: ShoppingCart[]
+  isDisabled: boolean
+  allItems: ShoppingItems[],
+  setList: React.Dispatch<React.SetStateAction<string>>,
+  setAllLists: React.Dispatch<React.SetStateAction<ShoppingCart[]>>,
+  setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+  setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>
+}
+
+export { ShoppingItems, ShoppingCart, InitialStateProps, IndividualItemProps, AppContextProps };
