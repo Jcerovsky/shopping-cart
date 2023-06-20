@@ -16,6 +16,7 @@ import {
   IoIosArrowDropdown,
   IoIosArrowDropup,
 } from "react-icons/io";
+import { AppContext } from "../AppContext";
 
 interface Props {
   list: ShoppingCart;
@@ -23,10 +24,11 @@ interface Props {
 
 function IndividualList({ list }: Props) {
 
+  const appContext = useContext(AppContext)
+
 
   const initialState: InitialStateProps = {
     item: "",
-    allItems: [],
     isAddItemBtnClicked: false,
     showList: false,
     editingList: false,
@@ -38,7 +40,6 @@ function IndividualList({ list }: Props) {
 
   const {
     item,
-    allItems,
     isAddItemBtnClicked,
     showList,
     editingList,
@@ -94,9 +95,12 @@ function IndividualList({ list }: Props) {
           listId: list.id,
         };
 
+        if (appContext) {
+          appContext.setAllItems(prevState => [...prevState, newItem]);
+        }
+
         setState((prevState) => ({
           ...prevState,
-          allItems: [...prevState.allItems, newItem],
           item: "",
           isAddItemBtnClicked: false,
         }));
@@ -139,13 +143,9 @@ function IndividualList({ list }: Props) {
       );
 
       if (response.ok) {
-        setState((prevState) => ({
-          ...prevState,
-          allItems: [
-            ...prevState.allItems.filter((item) => item.id !== itemId),
-          ],
-        }));
-      }
+        appContext?.setAllItems(appContext?.allItems.filter((item) => item.id !== itemId))
+
+    }
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
     }
@@ -182,7 +182,7 @@ function IndividualList({ list }: Props) {
     forwardedInputRef.current?.focus();
   };
 
-  const filteredItemsById = allItems.filter((item) => item.listId === list.id);
+  const filteredItemsById = appContext?.allItems.filter((item) => item.listId === list.id);
   const addItemInputRef = useRef<HTMLInputElement>(null);
   const forwardedInputRef = useRef<HTMLInputElement>(null);
 
@@ -234,7 +234,7 @@ function IndividualList({ list }: Props) {
             }}
           />
         )}
-        {allItems.length !== 0 ? (
+        {appContext?.allItems.length !== 0 ? (
           showList ? (
             <IoIosArrowDropup onClick={setShowListToggle} className="icon" />
           ) : (
@@ -293,13 +293,13 @@ function IndividualList({ list }: Props) {
         />
         <div display="flex" flexDirection="column">
           <p>{`Completed: ${
-            allItems.filter((item) => item.isDone === 1).length
-          }/${allItems.length} items`}</p>
+            appContext?.allItems.filter((item) => item.isDone === 1).length
+          }/${appContext?.allItems.length} items`}</p>
         </div>
       </li>
       <ul
         style={
-          allItems.length !== 0 && showList
+          appContext?.allItems.length !== 0 && showList
             ? {
                 borderRadius: "5px",
                 marginTop: "0.5em",
@@ -307,7 +307,7 @@ function IndividualList({ list }: Props) {
             : {}
         }
       >
-        {filteredItemsById.map((item) => (
+        {filteredItemsById && filteredItemsById.map((item) => (
           <IndividualItem
             key={item.id}
             handleDeleteItem={handleDeleteItem}

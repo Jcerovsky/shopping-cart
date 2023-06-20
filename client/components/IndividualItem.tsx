@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDoneOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IndividualItemProps } from "../ShoppingCartProps";
 import "../App.css";
+import { AppContext } from "../AppContext";
 
 function IndividualItem({
-  initialState,
   handleDeleteItem,
   listId,
   item,
-  setState,
 }: IndividualItemProps) {
-  const { allItems, showList } = initialState;
+
+  const appContext = useContext(AppContext)
+
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
   useEffect(() => {
     const updateItem = async () => {
       try {
-        const updatedItems = allItems.map((existingItem) => {
+        const updatedItems = appContext?.allItems.map((existingItem) => {
           if (existingItem.id === item.id) {
             return {
               ...existingItem,
@@ -28,7 +29,7 @@ function IndividualItem({
           return existingItem;
         });
 
-        setState((prevState) => ({
+        appContext?.setAllItems((prevState) => ({
           ...prevState,
           allItems: updatedItems,
         }));
@@ -50,7 +51,7 @@ function IndividualItem({
 
   return (
     <li
-      display={showList ? "flex" : "none"}
+      display={appContext?.showList ? "flex" : "none"}
       className="individual-item"
       key={item.id}
       style={isClicked ? { opacity: "0.5", background: "lightseagreen" } : {}}

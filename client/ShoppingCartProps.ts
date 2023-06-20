@@ -14,12 +14,12 @@ interface ShoppingItems {
 
 interface InitialStateProps {
   item: string;
-  allItems: ShoppingItems[];
   isAddItemBtnClicked: boolean;
   showList: boolean;
   editingList: boolean;
   editedListName: string;
   originalListName: string;
+
 }
 
 interface IndividualItemProps {
@@ -28,17 +28,27 @@ interface IndividualItemProps {
   listId: number;
   item: ShoppingItems;
   setState: React.Dispatch<React.SetStateAction<InitialStateProps>>;
+
 }
 
 interface AppContextProps {
   list: string,
-  allLists: ShoppingCart[]
-  isDisabled: boolean
-  allItems: ShoppingItems[],
   setList: React.Dispatch<React.SetStateAction<string>>,
+  allLists: ShoppingCart[]
   setAllLists: React.Dispatch<React.SetStateAction<ShoppingCart[]>>,
-  setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+  allItems: ShoppingItems[],
   setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>
+  isDisabled: boolean,
+  setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+  // item: string,
+  // setItem: React.Dispatch<React.SetStateAction<string>>
+  // isAddItemBtnClicked: boolean,
+  // setIsAddItemBtnClicked: React.Dispatch<React.SetStateAction<boolean>>,
+  showList: boolean,
+  setShowList: React.Dispatch<React.SetStateAction<boolean>>,
+  // editingList: boolean,
+  // setEditingList: React.Dispatch<React.SetStateAction<boolean>>,
 }
+
 
 export { ShoppingItems, ShoppingCart, InitialStateProps, IndividualItemProps, AppContextProps };
