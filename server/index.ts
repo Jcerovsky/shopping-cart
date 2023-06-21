@@ -5,7 +5,7 @@
 import http from 'http';
 import common from '../common';
 import Items from './items';
-import { createList, deleteList, getLists, updateList } from './lists';
+import Lists from './lists';
 import patterns from './patterns';
 
 const server = http.createServer((request, response) => {
@@ -20,7 +20,7 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST.test(url.pathname)) {
       const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
-      deleteList(+listId);
+      Lists.deleteList(+listId);
 
       return response.end();
     }
@@ -47,7 +47,7 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
-      return response.end(JSON.stringify(getLists()));
+      return response.end(JSON.stringify(Lists.getLists()));
     }
 
     // [GET] /list/{listId}/item
@@ -64,7 +64,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        updateList(+listId, name);
+        Lists.updateList(+listId, name);
 
         return response.end();
       }
@@ -88,7 +88,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        return response.end(JSON.stringify(createList(name).id));
+        return response.end(JSON.stringify(Lists.createList(name).id));
       }
     }
 
