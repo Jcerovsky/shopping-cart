@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ShoppingCart } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
@@ -14,18 +14,21 @@ import {
   IoIosArrowDropup,
 } from "react-icons/io";
 import { AppContext } from "../AppContext";
+import app from "../App";
 
 interface Props {
   list: ShoppingCart;
 }
 
 function IndividualList({ list }: Props) {
-  const appContext = useContext(AppContext);
+  const [editedListName, setEditedListName] = useState(list.name);
+  const [originalListName, setOriginalListName] = useState(list.name);
+  const [editingList, setEditingList] = useState<boolean>(false);
+  const [isAddItemBtnClicked, setIsAddItemBtnClicked] =
+    useState<boolean>(false);
+  const [showList, setShowList] = useState<boolean>(false);
 
-  useEffect(() => {
-    appContext?.setEditedListName(list.name);
-    appContext?.setOriginalListName(list.name);
-  }, []);
+  const appContext = useContext(AppContext);
 
   useEffect(() => {
     fetchItem();
@@ -33,13 +36,13 @@ function IndividualList({ list }: Props) {
 
   useEffect(() => {
     focusOnInput();
-  }, [appContext?.editingList]);
+  }, [editingList]);
 
   useEffect(() => {
-    if (appContext?.isAddItemBtnClicked && addItemInputRef.current) {
+    if (isAddItemBtnClicked && addItemInputRef.current) {
       addItemInputRef.current.focus();
     }
-  }, [appContext?.isAddItemBtnClicked]);
+  }, [isAddItemBtnClicked]);
 
   const fetchItem = async () => {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
@@ -74,7 +77,7 @@ function IndividualList({ list }: Props) {
 
         appContext?.setAllItems((prevState) => [...prevState, newItem]);
         appContext?.setItem("");
-        appContext?.setIsAddItemBtnClicked(false);
+        setIsAddItemBtnClicked(false);
       }
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
@@ -82,18 +85,18 @@ function IndividualList({ list }: Props) {
   };
 
   const handleEditListClick = async () => {
-    appContext?.setIsAddItemBtnClicked(false);
-    appContext?.setEditingList(false);
-    appContext?.setEditedListName(appContext?.editedListName);
+    setIsAddItemBtnClicked(false);
+    setEditingList(false);
+    setEditedListName(editedListName);
 
     try {
       await fetch(
-        `http://127.0.0.1:1337/list/${list.id}?name=${appContext?.editedListName}`,
+        `http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`,
         {
           method: "PATCH",
         }
       );
-      appContext?.setOriginalListName(appContext?.editedListName);
+      setOriginalListName(editedListName);
     } catch (error) {
       console.log(`Failed updating list name: ${error}`);
     }
@@ -119,13 +122,13 @@ function IndividualList({ list }: Props) {
   };
 
   const handleAddItemButton = () => {
-    appContext?.setIsAddItemBtnClicked(true);
+    setIsAddItemBtnClicked(true);
     appContext?.setItem("");
   };
 
   const handleCancelEditAddList = () => {
-    appContext?.setEditingList(false);
-    appContext?.setEditedListName(appContext?.originalListName);
+    setEditingList(false);
+    setEditedListName(originalListName);
 
     if (addItemInputRef.current) {
       addItemInputRef.current.value = "";
@@ -133,7 +136,7 @@ function IndividualList({ list }: Props) {
   };
 
   const setShowListToggle = () => {
-    appContext?.setShowList((prevState) => !prevState);
+    setShowList((prevState) => !prevState);
   };
 
   const focusOnInput = () => {
@@ -156,20 +159,20 @@ function IndividualList({ list }: Props) {
         color="blue"
         className="list--individual"
       >
-        {appContext?.editingList ? (
+        {editingList ? (
           <EditingListInput
-            value={appContext?.editedListName}
-            onChange={(e) => appContext?.setEditedListName(e.target.value)}
+            onChange={(e) => setEditedListName(e.target.value)}
             onClick={handleEditListClick}
             ref={forwardedInputRef}
+            editedListName={editedListName}
           />
         ) : (
-          <p>{appContext?.editedListName}</p>
+          <p>{editedListName}</p>
         )}
-        {appContext?.editingList ? (
+        {editingList ? (
           <MdOutlineCancel
             onClick={() => {
-              appContext?.setEditingList((prevState) => !prevState);
+              setEditingList((prevState) => !prevState);
               handleCancelEditAddList();
             }}
             className="icon delete-icon"
@@ -178,20 +181,21 @@ function IndividualList({ list }: Props) {
           <AiOutlineEdit
             className="icon"
             onClick={() => {
-              appContext?.setEditingList((prevState) => !prevState);
+              setEditingList((prevState) => !prevState);
 
               focusOnInput();
             }}
           />
         )}
-        {appContext?.allItems.length !== 0 ? (
-          appContext?.showList ? (
+        {appContext?.allItems.filter((item) => item.listId === list.id)
+          .length !== 0 ? (
+          showList ? (
             <IoIosArrowDropup onClick={setShowListToggle} className="icon" />
           ) : (
             <IoIosArrowDropdown onClick={setShowListToggle} className="icon" />
           )
         ) : null}
-        {appContext?.isAddItemBtnClicked ? (
+        {isAddItemBtnClicked ? (
           <div
             style={{
               marginLeft: "auto",
@@ -217,7 +221,7 @@ function IndividualList({ list }: Props) {
               style={{ alignSelf: "center" }}
             />
             <MdOutlineCancel
-              onClick={() => appContext?.setIsAddItemBtnClicked(false)}
+              onClick={() => setIsAddItemBtnClicked(false)}
               className="icon delete-icon"
               style={{ alignSelf: "center" }}
             />
@@ -232,14 +236,20 @@ function IndividualList({ list }: Props) {
 
         <DeleteListButton id={list.id} />
         <div display="flex" flexDirection="column">
-          <p>{`Completed: ${
-            appContext?.allItems.filter((item) => item.isDone === 1).length
-          }/${appContext?.allItems.length} items`}</p>
+          {/*completed items count logic */}
+          <p>{`${
+            appContext?.allItems.filter(
+              (item) => item.listId === list.id && item.isDone === 1
+            ).length
+          }/${
+            appContext?.allItems.filter((item) => item.listId === list.id)
+              .length
+          } items`}</p>
         </div>
       </li>
       <ul
         style={
-          appContext?.allItems.length !== 0 && appContext?.showList
+          appContext?.allItems.length !== 0 && showList
             ? {
                 borderRadius: "5px",
                 marginTop: "0.5em",
@@ -254,6 +264,7 @@ function IndividualList({ list }: Props) {
               handleDeleteItem={handleDeleteItem}
               listId={list.id}
               item={item}
+              showList={showList}
             />
           ))}
       </ul>

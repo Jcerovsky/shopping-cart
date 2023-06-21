@@ -16,6 +16,7 @@ interface IndividualItemProps {
   handleDeleteItem: (itemId: number) => Promise<void>;
   listId: number;
   item: ShoppingItems;
+  showList: boolean;
 }
 
 interface AppContextProps {
@@ -29,16 +30,6 @@ interface AppContextProps {
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
   item: string;
   setItem: React.Dispatch<React.SetStateAction<string>>;
-  isAddItemBtnClicked: boolean;
-  setIsAddItemBtnClicked: React.Dispatch<React.SetStateAction<boolean>>;
-  showList: boolean;
-  setShowList: React.Dispatch<React.SetStateAction<boolean>>;
-  editingList: boolean;
-  setEditingList: React.Dispatch<React.SetStateAction<boolean>>;
-  editedListName: string;
-  setEditedListName: React.Dispatch<React.SetStateAction<string>>;
-  originalListName: string;
-  setOriginalListName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps };

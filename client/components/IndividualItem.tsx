@@ -10,6 +10,7 @@ function IndividualItem({
   handleDeleteItem,
   listId,
   item,
+  showList,
 }: IndividualItemProps) {
   const appContext = useContext(AppContext);
 
@@ -47,7 +48,7 @@ function IndividualItem({
 
   return (
     <li
-      display={appContext?.showList ? "flex" : "none"}
+      display={showList ? "flex" : "none"}
       className="individual-item"
       key={item.id}
       style={isClicked ? { opacity: "0.5", background: "lightseagreen" } : {}}

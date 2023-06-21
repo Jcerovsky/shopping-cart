@@ -16,13 +16,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
-  const [showList, setShowList] = useState<boolean>(false);
   const [item, setItem] = useState<string>("");
-  const [isAddItemBtnClicked, setIsAddItemBtnClicked] =
-    useState<boolean>(false);
-  const [editingList, setEditingList] = useState<boolean>(false);
-  const [editedListName, setEditedListName] = useState("");
-  const [originalListName, setOriginalListName] = useState("");
 
   return (
     <AppContext.Provider
@@ -35,18 +29,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setIsDisabled,
         allItems,
         setAllItems,
-        showList,
-        setShowList,
         item,
         setItem,
-        editingList,
-        setEditingList,
-        isAddItemBtnClicked,
-        setIsAddItemBtnClicked,
-        editedListName,
-        setEditedListName,
-        originalListName,
-        setOriginalListName,
       }}
     >
       {children}
