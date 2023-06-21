@@ -4,8 +4,8 @@
 
 import http from 'http';
 import common from '../common';
-import { addItem, deleteItem, deleteItems, getItems, updateItem } from './items';
-import { createList, deleteList, getLists, updateList } from './lists';
+import Items from './items';
+import Lists from './lists';
 import patterns from './patterns';
 
 const server = http.createServer((request, response) => {
@@ -20,7 +20,7 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST.test(url.pathname)) {
       const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
-      deleteList(+listId);
+      Lists.deleteList(+listId);
 
       return response.end();
     }
@@ -29,7 +29,7 @@ const server = http.createServer((request, response) => {
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
-      deleteItems(+listId);
+      Items.deleteItems(+listId);
 
       return response.end();
     }
@@ -38,7 +38,7 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
       const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
 
-      deleteItem(+itemId);
+      Items.deleteItem(+itemId);
 
       return response.end();
     }
@@ -47,14 +47,14 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
-      return response.end(JSON.stringify(getLists()));
+      return response.end(JSON.stringify(Lists.getLists()));
     }
 
     // [GET] /list/{listId}/item
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
-      return response.end(JSON.stringify(getItems(+listId)));
+      return response.end(JSON.stringify(Items.getItems(+listId)));
     }
   }
 
@@ -64,7 +64,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        updateList(+listId, name);
+        Lists.updateList(+listId, name);
 
         return response.end();
       }
@@ -75,7 +75,7 @@ const server = http.createServer((request, response) => {
       const isDone = url.searchParams.get('isDone');
 
       if (isDone) {
-        updateItem(+itemId, +isDone);
+        Items.updateItem(+itemId, +isDone);
 
         return response.end();
       }
@@ -88,7 +88,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        return response.end(JSON.stringify(createList(name).id));
+        return response.end(JSON.stringify(Lists.createList(name).id));
       }
     }
 
@@ -98,7 +98,7 @@ const server = http.createServer((request, response) => {
       const text = url.searchParams.get('text');
 
       if (text) {
-        return response.end(JSON.stringify(addItem(+listId, text).id));
+        return response.end(JSON.stringify(Items.addItem(+listId, text).id));
       }
     }
   }

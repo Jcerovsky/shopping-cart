@@ -2,7 +2,7 @@
  * Copyright 2023 Marek Kobida
  */
 
-import { deleteItems } from './items';
+import Items from './items';
 
 interface List {
   createdAt: number;
@@ -10,38 +10,40 @@ interface List {
   name: string;
 }
 
-let lists: List[] = [
-  {
-    createdAt: +new Date(),
-    id: 0,
-    name: 'Môj prvý nákupný zoznam',
-  },
-];
+class Lists {
+  #lists: List[] = [
+    {
+      createdAt: +new Date(),
+      id: 0,
+      name: 'Môj prvý nákupný zoznam',
+    },
+  ];
 
-function createList(name: string): List {
-  //                                        ↓ If there is no last list, the `id` starts from 0.
-  const lastListId = lists[lists.length - 1]?.id ?? 0;
+  createList(name: string): List {
+    //                                                    ↓ If there is no last list, the `id` starts from 0.
+    const lastListId = this.#lists[this.#lists.length - 1]?.id ?? 0;
 
-  const list = { createdAt: +new Date(), id: lastListId + 1, name };
+    const list = { createdAt: +new Date(), id: lastListId + 1, name };
 
-  lists = [...lists, list];
+    this.#lists = [...this.#lists, list];
 
-  return list;
+    return list;
+  }
+
+  deleteList(id: number): List[] {
+    Items.deleteItems(id);
+
+    return (this.#lists = this.#lists.filter(list => list.id !== id));
+  }
+
+  getLists(): List[] {
+    return this.#lists;
+  }
+
+  updateList(id: number, name: string): List[] {
+    return (this.#lists = this.#lists.map(list => (list.id === id ? { ...list, name } : list)));
+  }
 }
 
-function deleteList(id: number): List[] {
-  deleteItems(id);
-
-  return (lists = lists.filter(list => list.id !== id));
-}
-
-function getLists(): List[] {
-  return lists;
-}
-
-function updateList(id: number, name: string): List[] {
-  return (lists = lists.map(list => (list.id === id ? { ...list, name } : list)));
-}
-
+export default new Lists();
 export type { List };
-export { createList, deleteList, getLists, updateList };
