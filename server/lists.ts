@@ -2,7 +2,7 @@
  * Copyright 2023 Marek Kobida
  */
 
-import { deleteItems } from './items';
+import Items from './items';
 
 interface List {
   createdAt: number;
@@ -30,7 +30,7 @@ function createList(name: string): List {
 }
 
 function deleteList(id: number): List[] {
-  deleteItems(id);
+  Items.deleteItems(id);
 
   return (lists = lists.filter(list => list.id !== id));
 }
