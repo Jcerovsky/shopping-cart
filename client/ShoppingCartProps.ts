@@ -17,6 +17,8 @@ interface IndividualItemProps {
   listId: number;
   item: ShoppingItems;
   showList: boolean;
+  allItems: ShoppingItems[];
+  setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>;
 }
 
 interface AppContextProps {
@@ -24,8 +26,6 @@ interface AppContextProps {
   setList: React.Dispatch<React.SetStateAction<string>>;
   allLists: ShoppingCart[];
   setAllLists: React.Dispatch<React.SetStateAction<ShoppingCart[]>>;
-  allItems: ShoppingItems[];
-  setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>;
   isDisabled: boolean;
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
   item: string;

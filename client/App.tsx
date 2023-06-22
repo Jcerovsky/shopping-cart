@@ -3,9 +3,11 @@ import ShoppingList from "./components/./ShoppingList";
 import Input from "./components/Input";
 import "./index.css";
 import { AppContext } from "./AppContext";
+import { createRequest } from "./utils/createRequest";
 
 function App() {
-  const appContext = useContext(AppContext);
+  const { setAllLists, setList, setIsDisabled, isDisabled, list } =
+    useContext(AppContext)!;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,7 +18,7 @@ function App() {
   const fetchList = async () => {
     const response = await fetch("http://127.0.0.1:1337/list");
     const data = await response.json();
-    appContext?.setAllLists(data);
+    setAllLists(data);
   };
 
   const handleClick = async () => {
@@ -26,6 +28,8 @@ function App() {
 
     if (name.length > 2) {
       try {
+        // const response = await createRequest(`list?name=${name}`, "POST");
+
         const response = await fetch(
           `http://127.0.0.1:1337/list?name=${name}`,
           {
@@ -35,27 +39,24 @@ function App() {
 
         const data = (await response.json()) as number;
 
-        appContext?.setAllLists((prevState) => [
-          ...prevState,
-          { name, id: data },
-        ]);
+        setAllLists((prevState) => [...prevState, { name, id: data }]);
       } catch (error) {
         throw new Error(`Error posting data. The error is ${error}`);
       }
 
-      appContext?.setList("");
+      setList("");
     }
   };
 
   useEffect(() => {
     if (inputRef.current) {
       if (inputRef.current?.value.length > 2) {
-        appContext?.setIsDisabled(false);
+        setIsDisabled(false);
       } else {
-        appContext?.setIsDisabled(true);
+        setIsDisabled(true);
       }
     }
-  }, [appContext?.list]);
+  }, [list]);
 
   return (
     <>
@@ -67,7 +68,7 @@ function App() {
           <Input forwardedRef={inputRef} handleClick={handleClick} />
           <button
             className="navbar--button"
-            disabled={appContext?.isDisabled as boolean}
+            disabled={isDisabled as boolean}
             onClick={handleClick}
           >
             ADD

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ShoppingCart } from "../ShoppingCartProps";
+import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
@@ -13,8 +13,8 @@ import {
   IoIosArrowDropdown,
   IoIosArrowDropup,
 } from "react-icons/io";
+
 import { AppContext } from "../AppContext";
-import app from "../App";
 
 interface Props {
   list: ShoppingCart;
@@ -27,12 +27,13 @@ function IndividualList({ list }: Props) {
   const [isAddItemBtnClicked, setIsAddItemBtnClicked] =
     useState<boolean>(false);
   const [showList, setShowList] = useState<boolean>(false);
+  const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
 
-  const appContext = useContext(AppContext);
+  const { item, setItem } = useContext(AppContext)!;
 
   useEffect(() => {
     fetchItem();
-  }, []);
+  }, [list.id]);
 
   useEffect(() => {
     focusOnInput();
@@ -47,19 +48,19 @@ function IndividualList({ list }: Props) {
   const fetchItem = async () => {
     const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
     const data = await response.json();
-
-    appContext?.setAllItems(data);
+    console.log(`data for ${list.id}`, data);
+    setAllItems(data);
   };
 
   const handleAddItem = async (): Promise<void> => {
-    if (appContext && appContext.item.length < 3) {
+    if (item.length < 3) {
       console.log("Items need to be at least three characters long");
       return;
     }
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:1337/list/${list.id}/item?text=${appContext?.item}`,
+        `http://127.0.0.1:1337/list/${list.id}/item?text=${item}`,
         {
           method: "POST",
         }
@@ -70,14 +71,14 @@ function IndividualList({ list }: Props) {
 
         const newItem = {
           id: newItemId,
-          text: appContext?.item as string,
+          text: item as string,
           isDone: 0,
           listId: list.id,
         };
+        console.log("newitem", newItem);
 
-        appContext?.setAllItems((prevState) => [...prevState, newItem]);
-        appContext?.setItem("");
-        setIsAddItemBtnClicked(false);
+        setAllItems((prevState) => [...prevState, newItem]);
+        setItem("");
       }
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
@@ -90,6 +91,7 @@ function IndividualList({ list }: Props) {
     setEditedListName(editedListName);
 
     try {
+      // await createRequest(`list/${list.id}?name=${editedListName}`, "PATCH");
       await fetch(
         `http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`,
         {
@@ -112,9 +114,7 @@ function IndividualList({ list }: Props) {
       );
 
       if (response.ok) {
-        appContext?.setAllItems(
-          appContext?.allItems.filter((item) => item.id !== itemId)
-        );
+        setAllItems(allItems.filter((item) => item.id !== itemId));
       }
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
@@ -123,7 +123,7 @@ function IndividualList({ list }: Props) {
 
   const handleAddItemButton = () => {
     setIsAddItemBtnClicked(true);
-    appContext?.setItem("");
+    setItem("");
   };
 
   const handleCancelEditAddList = () => {
@@ -143,9 +143,6 @@ function IndividualList({ list }: Props) {
     forwardedInputRef.current?.focus();
   };
 
-  const filteredItemsById = appContext?.allItems.filter(
-    (item) => item.listId === list.id
-  );
   const addItemInputRef = useRef<HTMLInputElement>(null);
   const forwardedInputRef = useRef<HTMLInputElement>(null);
 
@@ -187,8 +184,7 @@ function IndividualList({ list }: Props) {
             }}
           />
         )}
-        {appContext?.allItems.filter((item) => item.listId === list.id)
-          .length !== 0 ? (
+        {allItems.filter((item) => item.listId === list.id).length !== 0 ? (
           showList ? (
             <IoIosArrowDropup onClick={setShowListToggle} className="icon" />
           ) : (
@@ -207,9 +203,9 @@ function IndividualList({ list }: Props) {
             <input
               type="text"
               placeholder="Add item"
-              value={appContext?.item}
+              value={item}
               onChange={(e) => {
-                appContext?.setItem(e.target.value);
+                setItem(e.target.value);
               }}
               ref={addItemInputRef}
               className="add-item-input"
@@ -236,20 +232,19 @@ function IndividualList({ list }: Props) {
 
         <DeleteListButton id={list.id} />
         <div display="flex" flexDirection="column">
-          {/*completed items count logic */}
           <p>{`${
-            appContext?.allItems.filter(
+            allItems.filter(
               (item) => item.listId === list.id && item.isDone === 1
             ).length
           }/${
-            appContext?.allItems.filter((item) => item.listId === list.id)
-              .length
+            allItems.filter((item) => item.listId === list.id).length
           } items`}</p>
         </div>
       </li>
+
       <ul
         style={
-          appContext?.allItems.length !== 0 && showList
+          allItems.length !== 0 && showList
             ? {
                 borderRadius: "5px",
                 marginTop: "0.5em",
@@ -257,16 +252,17 @@ function IndividualList({ list }: Props) {
             : {}
         }
       >
-        {filteredItemsById &&
-          filteredItemsById.map((item) => (
-            <IndividualItem
-              key={item.id}
-              handleDeleteItem={handleDeleteItem}
-              listId={list.id}
-              item={item}
-              showList={showList}
-            />
-          ))}
+        {allItems.map((item) => (
+          <IndividualItem
+            key={item.id}
+            handleDeleteItem={handleDeleteItem}
+            listId={list.id}
+            item={item}
+            showList={showList}
+            allItems={allItems}
+            setAllItems={setAllItems}
+          />
+        ))}
       </ul>
     </div>
   );

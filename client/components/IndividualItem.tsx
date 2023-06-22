@@ -4,22 +4,21 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IndividualItemProps } from "../ShoppingCartProps";
 import "../App.css";
-import { AppContext } from "../AppContext";
 
 function IndividualItem({
   handleDeleteItem,
   listId,
   item,
   showList,
+  allItems,
+  setAllItems,
 }: IndividualItemProps) {
-  const appContext = useContext(AppContext);
-
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
   useEffect(() => {
     const updateItem = async () => {
       try {
-        const updatedItems = appContext?.allItems.map((existingItem) => {
+        const updatedItems = allItems.map((existingItem) => {
           if (existingItem.id === item.id) {
             return {
               ...existingItem,
@@ -29,7 +28,7 @@ function IndividualItem({
           return existingItem;
         });
 
-        updatedItems && appContext?.setAllItems(updatedItems);
+        setAllItems(updatedItems);
 
         await fetch(
           `http://127.0.0.1:1337/list/${listId}/item/${item.id}?isDone=${

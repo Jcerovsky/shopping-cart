@@ -9,14 +9,14 @@ interface InputRefProps {
 
 const Input = forwardRef(
   ({ forwardedRef, handleClick }: InputRefProps, ref) => {
-    const appContext = useContext(AppContext);
+    const { list, setList } = useContext(AppContext)!;
 
     return (
       <input
         type="text"
         placeholder="ADD NEW LIST"
-        value={appContext?.list}
-        onChange={(e) => appContext?.setList(e.target.value)}
+        value={list}
+        onChange={(e) => setList(e.target.value)}
         ref={forwardedRef}
         className="navbar--input"
         onKeyDown={(event) => {

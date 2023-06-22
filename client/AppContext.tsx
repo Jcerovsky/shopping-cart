@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 import {
   AppContextProps,
   ShoppingCart,
@@ -7,15 +7,10 @@ import {
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 
-export function useAnyState() {
-  return useContext(AppContext);
-}
-
 export function AppContextProvider({ children }: { children: ReactNode }) {
-  const [list, setList] = useState<string>("");
+  const [list, setList] = React.useState<string>("");
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
   const [item, setItem] = useState<string>("");
 
   return (
@@ -27,8 +22,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setAllLists,
         isDisabled,
         setIsDisabled,
-        allItems,
-        setAllItems,
         item,
         setItem,
       }}

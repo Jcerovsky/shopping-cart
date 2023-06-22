@@ -4,15 +4,13 @@ import "../App.css";
 import { AppContext } from "../AppContext";
 
 function ShoppingList() {
-  const appContext = useContext(AppContext);
+  const { allLists } = useContext(AppContext)!;
 
   return (
     <div className="list">
       <ul>
-        {appContext?.allLists.length !== 0 ? (
-          appContext?.allLists.map((list) => (
-            <IndividualList list={list} key={list.id} />
-          ))
+        {allLists.length !== 0 ? (
+          allLists.map((list) => <IndividualList list={list} key={list.id} />)
         ) : (
           <p>Loading...</p>
         )}
