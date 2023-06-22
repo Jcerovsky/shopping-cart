@@ -11,7 +11,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [list, setList] = React.useState<string>("");
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [item, setItem] = useState<string>("");
 
   return (
     <AppContext.Provider
@@ -22,8 +21,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setAllLists,
         isDisabled,
         setIsDisabled,
-        item,
-        setItem,
       }}
     >
       {children}

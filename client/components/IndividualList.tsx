@@ -14,9 +14,6 @@ import {
   IoIosArrowDropup,
 } from "react-icons/io";
 
-import { AppContext } from "../AppContext";
-import { createRequest } from "../utils/createRequest";
-
 interface Props {
   list: ShoppingCart;
 }
@@ -29,8 +26,7 @@ function IndividualList({ list }: Props) {
     useState<boolean>(false);
   const [showList, setShowList] = useState<boolean>(false);
   const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
-
-  const { item, setItem } = useContext(AppContext)!;
+  const [item, setItem] = useState<string>("");
 
   useEffect(() => {
     fetchItem();
