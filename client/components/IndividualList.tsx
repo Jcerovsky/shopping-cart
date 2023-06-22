@@ -13,6 +13,7 @@ import {
   IoIosArrowDropdown,
   IoIosArrowDropup,
 } from "react-icons/io";
+import { createRequest } from "../utils/createRequest";
 
 interface Props {
   list: ShoppingCart;
@@ -43,7 +44,7 @@ function IndividualList({ list }: Props) {
   }, [isAddItemBtnClicked]);
 
   const fetchItem = async () => {
-    const response = await fetch(`http://127.0.0.1:1337/list/${list.id}/item`);
+    const response = await createRequest(`list/${list.id}/item`, "GET");
     const data = await response.json();
     console.log(`data for ${list.id}`, data);
     setAllItems(data);
@@ -54,13 +55,11 @@ function IndividualList({ list }: Props) {
       console.log("Items need to be at least three characters long");
       return;
     }
-
+    setShowList(true);
     try {
-      const response = await fetch(
-        `http://127.0.0.1:1337/list/${list.id}/item?text=${item}`,
-        {
-          method: "POST",
-        }
+      const response = await createRequest(
+        `list/${list.id}/item?text=${item}`,
+        "POST"
       );
 
       if (response.ok) {
@@ -88,13 +87,7 @@ function IndividualList({ list }: Props) {
     setEditedListName(editedListName);
 
     try {
-      // await createRequest(`list/${list.id}?name=${editedListName}`, "PATCH");
-      await fetch(
-        `http://127.0.0.1:1337/list/${list.id}?name=${editedListName}`,
-        {
-          method: "PATCH",
-        }
-      );
+      await createRequest(`list/${list.id}?name=${editedListName}`, "PATCH");
 
       setOriginalListName(editedListName);
     } catch (error) {
@@ -104,12 +97,9 @@ function IndividualList({ list }: Props) {
 
   const handleDeleteItem = async (itemId: number) => {
     try {
-      // const response = await createRequest(`list/${list.id}/item/${itemId}`, "DELETE");
-      const response = await fetch(
-        `http://127.0.0.1:1337/list/${list.id}/item/${itemId}`,
-        {
-          method: "DELETE",
-        }
+      const response = await createRequest(
+        `list/${list.id}/item/${itemId}`,
+        "DELETE"
       );
 
       if (response.ok) {

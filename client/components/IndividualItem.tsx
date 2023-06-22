@@ -4,6 +4,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { ImCheckboxUnchecked } from "react-icons/im";
 import { IndividualItemProps } from "../ShoppingCartProps";
 import "../App.css";
+import { createRequest } from "../utils/createRequest";
 
 function IndividualItem({
   handleDeleteItem,
@@ -30,13 +31,9 @@ function IndividualItem({
 
         setAllItems(updatedItems);
 
-        await fetch(
-          `http://127.0.0.1:1337/list/${listId}/item/${item.id}?isDone=${
-            isClicked ? "1" : "0"
-          }`,
-          {
-            method: "PATCH",
-          }
+        await createRequest(
+          `list/${listId}/item/${item.id}?isDone=${isClicked ? "1" : "0"}`,
+          "PATCH"
         );
       } catch (error) {
         console.log(`Failed updating item: ${error}`);

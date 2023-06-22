@@ -18,16 +18,11 @@ function DeleteListButton({ id, allItems }: Props) {
     try {
       await Promise.all(
         listToDelete.map(async (item) => {
-          // await createRequest(`list/${item.listId}`, "DELETE");
-          await fetch(`http://127.0.0.1:1337/list/${item.listId}`, {
-            method: "DELETE",
-          });
+          await createRequest(`list/${item.listId}`, "DELETE");
         })
       );
       if (listToDelete?.length === 0) {
-        await fetch(`http://127.0.0.1:1337/list/${id}`, {
-          method: "DELETE",
-        });
+        await createRequest(`list/${id}`, "DELETE");
       }
     } catch (error) {
       throw new Error(`Error deleting item:' ${error}`);

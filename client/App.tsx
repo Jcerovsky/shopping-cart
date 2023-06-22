@@ -16,9 +16,7 @@ function App() {
   }, []);
 
   const fetchList = async () => {
-    // const response = await createRequest("http://127.0.0.1:1337/list" "GET");
-
-    const response = await fetch("http://127.0.0.1:1337/list");
+    const response = await createRequest("list", "GET");
     const data = await response.json();
     setAllLists(data);
   };
@@ -30,15 +28,7 @@ function App() {
 
     if (name.length > 2) {
       try {
-        // const response = await createRequest(`list?name=${name}`, "POST");
-
-        const response = await fetch(
-          `http://127.0.0.1:1337/list?name=${name}`,
-          {
-            method: "POST",
-          }
-        );
-
+        const response = await createRequest(`list?name=${name}`, "POST");
         const data = (await response.json()) as number;
 
         setAllLists((prevState) => [...prevState, { name, id: data }]);
