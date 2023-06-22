@@ -16,6 +16,8 @@ function App() {
   }, []);
 
   const fetchList = async () => {
+    // const response = await createRequest("http://127.0.0.1:1337/list" "GET");
+
     const response = await fetch("http://127.0.0.1:1337/list");
     const data = await response.json();
     setAllLists(data);

@@ -3,13 +3,15 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import "../App.css";
 import { AppContext } from "../AppContext";
 import { createRequest } from "../utils/createRequest";
+import { ShoppingItems } from "../ShoppingCartProps";
 
 interface Props {
   id: number;
+  allItems: ShoppingItems[];
 }
 
-function DeleteListButton({ id }: Props) {
-  const { allItems, setAllLists } = useContext(AppContext)!;
+function DeleteListButton({ id, allItems }: Props) {
+  const { setAllLists } = useContext(AppContext)!;
 
   const handleDelete = async () => {
     const listToDelete = allItems.filter((item) => item.listId === id);

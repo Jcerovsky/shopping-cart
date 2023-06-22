@@ -15,6 +15,7 @@ import {
 } from "react-icons/io";
 
 import { AppContext } from "../AppContext";
+import { createRequest } from "../utils/createRequest";
 
 interface Props {
   list: ShoppingCart;
@@ -75,8 +76,8 @@ function IndividualList({ list }: Props) {
           isDone: 0,
           listId: list.id,
         };
-        console.log("newitem", newItem);
 
+        //use sort method to sort based on date created at
         setAllItems((prevState) => [...prevState, newItem]);
         setItem("");
       }
@@ -98,6 +99,7 @@ function IndividualList({ list }: Props) {
           method: "PATCH",
         }
       );
+
       setOriginalListName(editedListName);
     } catch (error) {
       console.log(`Failed updating list name: ${error}`);
@@ -106,6 +108,7 @@ function IndividualList({ list }: Props) {
 
   const handleDeleteItem = async (itemId: number) => {
     try {
+      // const response = await createRequest(`list/${list.id}/item/${itemId}`, "DELETE");
       const response = await fetch(
         `http://127.0.0.1:1337/list/${list.id}/item/${itemId}`,
         {
@@ -230,7 +233,7 @@ function IndividualList({ list }: Props) {
           />
         )}
 
-        <DeleteListButton id={list.id} />
+        <DeleteListButton id={list.id} allItems={allItems} />
         <div display="flex" flexDirection="column">
           <p>{`${
             allItems.filter(
