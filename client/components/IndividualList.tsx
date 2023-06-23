@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { ShoppingCart, ShoppingItems } from "../ShoppingCartProps";
+import {
+  IndividualListProps,
+  ShoppingCart,
+  ShoppingItems,
+} from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
@@ -14,20 +18,32 @@ import {
   IoIosArrowDropup,
 } from "react-icons/io";
 import { createRequest } from "../utils/createRequest";
+import { setStateHelper } from "../utils/setStateHelper";
 
 interface Props {
   list: ShoppingCart;
 }
 
 function IndividualList({ list }: Props) {
-  const [editedListName, setEditedListName] = useState(list.name);
-  const [originalListName, setOriginalListName] = useState(list.name);
-  const [editingList, setEditingList] = useState<boolean>(false);
-  const [isAddItemBtnClicked, setIsAddItemBtnClicked] =
-    useState<boolean>(false);
-  const [showList, setShowList] = useState<boolean>(false);
-  const [allItems, setAllItems] = useState<ShoppingItems[]>([]);
-  const [item, setItem] = useState<string>("");
+  const [state, setState] = useState<IndividualListProps>({
+    editedListName: list.name,
+    originalListName: list.name,
+    editingList: false,
+    isAddItemBtnClicked: false,
+    showList: false,
+    allItems: [],
+    item: "",
+  });
+
+  const {
+    editedListName,
+    originalListName,
+    editingList,
+    isAddItemBtnClicked,
+    showList,
+    allItems,
+    item,
+  } = state;
 
   useEffect(() => {
     fetchItem();
@@ -46,8 +62,7 @@ function IndividualList({ list }: Props) {
   const fetchItem = async () => {
     const response = await createRequest(`list/${list.id}/item`, "GET");
     const data = await response.json();
-    console.log(`data for ${list.id}`, data);
-    setAllItems(data);
+    setStateHelper({ newData: { allItems: data }, setState: setState });
   };
 
   const handleAddItem = async (): Promise<void> => {
@@ -55,7 +70,8 @@ function IndividualList({ list }: Props) {
       console.log("Items need to be at least three characters long");
       return;
     }
-    setShowList(true);
+    setStateHelper({ newData: { showList: true }, setState: setState });
+    // setShowList(true);
     try {
       const response = await createRequest(
         `list/${list.id}/item?text=${item}`,
@@ -73,8 +89,11 @@ function IndividualList({ list }: Props) {
         };
 
         //use sort method to sort based on date created at
-        setAllItems((prevState) => [...prevState, newItem]);
-        setItem("");
+        setState((prevState) => ({
+          ...prevState,
+          allItems: [...prevState.allItems, newItem],
+          item: "",
+        }));
       }
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
@@ -82,14 +101,20 @@ function IndividualList({ list }: Props) {
   };
 
   const handleEditListClick = async () => {
-    setIsAddItemBtnClicked(false);
-    setEditingList(false);
-    setEditedListName(editedListName);
+    setState((prevState) => ({
+      ...prevState,
+      isAddItemBtnClicked: false,
+      editingList: false,
+      editedListName: editedListName,
+    }));
 
     try {
       await createRequest(`list/${list.id}?name=${editedListName}`, "PATCH");
 
-      setOriginalListName(editedListName);
+      setState((prevState) => ({
+        ...prevState,
+        originalListName: editedListName,
+      }));
     } catch (error) {
       console.log(`Failed updating list name: ${error}`);
     }
@@ -103,7 +128,10 @@ function IndividualList({ list }: Props) {
       );
 
       if (response.ok) {
-        setAllItems(allItems.filter((item) => item.id !== itemId));
+        setState((prevState) => ({
+          ...prevState,
+          allItems: allItems.filter((item) => item.id !== itemId),
+        }));
       }
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
@@ -111,13 +139,19 @@ function IndividualList({ list }: Props) {
   };
 
   const handleAddItemButton = () => {
-    setIsAddItemBtnClicked(true);
-    setItem("");
+    setState((prevState) => ({
+      ...prevState,
+      isAddItemBtnClicked: true,
+      item: "",
+    }));
   };
 
   const handleCancelEditAddList = () => {
-    setEditingList(false);
-    setEditedListName(originalListName);
+    setState((prevState) => ({
+      ...prevState,
+      editingList: false,
+      editedListName: originalListName,
+    }));
 
     if (addItemInputRef.current) {
       addItemInputRef.current.value = "";
@@ -125,7 +159,10 @@ function IndividualList({ list }: Props) {
   };
 
   const setShowListToggle = () => {
-    setShowList((prevState) => !prevState);
+    setState((prevState) => ({
+      ...prevState,
+      showList: !prevState.showList,
+    }));
   };
 
   const focusOnInput = () => {
@@ -147,7 +184,12 @@ function IndividualList({ list }: Props) {
       >
         {editingList ? (
           <EditingListInput
-            onChange={(e) => setEditedListName(e.target.value)}
+            onChange={(e) =>
+              setState((prevState) => ({
+                ...prevState,
+                editedListName: e.target.value,
+              }))
+            }
             onClick={handleEditListClick}
             ref={forwardedInputRef}
             editedListName={editedListName}
@@ -158,7 +200,10 @@ function IndividualList({ list }: Props) {
         {editingList ? (
           <MdOutlineCancel
             onClick={() => {
-              setEditingList((prevState) => !prevState);
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
               handleCancelEditAddList();
             }}
             className="icon delete-icon"
@@ -167,7 +212,10 @@ function IndividualList({ list }: Props) {
           <AiOutlineEdit
             className="icon"
             onClick={() => {
-              setEditingList((prevState) => !prevState);
+              setState((prevState) => ({
+                ...prevState,
+                editingList: !prevState.editingList,
+              }));
 
               focusOnInput();
             }}
@@ -194,7 +242,10 @@ function IndividualList({ list }: Props) {
               placeholder="Add item"
               value={item}
               onChange={(e) => {
-                setItem(e.target.value);
+                setState((prevState) => ({
+                  ...prevState,
+                  item: e.target.value,
+                }));
               }}
               ref={addItemInputRef}
               className="add-item-input"
@@ -206,7 +257,12 @@ function IndividualList({ list }: Props) {
               style={{ alignSelf: "center" }}
             />
             <MdOutlineCancel
-              onClick={() => setIsAddItemBtnClicked(false)}
+              onClick={() =>
+                setState((prevState) => ({
+                  ...prevState,
+                  isAddItemBtnClicked: false,
+                }))
+              }
               className="icon delete-icon"
               style={{ alignSelf: "center" }}
             />
@@ -249,7 +305,7 @@ function IndividualList({ list }: Props) {
             item={item}
             showList={showList}
             allItems={allItems}
-            setAllItems={setAllItems}
+            setState={setState}
           />
         ))}
       </ul>

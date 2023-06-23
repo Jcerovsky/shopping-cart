@@ -18,7 +18,17 @@ interface IndividualItemProps {
   item: ShoppingItems;
   showList: boolean;
   allItems: ShoppingItems[];
-  setAllItems: React.Dispatch<React.SetStateAction<ShoppingItems[]>>;
+  setState: React.Dispatch<React.SetStateAction<IndividualListProps>>;
+}
+
+interface IndividualListProps {
+  editedListName: string;
+  originalListName: string;
+  editingList: boolean;
+  isAddItemBtnClicked: boolean;
+  showList: boolean;
+  allItems: ShoppingItems[];
+  item: string;
 }
 
 interface AppContextProps {
@@ -30,4 +40,10 @@ interface AppContextProps {
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps };
+export {
+  ShoppingItems,
+  ShoppingCart,
+  IndividualItemProps,
+  AppContextProps,
+  IndividualListProps,
+};

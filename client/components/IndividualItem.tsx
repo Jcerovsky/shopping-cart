@@ -12,7 +12,7 @@ function IndividualItem({
   item,
   showList,
   allItems,
-  setAllItems,
+  setState,
 }: IndividualItemProps) {
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
@@ -29,7 +29,11 @@ function IndividualItem({
           return existingItem;
         });
 
-        setAllItems(updatedItems);
+        setState((prevState) => ({
+          ...prevState,
+          allItems: updatedItems,
+        }));
+        // setAllItems(updatedItems);
 
         await createRequest(
           `list/${listId}/item/${item.id}?isDone=${isClicked ? "1" : "0"}`,
