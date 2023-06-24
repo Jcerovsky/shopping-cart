@@ -14,5 +14,10 @@
     "webpack": "^5.80.0"
   },
   "name": "shopping-cart",
+  "prettier": {
+    "arrowParens": "avoid",
+    "printWidth": 120,
+    "singleQuote": true
+  },
   "version": "1.0.0"
 }
