@@ -1,9 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  IndividualListProps,
-  ShoppingCart,
-  ShoppingItems,
-} from "../ShoppingCartProps";
+import React, { useEffect, useRef, useState } from "react";
+import { IndividualListProps, ShoppingCart } from "../ShoppingCartProps";
 import DeleteListButton from "./DeleteListButton";
 import IndividualItem from "./IndividualItem";
 import EditingListInput from "./EditingListInput";
@@ -18,7 +14,6 @@ import {
   IoIosArrowDropup,
 } from "react-icons/io";
 import { createRequest } from "../utils/createRequest";
-import { setStateHelper } from "../utils/setStateHelper";
 
 interface Props {
   list: ShoppingCart;
@@ -62,7 +57,10 @@ function IndividualList({ list }: Props) {
   const fetchItem = async () => {
     const response = await createRequest(`list/${list.id}/item`, "GET");
     const data = await response.json();
-    setStateHelper({ newData: { allItems: data }, setState: setState });
+    setState((prevState) => ({
+      ...prevState,
+      allItems: data,
+    }));
   };
 
   const handleAddItem = async (): Promise<void> => {
@@ -70,8 +68,11 @@ function IndividualList({ list }: Props) {
       console.log("Items need to be at least three characters long");
       return;
     }
-    setStateHelper({ newData: { showList: true }, setState: setState });
-    // setShowList(true);
+    setState((prevState) => ({
+      ...prevState,
+      showList: true,
+    }));
+
     try {
       const response = await createRequest(
         `list/${list.id}/item?text=${item}`,
@@ -91,7 +92,7 @@ function IndividualList({ list }: Props) {
         //use sort method to sort based on date created at
         setState((prevState) => ({
           ...prevState,
-          allItems: [...prevState.allItems, newItem],
+          allItems: [...allItems, newItem],
           item: "",
         }));
       }
@@ -103,11 +104,9 @@ function IndividualList({ list }: Props) {
   const handleEditListClick = async () => {
     setState((prevState) => ({
       ...prevState,
-      isAddItemBtnClicked: false,
       editingList: false,
       editedListName: editedListName,
     }));
-
     try {
       await createRequest(`list/${list.id}?name=${editedListName}`, "PATCH");
 
