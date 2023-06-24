@@ -1,7 +1,7 @@
-import React, { forwardRef, useContext, useState } from "react";
-import { MdOutlineFileDownloadDone } from "react-icons/md";
-import "../App.css";
-import { AppContext } from "../AppContext";
+import React, { forwardRef, useContext, useState } from 'react';
+import { MdOutlineFileDownloadDone } from 'react-icons/md';
+import '../App.css';
+import { AppContext } from '../AppContext';
 
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,12 +20,9 @@ const EditingListInput = forwardRef<HTMLInputElement, Props>(
           value={editedListName}
           onChange={onChange}
           ref={forwardedInputRef}
-          onKeyDown={(event) => event.key === "Enter" && onClick()}
+          onKeyDown={event => event.key === 'Enter' && onClick()}
         />
-        <MdOutlineFileDownloadDone
-          onClick={onClick}
-          className="icon save-icon"
-        />
+        <MdOutlineFileDownloadDone onClick={onClick} className="icon save-icon" />
       </>
     );
   }

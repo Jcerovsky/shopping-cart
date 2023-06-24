@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ShoppingCart {
   name: string;
@@ -40,10 +40,4 @@ interface AppContextProps {
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export {
-  ShoppingItems,
-  ShoppingCart,
-  IndividualItemProps,
-  AppContextProps,
-  IndividualListProps,
-};
+export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps, IndividualListProps };

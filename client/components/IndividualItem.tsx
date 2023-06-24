@@ -1,25 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { MdDoneOutline } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { ImCheckboxUnchecked } from "react-icons/im";
-import { IndividualItemProps } from "../ShoppingCartProps";
-import "../App.css";
-import { createRequest } from "../utils/createRequest";
+import React, { useEffect, useState } from 'react';
+import { MdDoneOutline } from 'react-icons/md';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { ImCheckboxUnchecked } from 'react-icons/im';
+import { IndividualItemProps } from '../ShoppingCartProps';
+import '../App.css';
+import { createRequest } from '../utils/createRequest';
 
-function IndividualItem({
-  handleDeleteItem,
-  listId,
-  item,
-  showList,
-  allItems,
-  setState,
-}: IndividualItemProps) {
+function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, setState }: IndividualItemProps) {
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
   useEffect(() => {
     const updateItem = async () => {
       try {
-        const updatedItems = allItems.map((existingItem) => {
+        const updatedItems = allItems.map(existingItem => {
           if (existingItem.id === item.id) {
             return {
               ...existingItem,
@@ -29,16 +22,13 @@ function IndividualItem({
           return existingItem;
         });
 
-        setState((prevState) => ({
+        setState(prevState => ({
           ...prevState,
           allItems: updatedItems,
         }));
         // setAllItems(updatedItems);
 
-        await createRequest(
-          `list/${listId}/item/${item.id}?isDone=${isClicked ? "1" : "0"}`,
-          "PATCH"
-        );
+        await createRequest(`list/${listId}/item/${item.id}?isDone=${isClicked ? '1' : '0'}`, 'PATCH');
       } catch (error) {
         console.log(`Failed updating item: ${error}`);
       }
@@ -48,29 +38,26 @@ function IndividualItem({
 
   return (
     <li
-      display={showList ? "flex" : "none"}
+      display={showList ? 'flex' : 'none'}
       className="individual-item"
       key={item.id}
-      style={isClicked ? { opacity: "0.5", background: "lightseagreen" } : {}}
+      style={isClicked ? { opacity: '0.5', background: 'lightseagreen' } : {}}
     >
       {isClicked ? (
         <MdDoneOutline
-          onClick={() => setIsClicked((prevState) => !prevState)}
+          onClick={() => setIsClicked(prevState => !prevState)}
           className="icon"
-          style={{ background: "seagreen" }}
+          style={{ background: 'seagreen' }}
         />
       ) : (
-        <ImCheckboxUnchecked
-          onClick={() => setIsClicked((prevState) => !prevState)}
-          className="icon save-icon"
-        />
+        <ImCheckboxUnchecked onClick={() => setIsClicked(prevState => !prevState)} className="icon save-icon" />
       )}
       <p
         style={
           isClicked
             ? {
-                textDecoration: "line-through",
-                textDecorationColor: "green",
+                textDecoration: 'line-through',
+                textDecorationColor: 'green',
               }
             : {}
         }
@@ -79,7 +66,7 @@ function IndividualItem({
       </p>
       <RiDeleteBin6Line
         onClick={() => handleDeleteItem(item.id)}
-        style={{ marginLeft: "auto" }}
+        style={{ marginLeft: 'auto' }}
         className="icon delete-icon"
       />
     </li>

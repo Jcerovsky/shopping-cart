@@ -1,14 +1,10 @@
-import React, { createContext, ReactNode, useState } from "react";
-import {
-  AppContextProps,
-  ShoppingCart,
-  ShoppingItems,
-} from "./ShoppingCartProps";
+import React, { createContext, ReactNode, useState } from 'react';
+import { AppContextProps, ShoppingCart, ShoppingItems } from './ShoppingCartProps';
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-  const [list, setList] = React.useState<string>("");
+  const [list, setList] = React.useState<string>('');
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 

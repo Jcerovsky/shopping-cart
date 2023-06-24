@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useRef } from "react";
-import ShoppingList from "./components/./ShoppingList";
-import Input from "./components/Input";
-import "./index.css";
-import { AppContext } from "./AppContext";
-import { createRequest } from "./utils/createRequest";
+import React, { useContext, useEffect, useRef } from 'react';
+import ShoppingList from './components/./ShoppingList';
+import Input from './components/Input';
+import './index.css';
+import { AppContext } from './AppContext';
+import { createRequest } from './utils/createRequest';
 
 function App() {
-  const { setAllLists, setList, setIsDisabled, isDisabled, list } =
-    useContext(AppContext)!;
+  const { setAllLists, setList, setIsDisabled, isDisabled, list } = useContext(AppContext)!;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,7 +15,7 @@ function App() {
   }, []);
 
   const fetchList = async () => {
-    const response = await createRequest("list", "GET");
+    const response = await createRequest('list', 'GET');
     const data = await response.json();
     setAllLists(data);
   };
@@ -28,15 +27,15 @@ function App() {
 
     if (name.length > 2) {
       try {
-        const response = await createRequest(`list?name=${name}`, "POST");
+        const response = await createRequest(`list?name=${name}`, 'POST');
         const data = (await response.json()) as number;
 
-        setAllLists((prevState) => [...prevState, { name, id: data }]);
+        setAllLists(prevState => [...prevState, { name, id: data }]);
       } catch (error) {
         throw new Error(`Error posting data. The error is ${error}`);
       }
 
-      setList("");
+      setList('');
     }
   };
 
@@ -58,11 +57,7 @@ function App() {
         </div>
         <div display="flex" justifyContent="center">
           <Input forwardedRef={inputRef} handleClick={handleClick} />
-          <button
-            className="navbar--button"
-            disabled={isDisabled as boolean}
-            onClick={handleClick}
-          >
+          <button className="navbar--button" disabled={isDisabled as boolean} onClick={handleClick}>
             ADD
           </button>
         </div>
