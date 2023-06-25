@@ -38,12 +38,10 @@ function App() {
   };
 
   useEffect(() => {
-    if (inputRef.current) {
-      if (inputRef.current?.value.length > 2) {
-        setIsDisabled(false);
-      } else {
-        setIsDisabled(true);
-      }
+    if (inputRef.current && inputRef.current.value.length > 2) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
     }
   }, [list]);
 

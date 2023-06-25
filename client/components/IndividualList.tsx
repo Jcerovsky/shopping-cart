@@ -5,7 +5,6 @@ import IndividualItem from './IndividualItem';
 import EditingListInput from './EditingListInput';
 import '../App.css';
 
-//React Icons
 import { AiOutlineEdit } from 'react-icons/ai';
 import { MdOutlineCancel, MdOutlineFileDownloadDone } from 'react-icons/md';
 import { IoIosAddCircleOutline, IoIosArrowDropdown, IoIosArrowDropup } from 'react-icons/io';
@@ -69,7 +68,6 @@ function IndividualList({ list }: Props) {
         listId: list.id,
       };
 
-      //use sort method to sort based on date created at
       setState(prevState => ({
         ...prevState,
         allItems: [...allItems, newItem],

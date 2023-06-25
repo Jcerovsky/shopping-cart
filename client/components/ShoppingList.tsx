@@ -22,7 +22,9 @@ function ShoppingList() {
   return (
     <div className="list">
       <ul>
-        {allLists.length !== 0 ? allLists.map(list => <IndividualList list={list} key={list.id} />) : <p>Loading...</p>}
+        {allLists.map(list => (
+          <IndividualList list={list} key={list.id} />
+        ))}
       </ul>
     </div>
   );
