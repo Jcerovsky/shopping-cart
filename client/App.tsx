@@ -15,8 +15,7 @@ function App() {
   }, []);
 
   const fetchList = async () => {
-    const response = await createRequest('list', 'GET');
-    const data = await response.json();
+    const data = await createRequest('list', 'GET');
     setAllLists(data);
   };
 
@@ -27,8 +26,7 @@ function App() {
 
     if (name.length > 2) {
       try {
-        const response = await createRequest(`list?name=${name}`, 'POST');
-        const data = (await response.json()) as number;
+        const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
         setAllLists(prevState => [...prevState, { name, id: data }]);
       } catch (error) {

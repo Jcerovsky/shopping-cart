@@ -26,13 +26,13 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
           ...prevState,
           allItems: updatedItems,
         }));
-        // setAllItems(updatedItems);
 
         await createRequest(`list/${listId}/item/${item.id}?isDone=${isClicked ? '1' : '0'}`, 'PATCH');
       } catch (error) {
         console.log(`Failed updating item: ${error}`);
       }
     };
+
     updateItem();
   }, [isClicked]);
 

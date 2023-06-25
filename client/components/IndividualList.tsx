@@ -43,8 +43,7 @@ function IndividualList({ list }: Props) {
   }, [isAddItemBtnClicked]);
 
   const fetchItem = async () => {
-    const response = await createRequest(`list/${list.id}/item`, 'GET');
-    const data = await response.json();
+    const data = await createRequest(`list/${list.id}/item`, 'GET');
     setState(prevState => ({
       ...prevState,
       allItems: data,
@@ -62,25 +61,20 @@ function IndividualList({ list }: Props) {
     }));
 
     try {
-      const response = await createRequest(`list/${list.id}/item?text=${item}`, 'POST');
+      const data = await createRequest(`list/${list.id}/item?text=${item}`, 'POST');
+      const newItem = {
+        id: data,
+        text: item as string,
+        isDone: 0,
+        listId: list.id,
+      };
 
-      if (response.ok) {
-        const newItemId = await response.json();
-
-        const newItem = {
-          id: newItemId,
-          text: item as string,
-          isDone: 0,
-          listId: list.id,
-        };
-
-        //use sort method to sort based on date created at
-        setState(prevState => ({
-          ...prevState,
-          allItems: [...allItems, newItem],
-          item: '',
-        }));
-      }
+      //use sort method to sort based on date created at
+      setState(prevState => ({
+        ...prevState,
+        allItems: [...allItems, newItem],
+        item: '',
+      }));
     } catch (error) {
       console.error(`Failed to add item: ${error} `);
     }
@@ -106,14 +100,12 @@ function IndividualList({ list }: Props) {
 
   const handleDeleteItem = async (itemId: number) => {
     try {
-      const response = await createRequest(`list/${list.id}/item/${itemId}`, 'DELETE');
+      await createRequest(`list/${list.id}/item/${itemId}`, 'DELETE');
 
-      if (response.ok) {
-        setState(prevState => ({
-          ...prevState,
-          allItems: allItems.filter(item => item.id !== itemId),
-        }));
-      }
+      setState(prevState => ({
+        ...prevState,
+        allItems: allItems.filter(item => item.id !== itemId),
+      }));
     } catch (error) {
       console.error(`Failed deleting item: ${error}`);
     }
