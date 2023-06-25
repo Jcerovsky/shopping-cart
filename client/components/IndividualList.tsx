@@ -28,7 +28,12 @@ function IndividualList({ list }: Props) {
   const { editedListName, originalListName, editingList, isAddItemBtnClicked, showList, allItems, item } = state;
 
   useEffect(() => {
-    fetchItem();
+    createRequest(`list/${list.id}/item`, 'GET').then(data => {
+      setState(prevState => ({
+        ...prevState,
+        allItems: data,
+      }));
+    });
   }, [list.id]);
 
   useEffect(() => {
@@ -40,14 +45,6 @@ function IndividualList({ list }: Props) {
       addItemInputRef.current.focus();
     }
   }, [isAddItemBtnClicked]);
-
-  const fetchItem = async () => {
-    const data = await createRequest(`list/${list.id}/item`, 'GET');
-    setState(prevState => ({
-      ...prevState,
-      allItems: data,
-    }));
-  };
 
   const handleAddItem = async (): Promise<void> => {
     if (item.length < 3) {
