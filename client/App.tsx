@@ -8,7 +8,7 @@ import { createRequest } from './utils/createRequest';
 function App() {
   const { setAllLists, setList, setIsDisabled, isDisabled, list, allLists } = useContext(AppContext)!;
   const [pageCount, setPageCount] = useState<number>(0);
-  const [listCount, setListCount] = useState<number>(0);
+  const [limitPerPage, setLimitPerPage] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -16,7 +16,7 @@ function App() {
   const getData = () => {
     createRequest(`list?page=${currentPage}`, 'GET').then(data => {
       setPageCount(data.pageCount);
-      setListCount(data.limit);
+      setLimitPerPage(data.limit);
       setAllLists(data.filteredLists);
     });
   };
@@ -42,7 +42,7 @@ function App() {
       try {
         const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
-        if (pageCount === currentPage && allLists.length < listCount) {
+        if (pageCount === currentPage && allLists.length < limitPerPage) {
           setAllLists(prevState => [...prevState, { name: name, id: data }]);
         }
       } catch (error) {
