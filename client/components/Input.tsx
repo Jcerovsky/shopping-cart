@@ -2,12 +2,11 @@ import React, { forwardRef, useContext } from 'react';
 import '../App.css';
 import { AppContext } from '../AppContext';
 
-interface InputRefProps {
-  forwardedRef: React.RefObject<HTMLInputElement>;
+interface Props {
   handleClick: () => void;
 }
 
-const Input = forwardRef(({ forwardedRef, handleClick }: InputRefProps, ref) => {
+const Input = forwardRef<HTMLInputElement, Props>(({ handleClick }: Props, inputRef) => {
   const { list, setList } = useContext(AppContext)!;
 
   return (
@@ -16,7 +15,7 @@ const Input = forwardRef(({ forwardedRef, handleClick }: InputRefProps, ref) => 
       placeholder="ADD NEW LIST"
       value={list}
       onChange={e => setList(e.target.value)}
-      ref={forwardedRef}
+      ref={inputRef}
       className="navbar--input"
       onKeyDown={event => {
         if (event.key === 'Enter') {

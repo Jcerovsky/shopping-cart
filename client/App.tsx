@@ -54,7 +54,7 @@ function App() {
           <h1 className="navbar--heading__text">SHOPPING LIST</h1>
         </div>
         <div display="flex" justifyContent="center">
-          <Input forwardedRef={inputRef} handleClick={handleClick} />
+          <Input ref={inputRef} handleClick={handleClick} />
           <button className="navbar--button" disabled={isDisabled as boolean} onClick={handleClick}>
             ADD
           </button>
