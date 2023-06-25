@@ -9,9 +9,10 @@ interface Props {
 }
 
 function DeleteListButton({ id }: Props) {
-  const { setAllLists } = useContext(AppContext)!;
+  const { setAllLists, setErrorMessage } = useContext(AppContext)!;
 
   const handleDelete = () => {
+    setErrorMessage(true);
     try {
       createRequest(`list/${id}`, 'DELETE');
     } catch (error) {

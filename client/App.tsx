@@ -42,6 +42,18 @@ function App() {
       try {
         const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
+        // when currently on a differnet page and adding list - move to the last page
+        if (allLists.length >= limitPerPage - 1) {
+          if (currentPage < pageCount) {
+            setCurrentPage(pageCount);
+          } else {
+            getData();
+          }
+        } else if (allLists.length === 0 && currentPage > 1) {
+          setCurrentPage(prevState => prevState - 1);
+          getData();
+        }
+
         if (pageCount === currentPage && allLists.length < limitPerPage) {
           setAllLists(prevState => [...prevState, { name: name, id: data }]);
         }
