@@ -48,22 +48,29 @@ const server = http.createServer((request, response) => {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
       const page = url.searchParams.get('page');
+      const pattern = /[0-9]+/;
 
-      // dokončiť – pagination
-      if (page && /[0-9]+/.test(page)) {
+      if (page && pattern.test(page)) {
         const LIMIT = 5;
         const PAGE = +page;
 
         const startIndex = (PAGE - 1) * LIMIT;
         const endIndex = startIndex + LIMIT;
 
-        const lists = Lists
-          /**/ .getLists()
+        const lists = Lists.getLists();
+
+        /**/
+
+        const filteredLists = lists
           /**/ .filter((list, index) => {
             return index >= startIndex && index < endIndex;
           });
 
-        return response.end(JSON.stringify(lists));
+        const pageCount = -~(lists.length / LIMIT);
+
+        return response.end(
+          JSON.stringify({ filteredLists, limit: LIMIT, listCount: lists.length, page: PAGE, pageCount })
+        );
       }
 
       return response.end(JSON.stringify(Lists.getLists()));
