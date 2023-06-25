@@ -47,6 +47,25 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
+      const page = url.searchParams.get('page');
+
+      // dokončiť – pagination
+      if (page && /[0-9]+/.test(page)) {
+        const LIMIT = 5;
+        const PAGE = +page;
+
+        const startIndex = (PAGE - 1) * LIMIT;
+        const endIndex = startIndex + LIMIT;
+
+        const lists = Lists
+          /**/ .getLists()
+          /**/ .filter((list, index) => {
+            return index >= startIndex && index < endIndex;
+          });
+
+        return response.end(JSON.stringify(lists));
+      }
+
       return response.end(JSON.stringify(Lists.getLists()));
     }
 
