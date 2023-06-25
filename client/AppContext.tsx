@@ -7,6 +7,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [list, setList] = React.useState<string>('');
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   return (
     <AppContext.Provider

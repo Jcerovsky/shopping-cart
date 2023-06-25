@@ -11,13 +11,8 @@ function App() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetchList();
+    createRequest('list', 'GET').then(setAllLists);
   }, []);
-
-  const fetchList = async () => {
-    const data = await createRequest('list', 'GET');
-    setAllLists(data);
-  };
 
   const handleClick = async () => {
     const name = inputRef.current?.value;
@@ -53,7 +48,7 @@ function App() {
         </div>
         <div display="flex" justifyContent="center">
           <Input ref={inputRef} handleClick={handleClick} />
-          <button className="navbar--button" disabled={isDisabled as boolean} onClick={handleClick}>
+          <button className="navbar--button" disabled={isDisabled} onClick={handleClick}>
             ADD
           </button>
         </div>

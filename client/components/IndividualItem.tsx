@@ -10,30 +10,26 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
 
   useEffect(() => {
-    const updateItem = async () => {
-      try {
-        const updatedItems = allItems.map(existingItem => {
-          if (existingItem.id === item.id) {
-            return {
-              ...existingItem,
-              isDone: isClicked ? 1 : 0,
-            };
-          }
-          return existingItem;
-        });
+    try {
+      const updatedItems = allItems.map(existingItem => {
+        if (existingItem.id === item.id) {
+          return {
+            ...existingItem,
+            isDone: isClicked ? 1 : 0,
+          };
+        }
+        return existingItem;
+      });
 
-        setState(prevState => ({
-          ...prevState,
-          allItems: updatedItems,
-        }));
+      setState(prevState => ({
+        ...prevState,
+        allItems: updatedItems,
+      }));
 
-        await createRequest(`list/${listId}/item/${item.id}?isDone=${isClicked ? '1' : '0'}`, 'PATCH');
-      } catch (error) {
-        console.log(`Failed updating item: ${error}`);
-      }
-    };
-
-    updateItem();
+      createRequest(`list/${listId}/item/${item.id}?isDone=${isClicked ? '1' : '0'}`, 'PATCH');
+    } catch (error) {
+      console.log(`Failed updating item: ${error}`);
+    }
   }, [isClicked]);
 
   return (

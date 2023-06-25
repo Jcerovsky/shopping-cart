@@ -11,9 +11,9 @@ interface Props {
 function DeleteListButton({ id }: Props) {
   const { setAllLists } = useContext(AppContext)!;
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     try {
-      await createRequest(`list/${id}`, 'DELETE');
+      createRequest(`list/${id}`, 'DELETE');
     } catch (error) {
       throw new Error(`Error deleting item:' ${error}`);
     }
