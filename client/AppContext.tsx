@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useState } from 'react';
-import { AppContextProps, ShoppingCart, ShoppingItems } from './ShoppingCartProps';
+import { AppContextProps, ShoppingCart } from './ShoppingCartProps';
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
 

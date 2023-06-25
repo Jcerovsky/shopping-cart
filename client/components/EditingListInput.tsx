@@ -1,7 +1,6 @@
-import React, { forwardRef, useContext, useState } from 'react';
+import React, { forwardRef } from 'react';
 import { MdOutlineFileDownloadDone } from 'react-icons/md';
 import '../App.css';
-import { AppContext } from '../AppContext';
 
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

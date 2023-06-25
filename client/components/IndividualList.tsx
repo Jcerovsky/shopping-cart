@@ -241,7 +241,7 @@ function IndividualList({ list }: Props) {
           />
         )}
 
-        <DeleteListButton id={list.id} allItems={allItems} />
+        <DeleteListButton id={list.id} />
         <div display="flex" flexDirection="column">
           <p>{`${allItems.filter(item => item.listId === list.id && item.isDone === 1).length}/${
             allItems.filter(item => item.listId === list.id).length
