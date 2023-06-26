@@ -6,18 +6,26 @@ import { AppContext } from './AppContext';
 import { createRequest } from './utils/createRequest';
 
 function App() {
-  const { setAllLists, setList, setIsDisabled, isDisabled, list, allLists } = useContext(AppContext)!;
-  const [pageCount, setPageCount] = useState<number>(0);
-  const [limitPerPage, setLimitPerPage] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const {
+    setAllLists,
+    setList,
+    setIsDisabled,
+    isDisabled,
+    list,
+    allLists,
+    pageCount,
+    currentPage,
+    setCurrentPage,
+    setPageCount,
+    limitPerPage,
+  } = useContext(AppContext)!;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const getData = () => {
-    createRequest(`list?page=${currentPage}`, 'GET').then(data => {
-      setPageCount(data.pageCount);
-      setLimitPerPage(data.limit);
-      setAllLists(data.filteredLists);
+    createRequest(`list?limit=${limitPerPage}&page=${currentPage}`, 'GET').then(data => {
+      setPageCount(data.pageCount < 1 ? 1 : data.pageCount);
+      setAllLists(data.filtered);
     });
   };
 
@@ -42,19 +50,20 @@ function App() {
       try {
         const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
-        // when currently on a differnet page and adding list - move to the last page
-        if (allLists.length >= limitPerPage - 1) {
-          if (currentPage < pageCount) {
-            setCurrentPage(pageCount);
-          } else {
-            getData();
-          }
-        } else if (allLists.length === 0 && currentPage > 1) {
-          setCurrentPage(prevState => prevState - 1);
+        if (allLists.length === limitPerPage && currentPage === pageCount) {
+          setCurrentPage(prevState => prevState + 1);
           getData();
         }
 
-        if (pageCount === currentPage && allLists.length < limitPerPage) {
+        // when on a different page and adding list - move to the last page
+
+        if (allLists.length >= limitPerPage - 1) {
+          if (currentPage < pageCount) {
+            setCurrentPage(pageCount < 1 ? 1 : pageCount);
+          }
+        }
+
+        if (pageCount === currentPage || allLists.length < limitPerPage) {
           setAllLists(prevState => [...prevState, { name: name, id: data }]);
         }
       } catch (error) {
@@ -81,8 +90,15 @@ function App() {
       <ShoppingList />
       <div display="flex" justifyContent="center" alignItems="center">
         <p>Pages</p>
-        {[...new Array(pageCount)].map(($, index) => (
-          <div cursor="pointer" onClick={() => setCurrentPage(index + 1)} p="2" border="1" key={index}>
+        {[...new Array(pageCount)].map((_, index) => (
+          <div
+            cursor="pointer"
+            onClick={() => setCurrentPage(index + 1)}
+            p="2"
+            border="1"
+            borderRadius="50"
+            key={index}
+          >
             {index + 1}
           </div>
         ))}

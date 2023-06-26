@@ -39,6 +39,12 @@ interface AppContextProps {
   isDisabled: boolean;
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorMessage: React.Dispatch<React.SetStateAction<boolean>>;
+  pageCount: number;
+  setPageCount: React.Dispatch<React.SetStateAction<number>>;
+  limitPerPage: number;
+  setLimitPerPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps, IndividualListProps };

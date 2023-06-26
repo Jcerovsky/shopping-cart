@@ -8,6 +8,9 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [allLists, setAllLists] = useState<ShoppingCart[]>([]);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<boolean>(false);
+  const [pageCount, setPageCount] = useState<number>(1);
+  const [limitPerPage, setLimitPerPage] = useState<number>(5);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
     <AppContext.Provider
@@ -19,6 +22,12 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         isDisabled,
         setIsDisabled,
         setErrorMessage,
+        pageCount,
+        setPageCount,
+        limitPerPage,
+        setLimitPerPage,
+        currentPage,
+        setCurrentPage,
       }}
     >
       {errorMessage && (

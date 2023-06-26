@@ -21,11 +21,7 @@ function ShoppingList() {
 
   return (
     <div className="list">
-      <ul>
-        {allLists.map(list => (
-          <IndividualList list={list} key={list.id} />
-        ))}
-      </ul>
+      <ul>{allLists !== undefined && allLists.map(list => <IndividualList list={list} key={list.id} />)}</ul>
     </div>
   );
 }
