@@ -9,10 +9,10 @@ import Lists from './lists';
 import patterns from './patterns';
 
 interface T {
-  count: number;
+  // count: number;
   filtered: unknown[];
-  limit: number;
-  page: number;
+  // limit: number;
+  // page: number;
   pageCount: number;
 }
 
