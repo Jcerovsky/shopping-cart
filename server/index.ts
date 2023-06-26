@@ -33,7 +33,7 @@ function pagination(of: unknown[], url: URL): T | undefined {
         return index >= START_INDEX && index < END_INDEX;
       });
 
-    const pageCount = -~(of.length / LIMIT);
+    const pageCount = Math.ceil(of.length / LIMIT);
 
     return { count: of.length, filtered, limit: LIMIT, page: +page, pageCount };
   }
