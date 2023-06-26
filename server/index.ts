@@ -8,6 +8,37 @@ import Items from './items';
 import Lists from './lists';
 import patterns from './patterns';
 
+interface T {
+  count: number;
+  filtered: unknown[];
+  limit: number;
+  page: number;
+  pageCount: number;
+}
+
+function pagination(of: unknown[], url: URL): T | undefined {
+  const page = url.searchParams.get('page');
+  const pattern = /[0-9]+/;
+
+  if (page && pattern.test(page)) {
+    const LIMIT = 5;
+
+    const START_INDEX = (+page - 1) * LIMIT;
+    const END_INDEX = START_INDEX + LIMIT;
+
+    /**/
+
+    const filtered = of
+      /**/ .filter((list, index) => {
+        return index >= START_INDEX && index < END_INDEX;
+      });
+
+    const pageCount = -~(of.length / LIMIT);
+
+    return { count: of.length, filtered, limit: LIMIT, page: +page, pageCount };
+  }
+}
+
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST');
   response.setHeader('Access-Control-Allow-Origin', '*');
@@ -47,30 +78,10 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
-      const page = url.searchParams.get('page');
-      const pattern = /[0-9]+/;
+      const $ = pagination(Lists.getLists(), url);
 
-      if (page && pattern.test(page)) {
-        const LIMIT = 5;
-        const PAGE = +page;
-
-        const startIndex = (PAGE - 1) * LIMIT;
-        const endIndex = startIndex + LIMIT;
-
-        const lists = Lists.getLists();
-
-        /**/
-
-        const filteredLists = lists
-          /**/ .filter((list, index) => {
-            return index >= startIndex && index < endIndex;
-          });
-
-        const pageCount = -~(lists.length / LIMIT);
-
-        return response.end(
-          JSON.stringify({ filteredLists, limit: LIMIT, listCount: lists.length, page: PAGE, pageCount })
-        );
+      if ($) {
+        return response.end(JSON.stringify($));
       }
 
       return response.end(JSON.stringify(Lists.getLists()));
@@ -79,6 +90,12 @@ const server = http.createServer((request, response) => {
     // [GET] /list/{listId}/item
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
+
+      const $ = pagination(Items.getItems(+listId), url);
+
+      if ($) {
+        return response.end(JSON.stringify($));
+      }
 
       return response.end(JSON.stringify(Items.getItems(+listId)));
     }
