@@ -22,11 +22,9 @@ function pagination(of: unknown[], url: URL): T | undefined {
 
   const pattern = /[0-9]+/;
 
-  if (page && pattern.test(page)) {
-    const LIMIT = 5;
-
-    const START_INDEX = (+page - 1) * LIMIT;
-    const END_INDEX = START_INDEX + LIMIT;
+  if (limit && pattern.test(limit) && page && pattern.test(page)) {
+    const START_INDEX = (+page - 1) * +limit;
+    const END_INDEX = START_INDEX + +limit;
 
     /**/
 
@@ -35,9 +33,15 @@ function pagination(of: unknown[], url: URL): T | undefined {
         return index >= START_INDEX && index < END_INDEX;
       });
 
-    const pageCount = Math.ceil(of.length / LIMIT);
+    const pageCount = Math.ceil(of.length / +limit);
 
-    return { count: of.length, filtered, limit: LIMIT, page: +page, pageCount };
+    return {
+      // count: of.length,
+      filtered,
+      // limit: +limit,
+      // page: +page,
+      pageCount,
+    };
   }
 }
 
