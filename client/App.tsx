@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ShoppingList from './components/./ShoppingList';
 import Input from './components/Input';
 import './index.css';
@@ -6,13 +6,32 @@ import { AppContext } from './AppContext';
 import { createRequest } from './utils/createRequest';
 
 function App() {
-  const { setAllLists, setList, setIsDisabled, isDisabled, list } = useContext(AppContext)!;
+  const { setAllLists, setList, setIsDisabled, isDisabled, list, allLists } = useContext(AppContext)!;
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [limitPerPage, setLimitPerPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const getData = () => {
+    createRequest(`list?page=${currentPage}`, 'GET').then(data => {
+      setPageCount(data.pageCount);
+      setLimitPerPage(data.limit);
+      setAllLists(data.filteredLists);
+    });
+  };
+
   useEffect(() => {
-    createRequest('list', 'GET').then(setAllLists);
-  }, []);
+    getData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (inputRef.current && inputRef.current.value.length > 2) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [list]);
 
   const handleClick = async () => {
     const name = inputRef.current?.value;
@@ -23,7 +42,21 @@ function App() {
       try {
         const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
-        setAllLists(prevState => [...prevState, { name, id: data }]);
+        // when currently on a differnet page and adding list - move to the last page
+        if (allLists.length >= limitPerPage - 1) {
+          if (currentPage < pageCount) {
+            setCurrentPage(pageCount);
+          } else {
+            getData();
+          }
+        } else if (allLists.length === 0 && currentPage > 1) {
+          setCurrentPage(prevState => prevState - 1);
+          getData();
+        }
+
+        if (pageCount === currentPage && allLists.length < limitPerPage) {
+          setAllLists(prevState => [...prevState, { name: name, id: data }]);
+        }
       } catch (error) {
         throw new Error(`Error posting data. The error is ${error}`);
       }
@@ -31,14 +64,6 @@ function App() {
       setList('');
     }
   };
-
-  useEffect(() => {
-    if (inputRef.current && inputRef.current.value.length > 2) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [list]);
 
   return (
     <>
@@ -54,6 +79,14 @@ function App() {
         </div>
       </div>
       <ShoppingList />
+      <div display="flex" justifyContent="center" alignItems="center">
+        <p>Pages</p>
+        {[...new Array(pageCount)].map(($, index) => (
+          <div cursor="pointer" onClick={() => setCurrentPage(index + 1)} p="2" border="1" key={index}>
+            {index + 1}
+          </div>
+        ))}
+      </div>
     </>
   );
 }

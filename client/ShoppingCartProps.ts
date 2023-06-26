@@ -38,6 +38,7 @@ interface AppContextProps {
   setAllLists: React.Dispatch<React.SetStateAction<ShoppingCart[]>>;
   isDisabled: boolean;
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setErrorMessage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps, IndividualListProps };
