@@ -17,7 +17,9 @@ interface T {
 }
 
 function pagination(of: unknown[], url: URL): T | undefined {
+  const limit = url.searchParams.get('limit');
   const page = url.searchParams.get('page');
+
   const pattern = /[0-9]+/;
 
   if (page && pattern.test(page)) {
