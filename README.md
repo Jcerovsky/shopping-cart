@@ -21,11 +21,13 @@ Parameters:
 
 ### Specific list
 
-- `[PATCH] /list/{listId}?name=Test`
-    - It updates a specific list identified by `listId`.
+#### `[PATCH] /list/{listId}?name=Test`
 
-- `[DELETE] /list/{listId}`
-    - It deletes a specific list identified by `listId`.
+Description: It updates a specific list identified by `listId`.
+
+#### `[DELETE] /list/{listId}`
+
+Description: It deletes a specific list identified by `listId`.
 
 ### List items
 
