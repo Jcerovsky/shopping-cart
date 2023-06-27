@@ -80,7 +80,7 @@ function IndividualList({ list }: Props) {
 
   const handleEditListClick = async () => {
     if (editedListName.length < 3) {
-      setErrorMessage('error: items need to be at least three characters long');
+      setErrorMessage('error: list name needs to be at least three characters long');
       return;
     }
     setErrorMessage('');
@@ -89,15 +89,18 @@ function IndividualList({ list }: Props) {
       editingList: false,
       editedListName: editedListName,
     }));
-    try {
-      await createRequest(`list/${list.id}?name=${editedListName}`, 'PATCH');
 
-      setState(prevState => ({
-        ...prevState,
-        originalListName: editedListName,
-      }));
-    } catch (error) {
-      setErrorMessage(`error updating list name:' ${error}`);
+    if (editedListName !== originalListName) {
+      try {
+        await createRequest(`list/${list.id}?name=${editedListName}`, 'PATCH');
+
+        setState(prevState => ({
+          ...prevState,
+          originalListName: editedListName,
+        }));
+      } catch (error) {
+        setErrorMessage(`error updating list name:' ${error}`);
+      }
     }
   };
 

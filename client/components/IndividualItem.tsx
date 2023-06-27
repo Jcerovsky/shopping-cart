@@ -105,6 +105,7 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
             ref={inputRef}
             onChange={e => setEditedItemName(e.target.value)}
             onKeyDown={event => event.key === 'Enter' && handleEditItem()}
+            alignSelf="center"
           />
           <MdOutlineFileDownloadDone onClick={() => handleEditItem()} className="icon save-icon" />
         </>
