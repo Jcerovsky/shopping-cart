@@ -31,8 +31,9 @@ Description: It deletes a specific list identified by `listId`.
 
 ### List items
 
-- `[GET] /list/{listId}/item`
-    - It returns all items in a specific list identified by `listId`.
+#### `[GET] /list/{listId}/item`
+
+Description: It returns all items in a specific list identified by `listId`.
 
 - `[POST] /list/{listId}/item?text=Test`
     - It adds a new item to a specific list identified by `listId`.
