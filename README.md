@@ -35,16 +35,20 @@ Description: It deletes a specific list identified by `listId`.
 
 Description: It returns all items in a specific list identified by `listId`.
 
-- `[POST] /list/{listId}/item?text=Test`
-    - It adds a new item to a specific list identified by `listId`.
+#### `[POST] /list/{listId}/item?text=Test`
 
-- `[DELETE] /list/{listId}/item`
-    - It deletes all items from a specific list identified by `listId`.
+Description: It adds a new item to a specific list identified by `listId`.
+
+#### `[DELETE] /list/{listId}/item`
+
+Description: It deletes all items from a specific list identified by `listId`.
 
 ### Specific list item
 
-- `[PATCH] /list/{listId}/item/{itemId}?isDone=1`
-    - It updates a specific item identified by `itemId`.
+#### `[PATCH] /list/{listId}/item/{itemId}?isDone=1`
 
-- `[DELETE] /list/{listId}/item/{itemId}`
-    - It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
+Description: It updates a specific item identified by `itemId`.
+
+#### `[DELETE] /list/{listId}/item/{itemId}`
+
+Description: It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
