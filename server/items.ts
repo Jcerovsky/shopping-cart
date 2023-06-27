@@ -44,8 +44,10 @@ class Items {
     return this.#items.filter(item => item.listId === listId);
   }
 
-  updateItem(id: number, isDone: number): Item[] {
-    return (this.#items = this.#items.map(item => (item.id === id ? { ...item, isDone } : item)));
+  updateItem(id: number, isDoneOrName: number | string): Item[] {
+    const columnName = typeof isDoneOrName === 'number' ? 'isDone' : 'name';
+
+    return (this.#items = this.#items.map(item => (item.id === id ? { ...item, [columnName]: isDoneOrName } : item)));
   }
 }
 

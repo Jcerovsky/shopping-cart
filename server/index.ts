@@ -122,9 +122,16 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
       const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
       const isDone = url.searchParams.get('isDone');
+      const name = url.searchParams.get('name');
 
       if (isDone) {
         Items.updateItem(+itemId, +isDone);
+
+        return response.end();
+      }
+
+      if (name) {
+        Items.updateItem(+itemId, name);
 
         return response.end();
       }
