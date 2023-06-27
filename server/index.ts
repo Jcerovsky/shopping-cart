@@ -159,7 +159,9 @@ server.listen(1337, () => {
   const README = fs
     .readFileSync('./README.md')
     .toString()
-    .replace(/(Description|Parameters)/g, '\x1b[4m\x1b[31m$1\x1b[0m')
+    .replace(/### ([^\n]+)/g, '\x1b[4m\x1b[31m$1\x1b[0m')
+    .replace(/#### /g, '')
+    .replace(/(Description:|Parameters:)/g, '\x1b[2m\x1b[4m$1\x1b[0m')
     .replace(/`([^`]+)`/g, '\x1b[32m$1\x1b[0m');
 
   console.log(README);
