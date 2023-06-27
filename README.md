@@ -21,9 +21,12 @@ Parameters:
 
 ### Specific list
 
-#### `[PATCH] /list/{listId}?name=Test`
+#### `[PATCH] /list/{listId}`
 
 Description: It updates a specific list identified by `listId`.
+
+Parameters:
+- `name`
 
 #### `[DELETE] /list/{listId}`
 
@@ -35,9 +38,12 @@ Description: It deletes a specific list identified by `listId`.
 
 Description: It returns all items in a specific list identified by `listId`.
 
-#### `[POST] /list/{listId}/item?text=Test`
+#### `[POST] /list/{listId}/item`
 
 Description: It adds a new item to a specific list identified by `listId`.
+
+Parameters:
+- `text`: The text of the new item.
 
 #### `[DELETE] /list/{listId}/item`
 
@@ -45,7 +51,10 @@ Description: It deletes all items from a specific list identified by `listId`.
 
 ### Specific list item
 
-#### `[PATCH] /list/{listId}/item/{itemId}?isDone=1`
+#### `[PATCH] /list/{listId}/item/{itemId}`
+
+Parameters:
+- `isDone`
 
 Description: It updates a specific item identified by `itemId`.
 
