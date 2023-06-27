@@ -16,7 +16,7 @@ Description: It returns all created lists.
 
 Description: It creates a new list and returns an `id`.
 
-Parameters:
+Available parameters:
 - `name`: The name of the new list.
 
 ### Specific list
@@ -25,7 +25,7 @@ Parameters:
 
 Description: It updates a specific list identified by `listId`.
 
-Parameters:
+Available parameters:
 - `name`
 
 #### `[DELETE] /list/{listId}`
@@ -42,7 +42,7 @@ Description: It returns all items in a specific list identified by `listId`.
 
 Description: It adds a new item to a specific list identified by `listId`.
 
-Parameters:
+Available parameters:
 - `text`: The text of the new item.
 
 #### `[DELETE] /list/{listId}/item`
@@ -53,8 +53,9 @@ Description: It deletes all items from a specific list identified by `listId`.
 
 #### `[PATCH] /list/{listId}/item/{itemId}`
 
-Parameters:
+Available parameters:
 - `isDone`
+- `text`
 
 Description: It updates a specific item identified by `itemId`.
 

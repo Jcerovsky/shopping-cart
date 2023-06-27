@@ -44,10 +44,10 @@ class Items {
     return this.#items.filter(item => item.listId === listId);
   }
 
-  updateItem(id: number, isDoneOrName: number | string): Item[] {
-    const columnName = typeof isDoneOrName === 'number' ? 'isDone' : 'name';
+  updateItem(id: number, isDoneOrText: number | string): Item[] {
+    const columnName = typeof isDoneOrText === 'number' ? 'isDone' : 'text';
 
-    return (this.#items = this.#items.map(item => (item.id === id ? { ...item, [columnName]: isDoneOrName } : item)));
+    return (this.#items = this.#items.map(item => (item.id === id ? { ...item, [columnName]: isDoneOrText } : item)));
   }
 }
 

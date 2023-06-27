@@ -122,7 +122,7 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
       const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
       const isDone = url.searchParams.get('isDone');
-      const name = url.searchParams.get('name');
+      const text = url.searchParams.get('text');
 
       if (isDone) {
         Items.updateItem(+itemId, +isDone);
@@ -130,8 +130,8 @@ const server = http.createServer((request, response) => {
         return response.end();
       }
 
-      if (name) {
-        Items.updateItem(+itemId, name);
+      if (text) {
+        Items.updateItem(+itemId, text);
 
         return response.end();
       }
@@ -173,7 +173,7 @@ server.listen(1337, () => {
   text = text
     /* (1) */ .replace(/#### /g, '')
     /* (2) */ .replace(/### ([^\n]+)/g, '\x1b[4m\x1b[31m$1\x1b[0m')
-    .replace(/(Description:|Parameters:)/g, '\x1b[2m\x1b[4m$1\x1b[0m')
+    .replace(/(Description:|Available parameters:)/g, '\x1b[2m\x1b[4m$1\x1b[0m')
     .replace(/`([^`]+)`/g, '\x1b[32m$1\x1b[0m');
 
   console.log(text);
