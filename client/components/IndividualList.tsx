@@ -159,7 +159,7 @@ function IndividualList({ list }: Props) {
                 editedListName: e.target.value,
               }))
             }
-            onClick={handleEditListClick}
+            handleEditListClick={handleEditListClick}
             ref={forwardedInputRef}
             editedListName={editedListName}
           />
