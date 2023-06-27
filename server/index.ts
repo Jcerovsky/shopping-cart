@@ -6,44 +6,8 @@ import fs from 'fs';
 import http from 'http';
 import Items from './items';
 import Lists from './lists';
+import pagination from './pagination';
 import patterns from './patterns';
-
-interface T {
-  // count: number;
-  filtered: unknown[];
-  // limit: number;
-  // page: number;
-  pageCount: number;
-}
-
-function pagination(of: unknown[], url: URL): T | undefined {
-  const limit = url.searchParams.get('limit');
-  const page = url.searchParams.get('page');
-
-  const pattern = /[0-9]+/;
-
-  if (limit && pattern.test(limit) && page && pattern.test(page)) {
-    const START_INDEX = (+page - 1) * +limit;
-    const END_INDEX = START_INDEX + +limit;
-
-    /**/
-
-    const filtered = of
-      /**/ .filter((list, index) => {
-        return index >= START_INDEX && index < END_INDEX;
-      });
-
-    const pageCount = Math.ceil(of.length / +limit);
-
-    return {
-      // count: of.length,
-      filtered,
-      // limit: +limit,
-      // page: +page,
-      pageCount,
-    };
-  }
-}
 
 const server = http.createServer((request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST');
@@ -126,13 +90,11 @@ const server = http.createServer((request, response) => {
 
       if (isDone) {
         Items.updateItem(+itemId, +isDone);
-
         return response.end();
       }
 
       if (text) {
         Items.updateItem(+itemId, text);
-
         return response.end();
       }
     }
