@@ -4,24 +4,23 @@ import '../App.css';
 
 interface Props {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: () => Promise<void>;
+  handleEditListClick: () => Promise<void>;
   editedListName: string;
 }
 
 const EditingListInput = forwardRef<HTMLInputElement, Props>(
-  ({ onChange, onClick, editedListName }: Props, forwardedInputRef) => {
+  ({ onChange, handleEditListClick, editedListName }: Props, forwardedInputRef) => {
     return (
       <>
         <input
           className="editing-list-input"
           type="text"
-          placeholder="Add item"
           value={editedListName}
           onChange={onChange}
           ref={forwardedInputRef}
-          onKeyDown={event => event.key === 'Enter' && onClick()}
+          onKeyDown={event => event.key === 'Enter' && handleEditListClick()}
         />
-        <MdOutlineFileDownloadDone onClick={onClick} className="icon save-icon" />
+        <MdOutlineFileDownloadDone onClick={handleEditListClick} className="icon save-icon" />
       </>
     );
   }
