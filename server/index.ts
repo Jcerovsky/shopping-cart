@@ -2,8 +2,8 @@
  * Copyright 2023 Marek Kobida
  */
 
+import fs from 'fs';
 import http from 'http';
-import common from '../common';
 import Items from './items';
 import Lists from './lists';
 import patterns from './patterns';
@@ -155,4 +155,14 @@ const server = http.createServer((request, response) => {
   return response.end(JSON.stringify({ error: 'The request is not valid.' }));
 });
 
-server.listen(1337, () => console.log(`${common.SERVER_URL}/list`));
+server.listen(1337, () => {
+  const README = fs
+    .readFileSync('./README.md')
+    .toString()
+    .replace(/### ([^\n]+)/g, '\x1b[4m\x1b[31m$1\x1b[0m')
+    .replace(/#### /g, '')
+    .replace(/(Description:|Parameters:)/g, '\x1b[2m\x1b[4m$1\x1b[0m')
+    .replace(/`([^`]+)`/g, '\x1b[32m$1\x1b[0m');
+
+  console.log(README);
+});

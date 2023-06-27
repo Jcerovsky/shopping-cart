@@ -8,35 +8,47 @@ The [client](./client) directory is managed by [Jakub Cerovský](https://github.
 
 ### Lists
 
-- `[GET] /list`
-    - It returns all created lists.
+#### `[GET] /list`
 
-- `[POST] /list?name=Test`
-    - It creates a new list and returns an `id`.
+Description: It returns all created lists.
+
+#### `[POST] /list`
+
+Description: It creates a new list and returns an `id`.
+
+Parameters:
+- `name`: The name of the new list.
 
 ### Specific list
 
-- `[PATCH] /list/{listId}?name=Test`
-    - It updates a specific list identified by `listId`.
+#### `[PATCH] /list/{listId}?name=Test`
 
-- `[DELETE] /list/{listId}`
-    - It deletes a specific list identified by `listId`.
+Description: It updates a specific list identified by `listId`.
+
+#### `[DELETE] /list/{listId}`
+
+Description: It deletes a specific list identified by `listId`.
 
 ### List items
 
-- `[GET] /list/{listId}/item`
-    - It returns all items in a specific list identified by `listId`.
+#### `[GET] /list/{listId}/item`
 
-- `[POST] /list/{listId}/item?text=Test`
-    - It adds a new item to a specific list identified by `listId`.
+Description: It returns all items in a specific list identified by `listId`.
 
-- `[DELETE] /list/{listId}/item`
-    - It deletes all items from a specific list identified by `listId`.
+#### `[POST] /list/{listId}/item?text=Test`
+
+Description: It adds a new item to a specific list identified by `listId`.
+
+#### `[DELETE] /list/{listId}/item`
+
+Description: It deletes all items from a specific list identified by `listId`.
 
 ### Specific list item
 
-- `[PATCH] /list/{listId}/item/{itemId}?isDone=1`
-    - It updates a specific item identified by `itemId`.
+#### `[PATCH] /list/{listId}/item/{itemId}?isDone=1`
 
-- `[DELETE] /list/{listId}/item/{itemId}`
-    - It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
+Description: It updates a specific item identified by `itemId`.
+
+#### `[DELETE] /list/{listId}/item/{itemId}`
+
+Description: It deletes a specific item, identified by `itemId`, from a specific list identified by `listId`.
