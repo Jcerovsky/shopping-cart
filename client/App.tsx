@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import ShoppingList from './components/./ShoppingList';
 import Input from './components/Input';
 import './index.css';
