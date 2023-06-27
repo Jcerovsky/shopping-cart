@@ -18,6 +18,7 @@ function App() {
     setCurrentPage,
     setPageCount,
     limitPerPage,
+    setErrorMessage,
   } = useContext(AppContext)!;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,6 +48,7 @@ function App() {
     if (name === undefined) return;
 
     if (name.length > 2) {
+      setErrorMessage('');
       try {
         const data = (await createRequest(`list?name=${name}`, 'POST')) as number;
 
@@ -67,10 +69,13 @@ function App() {
           setAllLists(prevState => [...prevState, { name: name, id: data }]);
         }
       } catch (error) {
-        throw new Error(`Error posting data. The error is ${error}`);
+        setErrorMessage(`error posting data: ${error}`);
       }
 
       setList('');
+    } else if (name.length < 3) {
+      setErrorMessage('error: items need to be at least three characters long');
+      return;
     }
   };
 

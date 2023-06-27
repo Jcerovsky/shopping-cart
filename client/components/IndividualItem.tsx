@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { MdDoneOutline } from 'react-icons/md';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { IndividualItemProps } from '../ShoppingCartProps';
 import '../App.css';
 import { createRequest } from '../utils/createRequest';
+import { AppContext } from '../AppContext';
 
 function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, setState }: IndividualItemProps) {
   const [isClicked, setIsClicked] = useState(item.isDone === 1);
+
+  const { setErrorMessage } = useContext(AppContext)!;
 
   useEffect(() => {
     try {
@@ -28,7 +31,7 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
 
       createRequest(`list/${listId}/item/${item.id}?isDone=${isClicked ? '1' : '0'}`, 'PATCH');
     } catch (error) {
-      console.log(`Failed updating item: ${error}`);
+      setErrorMessage(`error updating list:' ${error}`);
     }
   }, [isClicked]);
 

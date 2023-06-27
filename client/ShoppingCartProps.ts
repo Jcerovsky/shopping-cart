@@ -38,7 +38,7 @@ interface AppContextProps {
   setAllLists: React.Dispatch<React.SetStateAction<ShoppingCart[]>>;
   isDisabled: boolean;
   setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorMessage: React.Dispatch<React.SetStateAction<boolean>>;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   pageCount: number;
   setPageCount: React.Dispatch<React.SetStateAction<number>>;
   limitPerPage: number;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { IndividualListProps, ShoppingCart } from '../ShoppingCartProps';
 import DeleteListButton from './DeleteListButton';
 import IndividualItem from './IndividualItem';
@@ -9,6 +9,7 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { MdOutlineCancel, MdOutlineFileDownloadDone } from 'react-icons/md';
 import { IoIosAddCircleOutline, IoIosArrowDropdown, IoIosArrowDropup } from 'react-icons/io';
 import { createRequest } from '../utils/createRequest';
+import { AppContext } from '../AppContext';
 
 interface Props {
   list: ShoppingCart;
@@ -26,6 +27,8 @@ function IndividualList({ list }: Props) {
   });
 
   const { editedListName, originalListName, editingList, isAddItemBtnClicked, showList, allItems, item } = state;
+
+  const { setErrorMessage } = useContext(AppContext)!;
 
   useEffect(() => {
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
@@ -48,7 +51,7 @@ function IndividualList({ list }: Props) {
 
   const handleAddItem = async (): Promise<void> => {
     if (item.length < 3) {
-      console.log('Items need to be at least three characters long');
+      setErrorMessage('error: items need to be at least three characters long');
       return;
     }
     setState(prevState => ({
@@ -71,11 +74,16 @@ function IndividualList({ list }: Props) {
         item: '',
       }));
     } catch (error) {
-      console.error(`Failed to add item: ${error} `);
+      setErrorMessage(`error adding item:' ${error}`);
     }
   };
 
   const handleEditListClick = async () => {
+    if (editedListName.length < 3) {
+      setErrorMessage('error: items need to be at least three characters long');
+      return;
+    }
+    setErrorMessage('');
     setState(prevState => ({
       ...prevState,
       editingList: false,
@@ -89,7 +97,7 @@ function IndividualList({ list }: Props) {
         originalListName: editedListName,
       }));
     } catch (error) {
-      console.log(`Failed updating list name: ${error}`);
+      setErrorMessage(`error updating list name:' ${error}`);
     }
   };
 
@@ -102,7 +110,7 @@ function IndividualList({ list }: Props) {
         allItems: allItems.filter(item => item.id !== itemId),
       }));
     } catch (error) {
-      console.error(`Failed deleting item: ${error}`);
+      setErrorMessage(`error deleting item:' ${error}`);
     }
   };
 

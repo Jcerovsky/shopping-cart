@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import '../App.css';
 import { AppContext } from '../AppContext';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 function DeleteListButton({ id }: Props) {
-  const { setAllLists, setErrorMessage, allLists, currentPage, limitPerPage, setPageCount } = useContext(AppContext)!;
+  const { setAllLists, allLists, currentPage, limitPerPage, setErrorMessage, setPageCount } = useContext(AppContext)!;
 
   const fetchDataAndSetLists = async () => {
     try {
@@ -17,23 +17,22 @@ function DeleteListButton({ id }: Props) {
       const nextPageList = await nextPageData.filtered;
       const updatedPageCount = await nextPageData.pageCount;
       //slices lists on the following page and fills empty spot in the current list
-      const slicedNextPageList = nextPageList.slice(0, Math.max(limitPerPage - allLists.length + 1), 0);
+      const slicedNextPageList = nextPageList.slice(0, limitPerPage - allLists.length);
       setAllLists(prevState => [...prevState, ...slicedNextPageList]);
-      setPageCount(updatedPageCount);
+      setPageCount(updatedPageCount < 1 ? 1 : updatedPageCount);
     } catch (error) {
-      throw new Error(`Error deleting item:' ${error}`);
+      setErrorMessage(`error updating list:' ${error}`);
     }
   };
 
   const handleDelete = async () => {
     try {
       await createRequest(`list/${id}`, 'DELETE');
+      setAllLists(prevList => prevList.filter(item => item.id !== id));
+      await fetchDataAndSetLists();
     } catch (error) {
-      throw new Error(`Error deleting item:' ${error}`);
+      setErrorMessage(`error deleting item:' ${error}`);
     }
-
-    await fetchDataAndSetLists();
-    setAllLists(prevList => prevList.filter(item => item.id !== id));
   };
 
   return <RiDeleteBin6Line onClick={handleDelete} className="icon delete-icon" />;
