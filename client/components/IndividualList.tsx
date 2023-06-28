@@ -31,13 +31,11 @@ function IndividualList({ list }: Props) {
 
   const { editedListName, originalListName, editingList, isAddItemBtnClicked, showList, allItems, item } = state;
 
-  const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
-
-  const isFirstRerender = useRef<boolean>(true);
+  const { setErrorMessage, limitPerPage, isFirstRender } = useContext(AppContext)!;
 
   useEffect(() => {
-    if (isFirstRerender.current) {
-      isFirstRerender.current = false;
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
       return;
     }
 
@@ -76,6 +74,7 @@ function IndividualList({ list }: Props) {
 
       if (allItems.length === limitPerPage && currentItemPage === itemPageCount) {
         setCurrentItemPage(prevState => prevState + 1);
+        getPageData();
       }
 
       // when on a different page and adding item - move to the last page
@@ -313,7 +312,7 @@ function IndividualList({ list }: Props) {
           ))}
           <div style={{ display: showList ? 'flex' : 'none', justifyContent: 'right' }}>
             {[...new Array(itemPageCount)].map((_, index) => (
-              <div border="1" onClick={() => setCurrentItemPage(index + 1)}>
+              <div border="1" onClick={() => setCurrentItemPage(index + 1)} key={index}>
                 {index + 1}
               </div>
             ))}

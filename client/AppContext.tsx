@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, ReactNode, useRef, useState } from 'react';
 import { AppContextProps, ShoppingCart } from './ShoppingCartProps';
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -11,6 +11,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [pageCount, setPageCount] = useState<number>(1);
   const [limitPerPage, setLimitPerPage] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const isFirstRender = useRef<boolean>(true);
 
   return (
     <AppContext.Provider
@@ -28,6 +30,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setLimitPerPage,
         currentPage,
         setCurrentPage,
+        isFirstRender,
       }}
     >
       {errorMessage && (

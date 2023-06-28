@@ -14,8 +14,7 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
   const [editedItemName, setEditedItemName] = useState<string>(item.text);
   const [originalItemName, setOriginalItemName] = useState<string>(item.text);
 
-  const isFirstRender = useRef<boolean>(true);
-  const { setErrorMessage } = useContext(AppContext)!;
+  const { setErrorMessage, isFirstRender } = useContext(AppContext)!;
 
   useEffect(() => {
     if (isFirstRender.current) {
