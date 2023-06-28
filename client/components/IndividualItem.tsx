@@ -57,7 +57,6 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
       setErrorMessage('error: items need to be at least three characters long');
       return;
     }
-
     setErrorMessage('');
     setEditedItemName(editedItemName);
     setIsItemEdited(false);
@@ -147,11 +146,6 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
           className="icon delete-icon"
         />
       </li>
-      <div style={{ display: showList ? 'flex' : 'none' }}>
-        {[...new Array(10)].map((_, index) => (
-          <div b="1">{index}</div>
-        ))}
-      </div>
     </>
   );
 }

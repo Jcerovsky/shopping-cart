@@ -26,9 +26,16 @@ function IndividualList({ list }: Props) {
     item: '',
   });
 
+  const [itemPageCount, setItemPageCount] = useState<number>(1);
+  const [currentItemPage, setCurrentItemPage] = useState<number>(1);
+
   const { editedListName, originalListName, editingList, isAddItemBtnClicked, showList, allItems, item } = state;
 
-  const { setErrorMessage } = useContext(AppContext)!;
+  const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
+
+  useEffect(() => {
+    getPageData();
+  }, [currentItemPage]);
 
   useEffect(() => {
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
@@ -54,10 +61,6 @@ function IndividualList({ list }: Props) {
       setErrorMessage('error: items need to be at least three characters long');
       return;
     }
-    setState(prevState => ({
-      ...prevState,
-      showList: true,
-    }));
 
     try {
       const data = await createRequest(`list/${list.id}/item?text=${item}`, 'POST');
@@ -68,10 +71,29 @@ function IndividualList({ list }: Props) {
         listId: list.id,
       };
 
+      if (allItems.length === limitPerPage && currentItemPage === itemPageCount) {
+        setCurrentItemPage(prevState => prevState + 1);
+        getPageData();
+      }
+
+      // when on a different page and adding item - move to the last page
+
+      if (allItems.length >= limitPerPage - 1) {
+        if (currentItemPage < itemPageCount) {
+          setCurrentItemPage(itemPageCount < 1 ? 1 : itemPageCount);
+        }
+      }
+
+      if (itemPageCount === currentItemPage || allItems.length < limitPerPage) {
+        setState(prevState => ({
+          ...prevState,
+          allItems: [...allItems, newItem],
+          item: '',
+        }));
+      }
       setState(prevState => ({
         ...prevState,
-        allItems: [...allItems, newItem],
-        item: '',
+        showList: true,
       }));
     } catch (error) {
       setErrorMessage(`error adding item:' ${error}`);
@@ -146,6 +168,16 @@ function IndividualList({ list }: Props) {
 
   const focusOnInput = () => {
     forwardedInputRef.current?.focus();
+  };
+
+  const getPageData = () => {
+    createRequest(`list/${list.id}/item?limit=${limitPerPage}&page=${currentItemPage}`, 'GET').then(data => {
+      setItemPageCount(data.pageCount < 1 ? 1 : data.pageCount);
+      setState(prevState => ({
+        ...prevState,
+        allItems: data.filtered,
+      }));
+    });
   };
 
   const addItemInputRef = useRef<HTMLInputElement>(null);
@@ -265,17 +297,26 @@ function IndividualList({ list }: Props) {
             : {}
         }
       >
-        {allItems.map(item => (
-          <IndividualItem
-            key={item.id}
-            handleDeleteItem={handleDeleteItem}
-            listId={list.id}
-            item={item}
-            showList={showList}
-            allItems={allItems}
-            setState={setState}
-          />
-        ))}
+        <>
+          {allItems.map(item => (
+            <IndividualItem
+              key={item.id}
+              handleDeleteItem={handleDeleteItem}
+              listId={list.id}
+              item={item}
+              showList={showList}
+              allItems={allItems}
+              setState={setState}
+            />
+          ))}
+          <div style={{ display: showList ? 'flex' : 'none', justifyContent: 'right' }}>
+            {[...new Array(itemPageCount)].map((_, index) => (
+              <div border="1" onClick={() => setCurrentItemPage(index + 1)}>
+                {index + 1}
+              </div>
+            ))}
+          </div>{' '}
+        </>
       </ul>
     </div>
   );
