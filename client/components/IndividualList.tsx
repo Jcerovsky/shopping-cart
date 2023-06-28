@@ -33,9 +33,10 @@ function IndividualList({ list }: Props) {
 
   const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
-  useEffect(() => {
-    getPageData();
-  }, [currentItemPage]);
+  //
+  // useEffect(() => {
+  //   getPageData();
+  // }, [currentItemPage]);
 
   useEffect(() => {
     createRequest(`list/${list.id}/item`, 'GET').then(data => {

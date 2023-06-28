@@ -54,7 +54,6 @@ function App() {
 
         if (allLists.length === limitPerPage && currentPage === pageCount) {
           setCurrentPage(prevState => prevState + 1);
-          getData();
         }
 
         // when on a different page and adding list - move to the last page
