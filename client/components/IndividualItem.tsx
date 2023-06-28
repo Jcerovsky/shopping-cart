@@ -16,7 +16,7 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
 
   const { setErrorMessage } = useContext(AppContext)!;
 
-  useEffect(() => {
+  const isItemCompleted = (state: boolean) => {
     try {
       const updatedItems = allItems.map(existingItem => {
         if (existingItem.id === item.id) {
@@ -37,7 +37,9 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
     } catch (error) {
       setErrorMessage(`error updating list:' ${error}`);
     }
-  }, [isClicked]);
+
+    setIsClicked(state);
+  };
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -61,7 +63,7 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
     setEditedItemName(editedItemName);
     setIsItemEdited(false);
 
-    if (editedItemName !== editedItemName) {
+    if (editedItemName !== originalItemName) {
       try {
         await createRequest(`list/${listId}/item/${item.id}?text=${editedItemName}`, 'PATCH');
 
@@ -85,13 +87,13 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
       >
         {isClicked ? (
           <MdDoneOutline
-            onClick={() => setIsClicked(prevState => !prevState)}
+            onClick={() => isItemCompleted(false)}
             className="icon"
             style={{ background: 'seagreen', marginRight: '0.25em' }}
           />
         ) : (
           <ImCheckboxUnchecked
-            onClick={() => setIsClicked(prevState => !prevState)}
+            onClick={() => isItemCompleted(true)}
             className="icon save-icon"
             style={{ marginRight: '0.25em' }}
           />

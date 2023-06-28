@@ -73,7 +73,7 @@ function IndividualList({ list }: Props) {
 
       if (allItems.length === limitPerPage && currentItemPage === itemPageCount) {
         setCurrentItemPage(prevState => prevState + 1);
-        getPageData();
+        // getPageData();
       }
 
       // when on a different page and adding item - move to the last page
