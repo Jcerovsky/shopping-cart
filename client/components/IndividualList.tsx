@@ -33,12 +33,14 @@ function IndividualList({ list }: Props) {
 
   const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
-  //
-  // useEffect(() => {
-  //   getPageData();
-  // }, [currentItemPage]);
+  const isFirstRerender = useRef<boolean>(true);
 
   useEffect(() => {
+    if (isFirstRerender.current) {
+      isFirstRerender.current = false;
+      return;
+    }
+
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
         ...prevState,
@@ -74,7 +76,6 @@ function IndividualList({ list }: Props) {
 
       if (allItems.length === limitPerPage && currentItemPage === itemPageCount) {
         setCurrentItemPage(prevState => prevState + 1);
-        // getPageData();
       }
 
       // when on a different page and adding item - move to the last page

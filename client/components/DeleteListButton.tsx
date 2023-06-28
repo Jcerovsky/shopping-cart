@@ -9,7 +9,8 @@ interface Props {
 }
 
 function DeleteListButton({ id }: Props) {
-  const { setAllLists, allLists, currentPage, limitPerPage, setErrorMessage, setPageCount } = useContext(AppContext)!;
+  const { setAllLists, allLists, currentPage, limitPerPage, setErrorMessage, setPageCount, setCurrentPage, pageCount } =
+    useContext(AppContext)!;
 
   const fetchDataAndSetLists = async () => {
     try {
@@ -32,6 +33,11 @@ function DeleteListButton({ id }: Props) {
       await fetchDataAndSetLists();
     } catch (error) {
       setErrorMessage(`error deleting item:' ${error}`);
+    }
+
+    //THIS WILL GO TO THE PREVIOUS PAGE IF NO LISTS ON THE PAGE
+    if (allLists.length === 1) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
