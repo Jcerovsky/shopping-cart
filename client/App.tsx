@@ -103,7 +103,7 @@ function App() {
             borderRadius="50"
             key={index}
           >
-            {index + 1}
+            <span style={{ backgroundColor: index + 1 === currentPage ? 'red' : undefined }}>{index + 1}</span>
           </div>
         ))}
       </div>

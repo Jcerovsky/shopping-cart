@@ -321,7 +321,7 @@ function IndividualList({ list }: Props) {
           <div style={{ display: showList ? 'flex' : 'none', justifyContent: 'right' }}>
             {[...new Array(itemPageCount)].map((_, index) => (
               <div border="1" onClick={() => setCurrentItemPage(index + 1)} key={index}>
-                {index + 1}
+                <span style={{ backgroundColor: index + 1 === currentItemPage ? 'red' : undefined }}>{index + 1}</span>
               </div>
             ))}
           </div>{' '}
