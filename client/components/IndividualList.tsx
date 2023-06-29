@@ -33,7 +33,14 @@ function IndividualList({ list }: Props) {
 
   const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
+  const isListFirstRendered = useRef<boolean>(true);
+
   useEffect(() => {
+    if (isListFirstRendered.current) {
+      isListFirstRendered.current = false;
+      return;
+    }
+
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
         ...prevState,
