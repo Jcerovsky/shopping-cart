@@ -31,21 +31,16 @@ function IndividualList({ list }: Props) {
 
   const { editedListName, originalListName, editingList, isAddItemBtnClicked, showList, allItems, item } = state;
 
-  const { setErrorMessage, limitPerPage, isFirstRender } = useContext(AppContext)!;
+  const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
         ...prevState,
         allItems: data,
       }));
     });
-  }, [list.id]);
+  }, []);
 
   useEffect(() => {
     focusOnInput();
@@ -113,17 +108,16 @@ function IndividualList({ list }: Props) {
       editedListName: editedListName,
     }));
 
-    if (editedListName !== originalListName) {
-      try {
-        await createRequest(`list/${list.id}?name=${editedListName}`, 'PATCH');
+    if (editedListName === originalListName) return;
+    try {
+      await createRequest(`list/${list.id}?name=${editedListName}`, 'PATCH');
 
-        setState(prevState => ({
-          ...prevState,
-          originalListName: editedListName,
-        }));
-      } catch (error) {
-        setErrorMessage(`error updating list name:' ${error}`);
-      }
+      setState(prevState => ({
+        ...prevState,
+        originalListName: editedListName,
+      }));
+    } catch (error) {
+      setErrorMessage(`error updating list name:' ${error}`);
     }
   };
 

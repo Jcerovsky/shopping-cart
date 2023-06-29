@@ -12,8 +12,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [limitPerPage, setLimitPerPage] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const isFirstRender = useRef<boolean>(true);
-
   return (
     <AppContext.Provider
       value={{
@@ -30,7 +28,6 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         setLimitPerPage,
         currentPage,
         setCurrentPage,
-        isFirstRender,
       }}
     >
       {errorMessage && (

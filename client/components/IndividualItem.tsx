@@ -14,14 +14,14 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
   const [editedItemName, setEditedItemName] = useState<string>(item.text);
   const [originalItemName, setOriginalItemName] = useState<string>(item.text);
 
-  const { setErrorMessage, isFirstRender } = useContext(AppContext)!;
+  const { setErrorMessage } = useContext(AppContext)!;
+  const isItemFirstRendered = useRef<boolean>(true);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (isItemFirstRendered.current) {
+      isItemFirstRendered.current = false;
       return;
     }
-
     try {
       const updatedItems = allItems.map(existingItem => {
         if (existingItem.id === item.id) {
@@ -66,14 +66,14 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
     setEditedItemName(editedItemName);
     setIsItemEdited(false);
 
-    if (editedItemName !== originalItemName) {
-      try {
-        await createRequest(`list/${listId}/item/${item.id}?text=${editedItemName}`, 'PATCH');
+    if (editedItemName !== originalItemName) return;
 
-        setOriginalItemName(editedItemName);
-      } catch (error) {
-        setErrorMessage(`error updating item name:' ${error}`);
-      }
+    try {
+      await createRequest(`list/${listId}/item/${item.id}?text=${editedItemName}`, 'PATCH');
+
+      setOriginalItemName(editedItemName);
+    } catch (error) {
+      setErrorMessage(`error updating item name:' ${error}`);
     }
   };
 

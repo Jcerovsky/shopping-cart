@@ -45,7 +45,6 @@ interface AppContextProps {
   setLimitPerPage: React.Dispatch<React.SetStateAction<number>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-  isFirstRender: React.MutableRefObject<boolean>;
 }
 
 export { ShoppingItems, ShoppingCart, IndividualItemProps, AppContextProps, IndividualListProps };
