@@ -36,10 +36,10 @@ function IndividualList({ list }: Props) {
   const isListFirstRendered = useRef<boolean>(true);
 
   useEffect(() => {
-    if (isListFirstRendered.current) {
-      isListFirstRendered.current = false;
-      return;
-    }
+    // if (isListFirstRendered.current) {
+    //   isListFirstRendered.current = false;
+    //   return;
+    // }
 
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
@@ -52,6 +52,10 @@ function IndividualList({ list }: Props) {
   useEffect(() => {
     focusOnInput();
   }, [editingList]);
+
+  useEffect(() => {
+    getPageData();
+  }, [currentItemPage]);
 
   useEffect(() => {
     if (isAddItemBtnClicked && addItemInputRef.current) {
@@ -129,6 +133,9 @@ function IndividualList({ list }: Props) {
   };
 
   const handleDeleteItem = async (itemId: number) => {
+    if (allItems.length === 1) {
+      setCurrentItemPage(currentItemPage - 1);
+    }
     try {
       await createRequest(`list/${list.id}/item/${itemId}`, 'DELETE');
 
