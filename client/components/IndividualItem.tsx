@@ -15,8 +15,13 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
   const [originalItemName, setOriginalItemName] = useState<string>(item.text);
 
   const { setErrorMessage } = useContext(AppContext)!;
+  const isItemFirstRendered = useRef<boolean>(true);
 
   useEffect(() => {
+    if (isItemFirstRendered.current) {
+      isItemFirstRendered.current = false;
+      return;
+    }
     try {
       const updatedItems = allItems.map(existingItem => {
         if (existingItem.id === item.id) {
@@ -57,94 +62,96 @@ function IndividualItem({ handleDeleteItem, listId, item, showList, allItems, se
       setErrorMessage('error: items need to be at least three characters long');
       return;
     }
-
     setErrorMessage('');
     setEditedItemName(editedItemName);
     setIsItemEdited(false);
 
-    if (editedItemName !== editedItemName) {
-      try {
-        await createRequest(`list/${listId}/item/${item.id}?text=${editedItemName}`, 'PATCH');
+    if (editedItemName !== originalItemName) return;
 
-        setOriginalItemName(editedItemName);
-      } catch (error) {
-        setErrorMessage(`error updating item name:' ${error}`);
-      }
+    try {
+      await createRequest(`list/${listId}/item/${item.id}?text=${editedItemName}`, 'PATCH');
+
+      setOriginalItemName(editedItemName);
+    } catch (error) {
+      setErrorMessage(`error updating item name:' ${error}`);
     }
   };
 
   return (
-    <li
-      display={showList ? 'flex' : 'none'}
-      className="individual-item"
-      justifyContent="center"
-      alignItems="center"
-      gap="2"
-      key={item.id}
-      style={isClicked ? { opacity: '0.5', background: 'lightseagreen' } : {}}
-    >
-      {isClicked ? (
-        <MdDoneOutline
-          onClick={() => setIsClicked(prevState => !prevState)}
-          className="icon"
-          style={{ background: 'seagreen', marginRight: '0.25em' }}
-        />
-      ) : (
-        <ImCheckboxUnchecked
-          onClick={() => setIsClicked(prevState => !prevState)}
-          className="icon save-icon"
-          style={{ marginRight: '0.25em' }}
-        />
-      )}
-      {isItemEdited ? (
-        <>
-          <input
-            className="editing-list-input"
-            type="text"
-            value={editedItemName}
-            ref={inputRef}
-            onChange={e => setEditedItemName(e.target.value)}
-            onKeyDown={event => event.key === 'Enter' && handleEditItem()}
+    <>
+      <li
+        display={showList ? 'flex' : 'none'}
+        className="individual-item"
+        justifyContent="center"
+        alignItems="center"
+        gap="2"
+        key={item.id}
+        style={isClicked ? { opacity: '0.5', background: 'lightseagreen' } : {}}
+      >
+        {isClicked ? (
+          <MdDoneOutline
+            onClick={() => setIsClicked(false)}
+            className="icon"
+            style={{ background: 'seagreen', marginRight: '0.25em' }}
           />
-          <MdOutlineFileDownloadDone onClick={() => handleEditItem()} className="icon save-icon" />
-        </>
-      ) : (
-        <p
-          style={
-            isClicked
-              ? {
-                  textDecoration: 'line-through',
-                  textDecorationColor: 'green',
-                }
-              : {}
-          }
-        >
-          {editedItemName}
-        </p>
-      )}
-      {isItemEdited ? (
-        <MdOutlineCancel
-          onClick={() => {
-            setIsItemEdited(prevState => !prevState);
-            handleCancelEdit();
-          }}
+        ) : (
+          <ImCheckboxUnchecked
+            onClick={() => setIsClicked(true)}
+            className="icon save-icon"
+            style={{ marginRight: '0.25em' }}
+          />
+        )}
+        {isItemEdited ? (
+          <>
+            <input
+              className="editing-list-input"
+              type="text"
+              value={editedItemName}
+              ref={inputRef}
+              onChange={e => setEditedItemName(e.target.value)}
+              onKeyDown={event => event.key === 'Enter' && handleEditItem()}
+              alignSelf="center"
+            />
+            <MdOutlineFileDownloadDone onClick={() => handleEditItem()} className="icon save-icon" />
+          </>
+        ) : (
+          <p
+            style={
+              isClicked
+                ? {
+                    textDecoration: 'line-through',
+                    textDecorationColor: 'green',
+                  }
+                : {}
+            }
+          >
+            {editedItemName}
+          </p>
+        )}
+        {isItemEdited ? (
+          <MdOutlineCancel
+            onClick={() => {
+              setIsItemEdited(prevState => !prevState);
+              handleCancelEdit();
+            }}
+            className="icon delete-icon"
+          />
+        ) : (
+          <AiOutlineEdit
+            className="icon"
+            onClick={() => {
+              setIsItemEdited(prevState => !prevState);
+            }}
+          />
+        )}
+
+        <RiDeleteBin6Line
+          onClick={() => handleDeleteItem(item.id)}
+          style={{ marginLeft: 'auto' }}
           className="icon delete-icon"
         />
-      ) : (
-        <AiOutlineEdit
-          className="icon"
-          onClick={() => {
-            setIsItemEdited(prevState => !prevState);
-          }}
-        />
-      )}
-
-      <RiDeleteBin6Line
-        onClick={() => handleDeleteItem(item.id)}
-        style={{ marginLeft: 'auto' }}
-        className="icon delete-icon"
-      />
-    </li>
+      </li>
+    </>
   );
 }
 

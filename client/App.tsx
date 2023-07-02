@@ -54,7 +54,6 @@ function App() {
 
         if (allLists.length === limitPerPage && currentPage === pageCount) {
           setCurrentPage(prevState => prevState + 1);
-          getData();
         }
 
         // when on a different page and adding list - move to the last page
@@ -104,7 +103,7 @@ function App() {
             borderRadius="50"
             key={index}
           >
-            {index + 1}
+            <span style={{ backgroundColor: index + 1 === currentPage ? 'red' : undefined }}>{index + 1}</span>
           </div>
         ))}
       </div>
