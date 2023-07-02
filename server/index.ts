@@ -9,7 +9,7 @@ import Lists from './lists';
 import pagination from './pagination';
 import patterns from './patterns';
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   response.setHeader('Access-Control-Allow-Methods', 'DELETE, GET, PATCH, POST');
   response.setHeader('Access-Control-Allow-Origin', '*');
   response.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -21,7 +21,7 @@ const server = http.createServer((request, response) => {
     if (patterns.SPECIFIC_LIST.test(url.pathname)) {
       const [, listId] = patterns.SPECIFIC_LIST.exec(url.pathname)!;
 
-      Lists.deleteList(+listId);
+      await Lists.deleteList(+listId);
 
       return response.end();
     }
@@ -48,7 +48,7 @@ const server = http.createServer((request, response) => {
   if (request.method === 'GET') {
     // [GET] /list
     if (/^\/list$/.test(url.pathname)) {
-      const $ = pagination(Lists.getLists(), url);
+      const $ = pagination(await Lists.getLists(), url);
 
       if ($) {
         return response.end(JSON.stringify($));
@@ -77,7 +77,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        Lists.updateList(+listId, name);
+        await Lists.updateList(+listId, name);
 
         return response.end();
       }
@@ -106,7 +106,7 @@ const server = http.createServer((request, response) => {
       const name = url.searchParams.get('name');
 
       if (name) {
-        return response.end(JSON.stringify(Lists.createList(name).id));
+        return response.end(JSON.stringify((await Lists.createList(name)).id));
       }
     }
 

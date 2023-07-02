@@ -2,6 +2,7 @@
  * Copyright 2023 Marek Kobida
  */
 
+import { get, set } from './gists';
 import Items from './items';
 
 interface List {
@@ -11,37 +12,43 @@ interface List {
 }
 
 class Lists {
-  #lists: List[] = [
-    {
-      createdAt: +new Date(),
-      id: 0,
-      name: 'Môj prvý nákupný zoznam',
-    },
-  ];
+  async createList(name: string): Promise<List> {
+    const lists = await this.getLists();
 
-  createList(name: string): List {
-    //                                                    ↓ If there is no last list, the `id` starts from 0.
-    const lastListId = this.#lists[this.#lists.length - 1]?.id ?? 0;
+    //                                        ↓ If there is no last list, the `id` starts from 0.
+    const lastListId = lists[lists.length - 1]?.id ?? 0;
 
     const list = { createdAt: +new Date(), id: lastListId + 1, name };
 
-    this.#lists = [...this.#lists, list];
+    await this.setLists([...lists, list]);
 
     return list;
   }
 
-  deleteList(id: number): List[] {
+  async deleteList(id: number): Promise<List[]> {
     Items.deleteItems(id);
 
-    return (this.#lists = this.#lists.filter(list => list.id !== id));
+    const lists = await this.getLists();
+
+    return this.setLists(lists.filter(list => list.id !== id));
   }
 
-  getLists(): List[] {
-    return this.#lists;
+  async getLists(): Promise<List[]> {
+    const $ = await get();
+
+    return $.lists;
   }
 
-  updateList(id: number, name: string): List[] {
-    return (this.#lists = this.#lists.map(list => (list.id === id ? { ...list, name } : list)));
+  async setLists(lists: List[]): Promise<List[]> {
+    const $ = await set('lists', lists);
+
+    return $.lists;
+  }
+
+  async updateList(id: number, name: string): Promise<List[]> {
+    const lists = await this.getLists();
+
+    return this.setLists(lists.map(list => (list.id === id ? { ...list, name } : list)));
   }
 }
 
