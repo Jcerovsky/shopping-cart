@@ -30,7 +30,7 @@ const server = http.createServer(async (request, response) => {
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
-      Items.deleteItems(+listId);
+      await Items.deleteItems(+listId);
 
       return response.end();
     }
@@ -39,7 +39,7 @@ const server = http.createServer(async (request, response) => {
     if (patterns.SPECIFIC_LIST_ITEM.test(url.pathname)) {
       const [, listId, itemId] = patterns.SPECIFIC_LIST_ITEM.exec(url.pathname)!;
 
-      Items.deleteItem(+itemId);
+      await Items.deleteItem(+itemId);
 
       return response.end();
     }
@@ -54,20 +54,20 @@ const server = http.createServer(async (request, response) => {
         return response.end(JSON.stringify($));
       }
 
-      return response.end(JSON.stringify(Lists.getLists()));
+      return response.end(JSON.stringify(await Lists.getLists()));
     }
 
     // [GET] /list/{listId}/item
     if (patterns.LIST_ITEMS.test(url.pathname)) {
       const [, listId] = patterns.LIST_ITEMS.exec(url.pathname)!;
 
-      const $ = pagination(Items.getItems(+listId), url);
+      const $ = pagination(await Items.getItems(+listId), url);
 
       if ($) {
         return response.end(JSON.stringify($));
       }
 
-      return response.end(JSON.stringify(Items.getItems(+listId)));
+      return response.end(JSON.stringify(await Items.getItems(+listId)));
     }
   }
 
@@ -89,12 +89,12 @@ const server = http.createServer(async (request, response) => {
       const text = url.searchParams.get('text');
 
       if (isDone) {
-        Items.updateItem(+itemId, +isDone);
+        await Items.updateItem(+itemId, +isDone);
         return response.end();
       }
 
       if (text) {
-        Items.updateItem(+itemId, text);
+        await Items.updateItem(+itemId, text);
         return response.end();
       }
     }
@@ -116,7 +116,7 @@ const server = http.createServer(async (request, response) => {
       const text = url.searchParams.get('text');
 
       if (text) {
-        return response.end(JSON.stringify(Items.addItem(+listId, text).id));
+        return response.end(JSON.stringify((await Items.addItem(+listId, text)).id));
       }
     }
   }

@@ -26,7 +26,7 @@ class Lists {
   }
 
   async deleteList(id: number): Promise<List[]> {
-    Items.deleteItems(id);
+    await Items.deleteItems(id);
 
     const lists = await this.getLists();
 
