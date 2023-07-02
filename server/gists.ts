@@ -6,7 +6,7 @@ import type { Item } from './items';
 import type { List } from './lists';
 
 const GIST_ID = 'be8a6322dabdc1a55b99de6b319d3a4f';
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 
 async function get(): Promise<{ items: Item[]; lists: List[] }> {
   const response = await fetch(
