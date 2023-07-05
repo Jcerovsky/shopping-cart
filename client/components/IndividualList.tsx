@@ -33,14 +33,7 @@ function IndividualList({ list }: Props) {
 
   const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
-  const isListFirstRendered = useRef<boolean>(true);
-
   useEffect(() => {
-    // if (isListFirstRendered.current) {
-    //   isListFirstRendered.current = false;
-    //   return;
-    // }
-
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
         ...prevState,
@@ -179,6 +172,7 @@ function IndividualList({ list }: Props) {
     forwardedInputRef.current?.focus();
   };
 
+  //fetches once for each list and displays the items in that particular list - not a bug
   const getPageData = () => {
     createRequest(`list/${list.id}/item?limit=${limitPerPage}&page=${currentItemPage}`, 'GET').then(data => {
       setItemPageCount(data.pageCount < 1 ? 1 : data.pageCount);

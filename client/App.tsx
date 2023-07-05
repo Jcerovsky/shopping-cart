@@ -96,6 +96,15 @@ function App() {
         <p>Pages</p>
         {[...new Array(pageCount)].map((_, index) => (
           <div
+            style={{
+              backgroundColor: index + 1 === currentPage ? 'grey' : undefined,
+              width: '30px',
+              height: '30px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignContent: 'center',
+              marginLeft: '0.3em',
+            }}
             cursor="pointer"
             onClick={() => setCurrentPage(index + 1)}
             p="2"
@@ -103,7 +112,7 @@ function App() {
             borderRadius="50"
             key={index}
           >
-            <span style={{ backgroundColor: index + 1 === currentPage ? 'red' : undefined }}>{index + 1}</span>
+            <span style={{ justifySelf: 'center', alignSelf: 'center', gap: '0.5em' }}>{index + 1}</span>
           </div>
         ))}
       </div>
