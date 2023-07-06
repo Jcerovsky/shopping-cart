@@ -314,8 +314,30 @@ function IndividualList({ list }: Props) {
           ))}
           <div style={{ display: showList ? 'flex' : 'none', justifyContent: 'right' }}>
             {[...new Array(itemPageCount)].map((_, index) => (
-              <div border="1" onClick={() => setCurrentItemPage(index + 1)} key={index}>
-                <span style={{ backgroundColor: index + 1 === currentItemPage ? 'red' : undefined }}>{index + 1}</span>
+              <div
+                onClick={() => setCurrentItemPage(index + 1)}
+                key={index}
+                style={{
+                  backgroundColor: index + 1 === currentItemPage ? 'grey' : undefined,
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginLeft: '0.3em',
+                }}
+                border="1"
+                borderRadius="50"
+              >
+                <span
+                  style={{
+                    backgroundColor: index + 1 === currentItemPage ? 'grey' : undefined,
+                    justifySelf: 'center',
+                    alignSelf: 'center',
+                  }}
+                >
+                  {index + 1}
+                </span>
               </div>
             ))}
           </div>{' '}

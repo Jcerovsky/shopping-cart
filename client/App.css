@@ -40,6 +40,7 @@ body {
   right: 10px;
   margin-left: 1em;
   padding: 0 0.75em;
+
 }
 
 .navbar--button:active {
@@ -112,4 +113,29 @@ body {
   border: var(--border);
   padding: 0.5em;
   font-family: inherit;
+}
+
+
+@media (max-width: 390px) {
+  .top-section{
+    flex-direction: column;
+    justify-content: center;
+    margin: 1em;
+  }
+  .navbar--input,
+  .navbar--button,
+  .navbar--heading{
+    width: 100%;
+  }
+  .navbar--button {
+    padding: 0.75em;
+    margin: 1em auto;
+  }
+
+  .navbar--heading {
+    font-size: 0.8em;
+    margin: 0 auto;
+  }
+
+
 }

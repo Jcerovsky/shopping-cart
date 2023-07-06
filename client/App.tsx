@@ -84,7 +84,7 @@ function App() {
         <div className="navbar--heading">
           <h1 className="navbar--heading__text">SHOPPING LIST</h1>
         </div>
-        <div display="flex" justifyContent="center">
+        <div display="flex" justifyContent="center" className="top-section">
           <Input ref={inputRef} handleClick={handleClick} />
           <button className="navbar--button" disabled={isDisabled} onClick={handleClick}>
             ADD
