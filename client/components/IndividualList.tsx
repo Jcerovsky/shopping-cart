@@ -190,43 +190,44 @@ function IndividualList({ list }: Props) {
     <div p="3">
       <li display="flex" justifyContent="center" alignItems="center" gap="2" color="blue" className="list--individual">
         {editingList ? (
-          <EditingListInput
-            onChange={e =>
-              setState(prevState => ({
-                ...prevState,
-                editedListName: e.target.value,
-              }))
-            }
-            handleEditListClick={handleEditListClick}
-            ref={forwardedInputRef}
-            editedListName={editedListName}
-          />
+          <>
+            <EditingListInput
+              onChange={e =>
+                setState(prevState => ({
+                  ...prevState,
+                  editedListName: e.target.value,
+                }))
+              }
+              handleEditListClick={handleEditListClick}
+              ref={forwardedInputRef}
+              editedListName={editedListName}
+            />
+            <MdOutlineCancel
+              onClick={() => {
+                setState(prevState => ({
+                  ...prevState,
+                  editingList: !prevState.editingList,
+                }));
+                handleCancelEditAddList();
+              }}
+              className="icon delete-icon"
+            />
+          </>
         ) : (
-          <p>{editedListName}</p>
-        )}
-        {editingList ? (
-          <MdOutlineCancel
-            onClick={() => {
-              setState(prevState => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
-              handleCancelEditAddList();
-            }}
-            className="icon delete-icon"
-          />
-        ) : (
-          <AiOutlineEdit
-            className="icon"
-            onClick={() => {
-              setState(prevState => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
+          <>
+            <p>{editedListName}</p>
+            <AiOutlineEdit
+              className="icon"
+              onClick={() => {
+                setState(prevState => ({
+                  ...prevState,
+                  editingList: !prevState.editingList,
+                }));
 
-              focusOnInput();
-            }}
-          />
+                focusOnInput();
+              }}
+            />
+          </>
         )}
         {allItems.filter(item => item.listId === list.id).length !== 0 ? (
           showList ? (
