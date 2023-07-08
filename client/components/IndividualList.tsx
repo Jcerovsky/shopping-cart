@@ -33,14 +33,7 @@ function IndividualList({ list }: Props) {
 
   const { setErrorMessage, limitPerPage } = useContext(AppContext)!;
 
-  const isListFirstRendered = useRef<boolean>(true);
-
   useEffect(() => {
-    // if (isListFirstRendered.current) {
-    //   isListFirstRendered.current = false;
-    //   return;
-    // }
-
     createRequest(`list/${list.id}/item`, 'GET').then(data => {
       setState(prevState => ({
         ...prevState,
@@ -179,6 +172,7 @@ function IndividualList({ list }: Props) {
     forwardedInputRef.current?.focus();
   };
 
+  //fetches once for each list and displays the items in that particular list - not a bug
   const getPageData = () => {
     createRequest(`list/${list.id}/item?limit=${limitPerPage}&page=${currentItemPage}`, 'GET').then(data => {
       setItemPageCount(data.pageCount < 1 ? 1 : data.pageCount);
@@ -196,43 +190,44 @@ function IndividualList({ list }: Props) {
     <div p="3">
       <li display="flex" justifyContent="center" alignItems="center" gap="2" color="blue" className="list--individual">
         {editingList ? (
-          <EditingListInput
-            onChange={e =>
-              setState(prevState => ({
-                ...prevState,
-                editedListName: e.target.value,
-              }))
-            }
-            handleEditListClick={handleEditListClick}
-            ref={forwardedInputRef}
-            editedListName={editedListName}
-          />
+          <>
+            <EditingListInput
+              onChange={e =>
+                setState(prevState => ({
+                  ...prevState,
+                  editedListName: e.target.value,
+                }))
+              }
+              handleEditListClick={handleEditListClick}
+              ref={forwardedInputRef}
+              editedListName={editedListName}
+            />
+            <MdOutlineCancel
+              onClick={() => {
+                setState(prevState => ({
+                  ...prevState,
+                  editingList: !prevState.editingList,
+                }));
+                handleCancelEditAddList();
+              }}
+              className="icon delete-icon"
+            />
+          </>
         ) : (
-          <p>{editedListName}</p>
-        )}
-        {editingList ? (
-          <MdOutlineCancel
-            onClick={() => {
-              setState(prevState => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
-              handleCancelEditAddList();
-            }}
-            className="icon delete-icon"
-          />
-        ) : (
-          <AiOutlineEdit
-            className="icon"
-            onClick={() => {
-              setState(prevState => ({
-                ...prevState,
-                editingList: !prevState.editingList,
-              }));
+          <>
+            <p>{editedListName}</p>
+            <AiOutlineEdit
+              className="icon"
+              onClick={() => {
+                setState(prevState => ({
+                  ...prevState,
+                  editingList: !prevState.editingList,
+                }));
 
-              focusOnInput();
-            }}
-          />
+                focusOnInput();
+              }}
+            />
+          </>
         )}
         {allItems.filter(item => item.listId === list.id).length !== 0 ? (
           showList ? (
@@ -320,8 +315,30 @@ function IndividualList({ list }: Props) {
           ))}
           <div style={{ display: showList ? 'flex' : 'none', justifyContent: 'right' }}>
             {[...new Array(itemPageCount)].map((_, index) => (
-              <div border="1" onClick={() => setCurrentItemPage(index + 1)} key={index}>
-                <span style={{ backgroundColor: index + 1 === currentItemPage ? 'red' : undefined }}>{index + 1}</span>
+              <div
+                onClick={() => setCurrentItemPage(index + 1)}
+                key={index}
+                style={{
+                  backgroundColor: index + 1 === currentItemPage ? 'grey' : undefined,
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginLeft: '0.3em',
+                }}
+                border="1"
+                borderRadius="50"
+              >
+                <span
+                  style={{
+                    backgroundColor: index + 1 === currentItemPage ? 'grey' : undefined,
+                    justifySelf: 'center',
+                    alignSelf: 'center',
+                  }}
+                >
+                  {index + 1}
+                </span>
               </div>
             ))}
           </div>{' '}
