@@ -2,15 +2,15 @@
  * Copyright 2023 Marek Kobida
  */
 
-interface T {
-  // count: number;
+interface Output {
+  count: number;
   filtered: unknown[];
-  // limit: number;
-  // page: number;
+  limit: number;
+  page: number;
   pageCount: number;
 }
 
-function pagination(of: unknown[], url: URL): T | undefined {
+function pagination<Input extends { createdAt: number }>(of: Input[], url: URL): Output | undefined {
   const limit = url.searchParams.get('limit');
   const page = url.searchParams.get('page');
 
@@ -25,15 +25,16 @@ function pagination(of: unknown[], url: URL): T | undefined {
     const filtered = of
       /**/ .filter((list, index) => {
         return index >= startIndex && index < endIndex;
-      });
+      })
+      /**/ .sort((a, b) => b.createdAt - a.createdAt);
 
     const pageCount = Math.ceil(of.length / +limit);
 
     return {
-      // count: of.length,
+      count: of.length,
       filtered,
-      // limit: +limit,
-      // page: +page,
+      limit: +limit,
+      page: +page,
       pageCount,
     };
   }
