@@ -2,11 +2,9 @@
  * Copyright 2023 Marek Kobida
  */
 
+import { GIST_ID, GITHUB_TOKEN } from '../server.json';
 import type { Item } from './items';
 import type { List } from './lists';
-
-const GIST_ID = '';
-const GITHUB_TOKEN = '';
 
 async function get(): Promise<{ items: Item[]; lists: List[] }> {
   const response = await fetch(

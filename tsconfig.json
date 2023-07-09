@@ -1,10 +1,10 @@
-
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "react",
     "module": "CommonJS",
+    "resolveJsonModule": true,
     "strict": true,
     "target": "ESNext"
   }
